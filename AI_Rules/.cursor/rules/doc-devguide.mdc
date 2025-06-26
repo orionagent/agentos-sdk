@@ -3,11 +3,19 @@ description:
 globs: 
 alwaysApply: true
 ---
-# 项目文档与规则说明
+# AgentOS SDK 项目开发规则
+
+## 重要：每次对话开始时必须加载的上下文文档
+在开始任何开发任务前，必须先阅读以下关键文档：
+
+[README.md](mdc:README.md)
+@Agent/v0.3.3/
+@Robot/v11.3C/
+[FAQ.md](mdc:FAQ.md)
 
 ## 1. 文档说明
 
-- **AgentOS_SDK_Doc_Vx.x.x.md**  
+- **AgentOS_SDK_Doc_x.x.x.md**  
   说明大模型相关能力接口和使用方法，包含对话管理、语音合成、智能交互等功能。
 
 - **RobotAPI.md**  
@@ -21,24 +29,50 @@ alwaysApply: true
 
 ---
 
-## 2. 项目开发规范
-
-- 所有机器人控制相关功能必须基于 **RobotAPI.md** 指定的 RobotOS SDK 开发。
-- 所有大模型（LLM）Agent开发相关功能(对话管理、语音合成、智能交互)必须基于 **AgentOS_SDK_Doc_Vx.x.x.md** 指定的 AgentOS SDK 开发。
-- 开发时优先参考 **SampleCodes.md**，结合 **ClassPathList.md** 确认正确导入类路径。
-
----
-
-## 3. 技术栈限定
+## 2. 技术栈要求
 
 - 编程语言：Java 和 Kotlin
-- 构建工具：Gradle，需遵循项目中统一的版本和依赖管理规范。
-- 代码应符合 Android 平台开发最佳实践。
+- 构建工具：Gradle
+- 平台：Android (最低API 26)
+- JDK版本：Java 11
 
 ---
 
-## 4. 其他注意事项
+## 3. SDK使用规范
 
-- 遵循项目中定义的命名规范和代码风格。
-- 如遇接口调用异常，优先排查文档示例与类路径是否匹配。
+- 所有机器人控制功能必须基于 **RobotAPI.md** 指定的 RobotOS SDK 开发
+- 所有Android功能必须先查阅 RobotOS SDK 开发文档，如果文档中没有任何相关信息再查询Android官方的标准文档
+- RobotOS SDK提供了摄像头，视觉，底盘运动，室内地图，导航等多个能力，遇到类似的功能开发需求，先完整查阅RobotOS SDK 开发文档
+- 所有大模型Agent开发功能必须基于 **AgentOS_SDK_Doc_v0.3.3.md** 指定的 AgentOS SDK 开发
+- 开发时优先参考 **SampleCodes.md**，结合 **ClassPathList.md** 确认正确导入类路径
+
+---
+
+## 4. 代码规范
+
+- 遵循Android平台开发最佳实践
+- 使用项目统一的命名规范和代码风格
+- 如遇接口调用异常，优先排查文档示例与类路径是否匹配
+
+---
+
+## 5. 重要提醒
+
+- 每个Action执行完成后必须调用action.notify()方法
+- 动态注册Action需要设置executor
+- 静态注册Action需要在actionRegistry.json中配置
+- 一个App只能有一个AppAgent实例
+- 每个页面只能有一个PageAgent实例
+- 目标设备屏幕规格：物理分辨率1920*1080px，屏幕密度3.5，逻辑分辨率约500*308dp。开发时必须先通过代码获取实际屏幕尺寸，然后根据可用高度动态调整UI布局。不要设置android:screenOrientation="landscape"，不要创建单独的适配文件，统一在layout文件夹处理响应式布局。UI组件尺寸和间距必须适配极小的可用空间，避免内容超出屏幕显示。
+
+---
+
+## 6. 开发流程
+
+1. 集成AgentSDK（配置仓库、添加依赖、创建注册表）
+2. 设定App的人设和目标
+3. 创建业务页面，设置页面级目标
+4. 定义并注册Action到Agent SDK
+5. 实现Action的处理逻辑
+6. 测试语音触发和Action执行
 
