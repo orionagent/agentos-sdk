@@ -1,7 +1,7 @@
 # Agent SDK for APK V0.3.0文档
 
 > ## 📣 **版本信息**
-> 当前SDK版本: 0.3.0
+> 当前SDK版本: 0.3.3
 
 # 1. 概述
 
@@ -70,7 +70,7 @@ dependencyResolutionManagement {
 
 ```Groovy
 dependencies {
-        implementation 'com.orionstar.agent:sdk:0.3.2-SNAPSHOT' // 【重要配置】Agent SDK依赖
+        implementation 'com.orionstar.agent:sdk:0.3.3-SNAPSHOT' // 【重要配置】Agent SDK依赖
         
         // 以下是Android标准库，默认kotlin项目都会依赖，
         // 如果编译报未找到错误，再添加以下依赖库
@@ -83,7 +83,7 @@ dependencies {
 
 ```Kotlin
 dependencies {
-        implementation("com.orionstar.agent:sdk:0.3.2-SNAPSHOT") // 【重要配置】Agent SDK依赖
+        implementation("com.orionstar.agent:sdk:0.3.3-SNAPSHOT") // 【重要配置】Agent SDK依赖
         
         // 以下是Android标准库，默认kotlin项目都会依赖，
         // 如果编译报未找到错误，再添加以下依赖库
@@ -1043,6 +1043,24 @@ var isDisablePlan: Boolean
     }
 ```
 
+## 12. 跳转到小豹应用
+
+### 介绍
+- AgentCore提供快速跳转到小豹应用的功能。
+
+```Kotlin
+import com.ainirobot.agent.AgentCore
+import android.content.Context
+
+/**
+ * 跳转到小豹应用
+ * 
+ * @param context 上下文，用于启动Activity
+ */
+fun jumpToXiaobao(context: Context)
+```
+
+> 📣 **注意：调用此方法前请确保小豹应用已安装，如果未安装会在日志中输出相应提示信息。**
 
 # 4. 进阶功能
 
