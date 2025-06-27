@@ -62,7 +62,7 @@ dependencyResolutionManagement {
 
 ```groovy
 dependencies {
-    implementation 'com.orionstar.agent:sdk:0.3.2-SNAPSHOT'
+    implementation 'com.orionstar.agent:sdk:0.3.3-SNAPSHOT'
     
     // 以下是Android标准库，默认kotlin项目都会依赖，
     // 如果编译报未找到错误，再添加以下依赖库
@@ -75,7 +75,7 @@ dependencies {
 
 ```kotlin
 dependencies {
-    implementation("com.orionstar.agent:sdk:0.3.2-SNAPSHOT")
+    implementation("com.orionstar.agent:sdk:0.3.3-SNAPSHOT")
     
     // 以下是Android标准库，默认kotlin项目都会依赖，
     // 如果编译报未找到错误，再添加以下依赖库

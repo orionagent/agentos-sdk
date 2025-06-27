@@ -3,6 +3,54 @@
 > ## 📣 **版本信息**
 > 当前SDK版本: 0.3.3
 
+## 📋 目录
+
+- [1. 概述](#1-概述)
+  - [1.1 环境要求](#11-环境要求)
+    - [1.1.1 开发环境](#111-开发环境)
+    - [1.1.2 运行环境](#112-运行环境)
+  - [1.2 快速开始](#12-快速开始)
+    - [1.2.1 配置仓库](#121-配置仓库)
+    - [1.2.2 添加依赖](#122-添加依赖)
+    - [1.2.3 添加注册表](#123-添加注册表)
+    - [1.2.4 添加AppAgent](#124-添加appagent)
+    - [1.2.5 添加PageAgent](#125-添加pageagent)
+    - [1.2.6 完整示例](#126-完整示例)
+    - [1.2.7 总结](#127-总结)
+- [2. Action详解](#2-action详解)
+  - [2.1 什么是Action](#21-什么是action)
+    - [2.1.1 基础属性](#211-基础属性)
+    - [2.1.2 Action参数](#212-action参数)
+  - [2.2 Action注册](#22-action注册)
+    - [2.2.1 App级Action](#221-app级action)
+    - [2.2.2 Page级Action](#222-page级action)
+  - [2.3 Action执行](#23-action执行)
+    - [2.3.1 执行回调](#231-执行回调)
+    - [2.3.2 执行结果](#232-执行结果)
+  - [2.4 系统内置Action](#24-系统内置action)
+- [3. 核心功能接口](#3-核心功能接口)
+  - [1. 麦克风开关](#1-麦克风开关)
+  - [2. 获取ASR和TTS的结果](#2-获取asr和tts的结果)
+  - [3. Agent状态监听](#3-agent状态监听)
+  - [4. 关闭语音条](#4-关闭语音条)
+  - [5. 播放TTS/停止播放TTS](#5-播放tts停止播放tts)
+  - [6. 大模型接口](#6-大模型接口)
+  - [7. 文本指令](#7-文本指令)
+  - [8. 感知信息上报](#8-感知信息上报)
+  - [9. 清空对话历史](#9-清空对话历史)
+  - [10. 免唤醒开关](#10-免唤醒开关)
+  - [11. 禁用强制规划](#11-禁用强制规划)
+  - [12. 跳转到小豹应用](#12-跳转到小豹应用)
+- [4. 进阶功能](#4-进阶功能)
+  - [注解实现Action动态注册](#注解实现action动态注册)
+    - [App级动态注册](#app级动态注册)
+    - [Page级动态注册](#page级动态注册)
+    - [注解类说明](#注解类说明)
+- [5. 项目源码](#5-项目源码)
+- [6. 技术支持](#6-技术支持)
+
+---
+
 # 1. 概述
 
 > Agent SDK 是一个用于机器人交互的Android开发套件，提供了应用与机器人Agent服务进行通信的能力。SDK支持应用级和页面级的Agent开发，可以实现自然语言交互、动作规划和执行等功能。
@@ -108,7 +156,7 @@ dependencies {
 
  **platform** ：当前运行的平台，如：**opk**或**apk**
 
- **actionList** ：可以从外部调起的action（只能是app级），在注册表中声名的action需要在AppAgent的[onExecuteAction](https://cheetah-mobile.feishu.cn/docx/FwCQdP1WboqJm3xv5Yic8SxdnWf?fromScene=spaceOverview#share-KHucdip2BoLGHZx74aYcIC1snAh)方法中处理action的执行，注：如果不想对外暴露action，actionList可以设置为空数组[]
+ **actionList** ：可以从外部调起的action（只能是app级），在注册表中声名的action需要在AppAgent的onExecuteAction方法中处理action的执行，注：如果不想对外暴露action，actionList可以设置为空数组[]
 
 > 📣 在这个项目中，我们将一起开发一个有个性、能感知情绪的虚拟助手。她不仅能和你对话，还能察觉你的情绪变化，并做出恰当回应——是的，她不再是冷冰冰的程序，而是一位会关心你感受的"豹姐姐"！
 
@@ -119,8 +167,9 @@ dependencies {
 
 > 📣 在这里，我们为虚拟助手：豹姐姐，进行角色人设、角色目标等基础设定。
 
-在项目的MainApplication的onCreate方法中添加以下代码（ **加粗部分** ），如果没有MainApplication.kt文件，请参考[示例项目](https://cheetah-mobile.feishu.cn/docx/FwCQdP1WboqJm3xv5Yic8SxdnWf?fromScene=spaceOverview#doxcnh7OkltLezA2VX1XufECh6f)
+在项目的MainApplication的onCreate方法中添加以下代码（ **加粗部分** ），如果没有MainApplication.kt文件，请参考[示例项目](#示例项目)
 
+**Kotlin版本：**
 ```Kotlin
 package com.ainirobot.agent.sample
 
@@ -155,6 +204,42 @@ class MainApplication : Application() {
     }
 }
 ```
+
+**Java版本：**
+```Java
+package com.ainirobot.agent.sample;
+
+import android.app.Application;
+import android.os.Bundle;
+import com.ainirobot.agent.AppAgent;
+import com.ainirobot.agent.action.Action;
+
+public class MainApplication extends Application {
+
+    @Override
+    public void onCreate() {
+        super.onCreate();
+
+        new AppAgent(this) {
+            
+            @Override
+            public void onCreate() {
+                // 设定角色人设
+                setPersona("你叫豹姐姐，是一位聪明、亲切又略带俏皮的虚拟助手。");
+                // 设定角色目标
+                setObjective("通过自然的对话和合适的情绪表达，让用户感受到理解、陪伴与情感共鸣，从而提升交流的舒适感和信任感。");
+            }
+
+            @Override
+            public boolean onExecuteAction(Action action, Bundle params) {
+                // 在此处处理静态注册的action，如果你不需要处理，请返回false，如果要自行处理且不需要后续处理，则返回true
+                // 默认返回false
+                return false;
+            }
+        };
+    }
+}
+```
 > 📣 到这一步，我们的 App 已经有了一个拥有"个性"的虚拟角色。接下来，我们要给她添加一些技能（Actoion），让她学会根据用户的情绪做出反应！
 
 ### 1.2.5 添加PageAgent
@@ -176,6 +261,7 @@ class MainApplication : Application() {
 
 在MainActivity.kt中添加以下代码（代码中只添加了一个显示表情的Action，你可以按示例添加另外两个）
 
+**Kotlin版本：**
 ```Kotlin
 package com.ainirobot.agent.sample
 
@@ -198,13 +284,7 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
         setContentView(R.layout.activity_main)
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
-            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
-            insets
-        }
 
         // 添加页面级Agent
         PageAgent(this)
@@ -241,13 +321,75 @@ class MainActivity : AppCompatActivity() {
 }
 ```
 
+**Java版本：**
+```Java
+package com.ainirobot.agent.sample;
+
+import android.os.Bundle;
+import android.widget.ImageView;
+import androidx.activity.EdgeToEdge;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowInsetsCompat;
+import com.ainirobot.agent.AgentCore;
+import com.ainirobot.agent.PageAgent;
+import com.ainirobot.agent.action.Action;
+import com.ainirobot.agent.action.ActionExecutor;
+import com.ainirobot.agent.base.Parameter;
+import com.ainirobot.agent.base.ParameterType;
+import java.util.Arrays;
+
+public class MainActivity extends AppCompatActivity {
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+
+        // 添加页面级Agent
+        new PageAgent(this)
+            .registerAction(
+                new Action(
+                    "com.agent.demo.SHOW_SMILE_FACE",
+                    "笑",
+                    "响应用户的开心、满意或正面情绪",
+                    Arrays.asList(
+                         new Parameter(
+                             "sentence",
+                             ParameterType.STRING,
+                             "回复给用户的话",
+                             true,
+                             null
+                         )
+                     ),
+                    new ActionExecutor() {
+                        @Override
+                        public boolean onExecute(Action action, Bundle params) {
+                            new Thread(() -> {
+                                // 展示笑脸
+                                showFaceImage(R.drawable.ic_smile);
+                                // 播放给用户说的话
+                                String sentence = params != null ? params.getString("sentence") : null;
+                                
+                                // 播放完成后，及时上报Action的执行状态
+                                action.notify();
+                            }).start();
+                            return true;
+                        }
+                    }
+                )
+            );
+    }
+}
+```
+
 > 📣 **注意：在任何一个Action执行完成后都需要调用action的nofity()方法**
 
 > 🎉 **现在你完成了一个能察觉你的情绪变化，并做出恰当回应的"豹姐姐"助手**
 
 ### 1.2.6 完整示例
 
-上边的QUICK START是为了方便接入，下面的[示例项目](https://cheetah-mobile.feishu.cn/docx/FwCQdP1WboqJm3xv5Yic8SxdnWf?fromScene=spaceOverview#doxcnrKf01IXamqIap0oEQqKgWc)也很简单，但添加了不同场景显示不同表情的功能，可能会更有趣一些，可以直接下载运行。
+上边的QUICK START是为了方便接入，下面的[示例项目](#示例项目)也很简单，但添加了不同场景显示不同表情的功能，可能会更有趣一些，可以直接下载运行。
 
 ### 1.2.7 总结
 
@@ -650,6 +792,11 @@ override fun onExecuteAction(
 2. 其次，如果你要处理一个Action，除了**在执行的** **回调** **方法返回值返回true**之外，还需要在**Action执行完成后手动调用action的成员方法nofity()** 把执行状态或结果同步给系统，具体的时机用户可以自行定义，如：页面加载完成、天气播报完成、到达一个目的地等。
 3. 最后，执行的回调方法默认都是 **子线程** 。
 
+> 📣 **注意：耗时操作的正确处理方式**
+> - onExecute方法应该立即返回true
+> - 将耗时操作（如网络请求、文件操作、TTS播放等）放到协程或者线程中执行
+> - 耗时操作完成后，调用action.notify()方法通知系统执行结果
+
 notify是Action类的成员方法，说明如下：
 
 ```Kotlin
@@ -666,6 +813,90 @@ fun notify(
     isTriggerFollowUp: Boolean = true
 )
 ```
+
+<span style="color: red;">**错误的例子**</span>
+
+**kotlin版**
+
+```Kotlin
+class MyActionExecutor : ActionExecutor {
+    
+    override fun onExecute(action: Action, params: Bundle?): Boolean {
+        // ❌ 错误：直接在onExecute中执行耗时操作
+        Thread.sleep(3000) // 3秒耗时操作
+        
+        // 通知执行完成
+        action.notify(true)
+        return true
+        
+        // 这个方法总共耗时3秒，会在2秒时被强制中断！
+    }
+}
+```
+
+**java版**
+
+```Java
+@Override
+public boolean onExecute(Action action, Bundle params) {
+    // ❌ 错误：直接在onExecute中执行耗时操作
+    Thread.sleep(5000); 
+
+    // 通知执行完成
+    action.notify(true);
+    return true;
+}
+
+```
+
+<span style="color: red;">**正确的例子**</span>
+
+**kotlin版**
+
+```Kotlin
+class MyActionExecutor : ActionExecutor {
+    
+    override fun onExecute(action: Action, params: Bundle?): Boolean {
+        // ✅ 正确：立即启动协程执行耗时操作
+        AOCoroutineScope.launch {
+            try {
+                // 在协程中执行耗时操作
+                delay(3000) // 3秒耗时操作
+                
+                // 完成后通知执行结果
+                action.notify(true)
+                
+            } catch (e: Exception) {
+                action.notify(false)
+            }
+        }
+        
+        // 立即返回true，不等待耗时操作完成
+        return true
+    }
+}
+```
+
+
+**java版**
+
+```Java
+public boolean onExecute(Action action, Bundle params) {
+    // 立即启动后台任务
+    new Thread(() -> {
+        try {
+            Thread.sleep(5000); // 耗时操作在后台执行
+            action.notify(true); // 完成后通知
+        } catch (Exception e) {
+            action.notify(false);
+        }
+    }).start();
+    
+    return true; // 立即返回，不阻塞
+}
+
+```
+
 
 ## 2.4 系统内置Action
 
