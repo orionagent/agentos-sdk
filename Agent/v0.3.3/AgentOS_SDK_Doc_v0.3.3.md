@@ -156,7 +156,7 @@ dependencies {
 
  **platform** ：当前运行的平台，如：**opk**或**apk**
 
- **actionList** ：可以从外部调起的action（只能是app级），在注册表中声名的action需要在AppAgent的onExecuteAction方法中处理action的执行，注：如果不想对外暴露action，actionList可以设置为空数组[]
+ **actionList** ：可以从外部调起的action（只能是app级），在注册表中声明的action需要在AppAgent的onExecuteAction方法中处理action的执行，注：如果不想对外暴露action，actionList可以设置为空数组[]
 
 > 📣 在这个项目中，我们将一起开发一个有个性、能感知情绪的虚拟助手。她不仅能和你对话，还能察觉你的情绪变化，并做出恰当回应——是的，她不再是冷冰冰的程序，而是一位会关心你感受的"豹姐姐"！
 
@@ -169,7 +169,6 @@ dependencies {
 
 在项目的MainApplication的onCreate方法中添加以下代码（ **加粗部分** ），如果没有MainApplication.kt文件，请参考[示例项目](#示例项目)
 
-**Kotlin版本：**
 ```Kotlin
 package com.ainirobot.agent.sample
 
@@ -183,64 +182,28 @@ class MainApplication : Application() {
     override fun onCreate() {
         super.onCreate()
 
-        object  : AppAgent(this) {
+        object : AppAgent(this) {
               
-            override   fun   onCreate()  {
-                  // 设定角色人设
-                 setPersona("你叫豹姐姐，是一位聪明、亲切又略带俏皮的虚拟助手。")
-                  // 设定角色目标
-                 setObjective("通过自然的对话和合适的情绪表达，让用户感受到理解、陪伴与情感共鸣，从而提升交流的舒适感和信任感。")
-             }
+            override fun onCreate() {
+                // 设定角色人设
+                setPersona("你叫豹姐姐，是一位聪明、亲切又略带俏皮的虚拟助手。")
+                // 设定角色目标
+                setObjective("通过自然的对话和合适的情绪表达，让用户感受到理解、陪伴与情感共鸣，从而提升交流的舒适感和信任感。")
+            }
 
-              override   fun   onExecuteAction(
-                 action:  Action,
-                 params:  Bundle?
-             ):  Boolean  {
-                  // 在此处处理静态注册的action，如果你不需要处理，请返回false，如果要自行处理且不需要后续处理，则返回true
-                  // 默认返回false
-                  return   false
-             }
+            override fun onExecuteAction(
+                action: Action,
+                params: Bundle?
+            ): Boolean {
+                // 在此处处理静态注册的action，如果你不需要处理，请返回false，如果要自行处理且不需要后续处理，则返回true
+                // 默认返回false
+                return false
+            }
          }
     }
 }
 ```
-
-**Java版本：**
-```Java
-package com.ainirobot.agent.sample;
-
-import android.app.Application;
-import android.os.Bundle;
-import com.ainirobot.agent.AppAgent;
-import com.ainirobot.agent.action.Action;
-
-public class MainApplication extends Application {
-
-    @Override
-    public void onCreate() {
-        super.onCreate();
-
-        new AppAgent(this) {
-            
-            @Override
-            public void onCreate() {
-                // 设定角色人设
-                setPersona("你叫豹姐姐，是一位聪明、亲切又略带俏皮的虚拟助手。");
-                // 设定角色目标
-                setObjective("通过自然的对话和合适的情绪表达，让用户感受到理解、陪伴与情感共鸣，从而提升交流的舒适感和信任感。");
-            }
-
-            @Override
-            public boolean onExecuteAction(Action action, Bundle params) {
-                // 在此处处理静态注册的action，如果你不需要处理，请返回false，如果要自行处理且不需要后续处理，则返回true
-                // 默认返回false
-                return false;
-            }
-        };
-    }
-}
-```
-> 📣 到这一步，我们的 App 已经有了一个拥有"个性"的虚拟角色。接下来，我们要给她添加一些技能（Actoion），让她学会根据用户的情绪做出反应！
+> 📣 到这一步，我们的 App 已经有了一个拥有"个性"的虚拟角色。接下来，我们要给她添加一些技能（Action），让她学会根据用户的情绪做出反应！
 
 ### 1.2.5 添加PageAgent
 
@@ -261,16 +224,11 @@ public class MainApplication extends Application {
 
 在MainActivity.kt中添加以下代码（代码中只添加了一个显示表情的Action，你可以按示例添加另外两个）
 
-**Kotlin版本：**
 ```Kotlin
 package com.ainirobot.agent.sample
 
 import android.os.Bundle
-import android.widget.ImageView
-import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
 import com.ainirobot.agent.AgentCore
 import com.ainirobot.agent.PageAgent
 import com.ainirobot.agent.action.Action
@@ -321,69 +279,8 @@ class MainActivity : AppCompatActivity() {
 }
 ```
 
-**Java版本：**
-```Java
-package com.ainirobot.agent.sample;
 
-import android.os.Bundle;
-import android.widget.ImageView;
-import androidx.activity.EdgeToEdge;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
-import com.ainirobot.agent.AgentCore;
-import com.ainirobot.agent.PageAgent;
-import com.ainirobot.agent.action.Action;
-import com.ainirobot.agent.action.ActionExecutor;
-import com.ainirobot.agent.base.Parameter;
-import com.ainirobot.agent.base.ParameterType;
-import java.util.Arrays;
-
-public class MainActivity extends AppCompatActivity {
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-
-        // 添加页面级Agent
-        new PageAgent(this)
-            .registerAction(
-                new Action(
-                    "com.agent.demo.SHOW_SMILE_FACE",
-                    "笑",
-                    "响应用户的开心、满意或正面情绪",
-                    Arrays.asList(
-                         new Parameter(
-                             "sentence",
-                             ParameterType.STRING,
-                             "回复给用户的话",
-                             true,
-                             null
-                         )
-                     ),
-                    new ActionExecutor() {
-                        @Override
-                        public boolean onExecute(Action action, Bundle params) {
-                            new Thread(() -> {
-                                // 展示笑脸
-                                showFaceImage(R.drawable.ic_smile);
-                                // 播放给用户说的话
-                                String sentence = params != null ? params.getString("sentence") : null;
-                                
-                                // 播放完成后，及时上报Action的执行状态
-                                action.notify();
-                            }).start();
-                            return true;
-                        }
-                    }
-                )
-            );
-    }
-}
-```
-
-> 📣 **注意：在任何一个Action执行完成后都需要调用action的nofity()方法**
+> 📣 **注意：在任何一个Action执行完成后都需要调用action的notify()方法**
 
 > 🎉 **现在你完成了一个能察觉你的情绪变化，并做出恰当回应的"豹姐姐"助手**
 
@@ -406,7 +303,7 @@ public class MainActivity extends AppCompatActivity {
 
 ## 2.1 什么是Action
 
-> AgentOS的核心是识别用户的意图执行合适的技能，而这个技能即为Action，如：用户问“我明天去深圳需要带伞吗？”，识别用户的意图是查询天气，那调用对应的查天气的技能（Action），比如：orion.agent.action.WEATHER
+> AgentOS的核心是识别用户的意图执行合适的技能，而这个技能即为Action，如：用户问“我明天去深圳需要带伞吗？”，识别用户的意图是查询天气，就调用对应的查天气的技能（Action），比如：orion.agent.action.WEATHER
 
 ### 2.1.1 基础属性
 
@@ -415,7 +312,7 @@ Action下基础属性及描述如下：
 ```Kotlin
 package com.ainirobot.agent.action
 
-class Action(
+open class Action(
     /**
       * action全名，结构最好是公司域名+action简名，避免与其它app中的action冲突
       * action简名必须大写，示例：com.orion.action.WEATHER
@@ -442,7 +339,18 @@ class Action(
       */
       @Transient
     var executor: ActionExecutor?
-)
+): ActionEntity(...), Parcelable {
+
+    /**
+     * 规划的action的Id，用于标识action的唯一性，同一个action每次规划都会返回不同的actionId
+     */
+    var sid: String = ""
+
+    /**
+     * 触发规划的用户问题
+     */
+    var userQuery: String = ""
+}
 ```
 
 > 📣 **注：创建Action时需要清晰描述Action的各项属性，方便大模型理解Action的功能，能够更精确的选择合适的Action**
@@ -577,7 +485,7 @@ registerAction(
 
 静态注册的Action，最终的执行器是在AppAgent的**onExecuteAction**方法中，如果对外公开了多个Action，则需要通过actionName判断不同的Action并分别处理。
 
-以下还是**天气App**为例，我们在上一步中，已经在**天气App**的**注册表**中添加了[com.agent.tool.WEATHER\_HOME](https://cheetah-mobile.feishu.cn/docx/FwCQdP1WboqJm3xv5Yic8SxdnWf?fromScene=spaceOverview#doxcnwGQmqyHAiMPRdoQw7dEf0g)的Action，那天气App中AgentAgent的**onExecuteAction**方法必须处理此Action。
+以下还是**天气App**为例，我们在上一步中，已经在**天气App**的**注册表**中添加了[com.agent.tool.WEATHER\_HOME](https://cheetah-mobile.feishu.cn/docx/FwCQdP1WboqJm3xv5Yic8SxdnWf?fromScene=spaceOverview#doxcnwGQmqyHAiMPRdoQw7dEf0g)的Action，那天气App中AppAgent的**onExecuteAction**方法必须处理此Action。
 
 以下示例
 
@@ -611,7 +519,7 @@ object : AppAgent(this) {
 
 ### 2.2.2 Page级Action
 
-> Page级的Action需要在页面（Activity或Fragment）初始化时声名，且只在当前页面对用户可见时生效，当页面退出或者被其它页面覆盖则不再生效
+> Page级的Action需要在页面（Activity或Fragment）初始化时声明，且只在当前页面对用户可见时生效，当页面退出或者被其它页面覆盖则不再生效
 
 #### 动态注册
 
@@ -663,7 +571,7 @@ PageAgent(this)
                 Parameter(
                     "sentence",
                     ParameterType.STRING,
-                    "回复给用户的话，给于安慰",
+                    "回复给用户的话，给予安慰",
                     true
                 )
             ),
@@ -760,14 +668,14 @@ Action(
             true
         )
     ),
-    executor =  object  : ActionExecutor {
+    executor = object : ActionExecutor {
 
-          override   fun   onExecute(action:  Action, params:  Bundle?):  Boolean  {
-             showFaceImage(R.drawable.ic_angry)
-             handleAction(action, params)
-              return   true
-         }
-     }
+        override fun onExecute(action: Action, params: Bundle?): Boolean {
+            showFaceImage(R.drawable.ic_angry)
+            handleAction(action, params)
+            return true
+        }
+    }
 )
 ```
 
@@ -789,7 +697,7 @@ override fun onExecuteAction(
 **<span style="background-color: #ff4444; color: black; padding: 4px 8px; border-radius: 4px; font-weight: bold;">这非常重要，必不可少！这非常重要，必不可少！这非常重要，必不可少！这非常重要，必不可少！这非常重要，必不可少！这非常重要，必不可少！这非常重要，必不可少！这非常重要，必不可少！这非常重要，必不可少！！！</span>**
 
 1. 首先，**任何Action的执行** **回调** **方法中都不能执行耗时操作。**
-2. 其次，如果你要处理一个Action，除了**在执行的** **回调** **方法返回值返回true**之外，还需要在**Action执行完成后手动调用action的成员方法nofity()** 把执行状态或结果同步给系统，具体的时机用户可以自行定义，如：页面加载完成、天气播报完成、到达一个目的地等。
+2. 其次，如果你要处理一个Action，除了**在执行的** **回调** **方法返回值返回true**之外，还需要在**Action执行完成后手动调用action的成员方法notify()** 把执行状态或结果同步给系统，具体的时机用户可以自行定义，如：页面加载完成、天气播报完成、到达一个目的地等。
 3. 最后，执行的回调方法默认都是 **子线程** 。
 
 > 📣 **注意：耗时操作的正确处理方式**
@@ -806,11 +714,11 @@ package com.ainirobot.agent.action
   * Action执行完成后需要同步执行结果
   *
   *  @param  result Action的执行结果
-  *  @param  isTriggerFollowUp 在Action执行完成后主动引导用户进行下一步操作，默认开启
+  *  @param  isTriggerFollowUp 在Action执行完成后主动引导用户进行下一步操作，默认关闭
   */
 fun notify(
     result: ActionResult = ActionResult(ActionStatus.SUCCEEDED),
-    isTriggerFollowUp: Boolean = true
+    isTriggerFollowUp: Boolean = false
 )
 ```
 
@@ -826,7 +734,7 @@ class MyActionExecutor : ActionExecutor {
         Thread.sleep(3000) // 3秒耗时操作
         
         // 通知执行完成
-        action.notify(true)
+        action.notify()
         return true
         
         // 这个方法总共耗时3秒，会在2秒时被强制中断！
@@ -840,13 +748,16 @@ class MyActionExecutor : ActionExecutor {
 @Override
 public boolean onExecute(Action action, Bundle params) {
     // ❌ 错误：直接在onExecute中执行耗时操作
-    Thread.sleep(5000); 
+    try {
+        Thread.sleep(5000); 
+    } catch (InterruptedException e) {
+        e.printStackTrace();
+    }
 
     // 通知执行完成
-    action.notify(true);
+    action.notify();
     return true;
 }
-
 ```
 
 <span style="color: red;">**正确的例子**</span>
@@ -864,10 +775,10 @@ class MyActionExecutor : ActionExecutor {
                 delay(3000) // 3秒耗时操作
                 
                 // 完成后通知执行结果
-                action.notify(true)
+                action.notify()
                 
             } catch (e: Exception) {
-                action.notify(false)
+                action.notify(ActionResult(ActionStatus.FAILED))
             }
         }
         
@@ -881,20 +792,20 @@ class MyActionExecutor : ActionExecutor {
 **java版**
 
 ```Java
+@Override
 public boolean onExecute(Action action, Bundle params) {
     // 立即启动后台任务
     new Thread(() -> {
         try {
             Thread.sleep(5000); // 耗时操作在后台执行
-            action.notify(true); // 完成后通知
+            action.notify(); // 完成后通知
         } catch (Exception e) {
-            action.notify(false);
+            action.notify(new ActionResult(ActionStatus.FAILED));
         }
     }).start();
     
     return true; // 立即返回，不阻塞
 }
-
 ```
 
 
@@ -992,7 +903,6 @@ AgentCore.isMicrophoneMuted = false // 取消静音
 - 如果你的应用想获取到ASR识别/TTS播报的内容，可以通过以下方法。
 
 ```Kotlin
-import com.ainirobot.agent.base
 import com.ainirobot.agent.OnTranscribeListener
 
 /**
@@ -1083,8 +993,9 @@ var isEnableVoiceBar: Boolean
 
 **播报TTS**
 
+**同步调用接口**
+
 ```Kotlin
-同步调用接口
 import com.ainirobot.agent.AgentCore
 
 /**
@@ -1094,28 +1005,29 @@ import com.ainirobot.agent.AgentCore
  * @param text 要播放的文本
  * @param timeoutMillis 超时时间，单位毫秒
  *
- * @return 返回1表示成功，返回0表示失败
+ * @return TaskResult<String> 任务执行结果，status=1表示成功，status=2表示失败
  */
-suspend fun ttsSync(text: String, timeoutMillis: Long = 180000): Int {
-    return this.appAgent?.api?.ttsSync(text, timeoutMillis) ?: 0
+suspend fun ttsSync(text: String, timeoutMillis: Long = 180000): TaskResult<String> {
+    return this.appAgent?.api?.ttsSync(text, timeoutMillis) ?: TaskResult(2)
 }
 ```
 
+**异步调用接口**
+
 ```Kotlin
-异步调用接口
 import com.ainirobot.agent.AgentCore
 
 /**
- * TTS接口，异步调用，返回状态通过TaskCallback回调
+ * TTS接口，异步调用，返回状态通过TTSCallback回调
  *
  * @param text 要播放的文本
  * @param timeoutMillis 超时时间，单位毫秒
- * @param callback 回调，status=1表示播放成功，status=0表示播放失败
+ * @param callback 回调，status=1表示播放成功，status=2表示播放失败
  */
 fun tts(
     text: String,
     timeoutMillis: Long = 180000,
-    callback: TaskCallback? = null
+    callback: TTSCallback? = null
 ) {
     this.appAgent?.api?.tts(text, timeoutMillis, callback)
 }
@@ -1138,6 +1050,7 @@ fun stopTTS() {
 - 同步接口调用
 ```Kotlin
 import com.ainirobot.agent.AgentCore
+import com.ainirobot.agent.assit.LLMResponse
 import com.ainirobot.agent.base.llm.LLMConfig
 import com.ainirobot.agent.base.llm.LLMMessage
 
@@ -1148,15 +1061,17 @@ import com.ainirobot.agent.base.llm.LLMMessage
   *  @param  messages 大模型chat message
   *  @param  config 大模型配置
   *  @param  timeoutMillis 超时时间，单位毫秒
+  *  @param  isStreaming 是否流式输出，true表示流式输出（会自动调用TTS流式播放），false表示非流式输出（会返回执行结果）
   *
-  *  @return  返回1表示成功，返回0表示失败
+  *  @return  TaskResult<LLMResponse> 任务执行结果，status=1表示成功，status=2表示失败
   */
 suspend fun llmSync(
     messages: List<LLMMessage>,
     config: LLMConfig,
-    timeoutMillis: Long = 180000
-): Int {
-    return this.appAgent?.api?.llmSync(messages, config, timeoutMillis) ?: 0
+    timeoutMillis: Long = 180000,
+    isStreaming: Boolean = true
+): TaskResult<LLMResponse> {
+    return this.appAgent?.api?.llmSync(messages, config, timeoutMillis, isStreaming) ?: TaskResult(2)
 }
 ```
 - 异步接口调用
@@ -1166,20 +1081,22 @@ import com.ainirobot.agent.base.llm.LLMConfig
 import com.ainirobot.agent.base.llm.LLMMessage
 
 /**
-  * 大模型接口，异步调用，返回状态通过TaskCallback回调
+  * 大模型接口，异步调用，返回状态通过LLMCallback回调
   *
   *  @param  messages 大模型chat message
   *  @param  config 大模型配置
   *  @param  timeoutMillis 超时时间，单位毫秒
+  *  @param  isStreaming 是否流式输出，true表示流式输出（会自动调用TTS流式播放），false表示非流式输出（会返回执行结果）
   *  @param  callback 回调，status=1表示播放成功，status=2表示播放失败
   */
 fun llm(
     messages: List<LLMMessage>,
     config: LLMConfig,
     timeoutMillis: Long = 180000,
-    callback: TaskCallback? = null
+    isStreaming: Boolean = true,
+    callback: LLMCallback? = null
 ) {
-    this.appAgent?.api?.llm(messages, config, timeoutMillis, callback)
+    this.appAgent?.api?.llm(messages, config, timeoutMillis, isStreaming, callback)
 }
 ```
 
@@ -1188,8 +1105,8 @@ fun llm(
 - 介绍
   - 当你需要在没有用户语音交互的时候希望触发大模型的规划和执行时，推荐使用。
 - 应用场景
-  - 用户手动点击一个页面的按钮“确定”，等效于用户说了“确定”，通过QueryByText即可。
-  - 比如应用启动页面，在用户开始交互之前，主动去跟用户交互，可以通过QueryByText去驱动。
+  - 用户手动点击一个页面的按钮“确定”，等效于用户说了“确定”，通过query方法即可。
+  - 比如应用启动页面，在用户开始交互之前，主动去跟用户交互，可以通过query方法去驱动。
 
 ```Kotlin
 import com.ainirobot.agent.AgentCore
@@ -1262,7 +1179,7 @@ import com.ainirobot.agent.AgentCore
 
 /**
  * 是否禁用大模型规划，禁用后不会再进行大模型规划，true表示禁用，默认为false
- * 用户如果需要自行处理大模型与大模型的调用则可设置为true
+ * 用户如果需要自行处理大模型的调用则可设置为true
  */
 var isDisablePlan: Boolean
     get() = appAgent?.isDisablePlan ?: false
@@ -1317,7 +1234,7 @@ class MainApplication : Application() {
         super.onCreate()
 
         // AppAgent初始化
-        object : AppAgent(this@MainApplication) {
+        object : AppAgent(this) {
 
             override fun onCreate() {
                 // 设定角色人设
@@ -1338,26 +1255,26 @@ class MainApplication : Application() {
     }
 
     @AgentAction(
-         name =  "com.agent.demo.SHOW_SMILE_FACE",
-         displayName =  "笑",
-         desc =  "响应用户的开心、满意或正面情绪"
-     )
-      private   fun   showSmileFace(
-         action:  Action,
-          @ActionParameter(
-             name =  "sentence",
-             desc =  "回复给用户的话"
-         )
-         sentence:  String
-     ):  Boolean  {
-         AOCoroutineScope.launch  {
-              // 播放给用户说的话
-             AgentCore.ttsSync(sentence)
-              // 播放完成后，及时上报Action的执行状态
-             action.notify(isTriggerFollowUp =  false)
-         }
-          return   true
-     }
+        name = "com.agent.demo.SHOW_SMILE_FACE",
+        displayName = "笑",
+        desc = "响应用户的开心、满意或正面情绪"
+    )
+    private fun showSmileFace(
+        action: Action,
+        @ActionParameter(
+            name = "sentence",
+            desc = "回复给用户的话"
+        )
+        sentence: String
+    ): Boolean {
+        AOCoroutineScope.launch {
+            // 播放给用户说的话
+            AgentCore.ttsSync(sentence)
+            // 播放完成后，及时上报Action的执行状态
+            action.notify(isTriggerFollowUp = false)
+        }
+        return true
+    }
 }
 ```
 
@@ -1367,10 +1284,7 @@ class MainApplication : Application() {
 
 ```kotlin
 import android.os.Bundle
-import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
 import com.ainirobot.agent.AgentCore
 import com.ainirobot.agent.PageAgent
 import com.ainirobot.agent.action.Action
@@ -1382,39 +1296,33 @@ import kotlinx.coroutines.launch
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
         setContentView(R.layout.activity_main)
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) {  v, insets ->
-              val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
-            insets
-        }
 
-          // PageAgent初始化
+        // PageAgent初始化
         PageAgent(this)
     }
 
     @AgentAction(
-         name =  "com.agent.demo.SHOW_SMILE_FACE",
-         displayName =  "笑",
-         desc =  "响应用户的开心、满意或正面情绪"
-     )
-      private   fun   showSmileFace(
-         action:  Action,
-          @ActionParameter(
-             name =  "sentence",
-             desc =  "回复给用户的话"
-         )
-         sentence:  String
-     ):  Boolean  {
-         AOCoroutineScope.launch  {
-              // 播放给用户说的话
-             AgentCore.ttsSync(sentence)
-              // 播放完成后，及时上报Action的执行状态
-             action.notify(isTriggerFollowUp =  false)
-         }
-          return true
-     }
+        name = "com.agent.demo.SHOW_SMILE_FACE",
+        displayName = "笑",
+        desc = "响应用户的开心、满意或正面情绪"
+    )
+    private fun showSmileFace(
+        action: Action,
+        @ActionParameter(
+            name = "sentence",
+            desc = "回复给用户的话"
+        )
+        sentence: String
+    ): Boolean {
+        AOCoroutineScope.launch {
+            // 播放给用户说的话
+            AgentCore.ttsSync(sentence)
+            // 播放完成后，及时上报Action的执行状态
+            action.notify(isTriggerFollowUp = false)
+        }
+        return true
+    }
 }
 ```
 
