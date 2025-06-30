@@ -1020,15 +1020,12 @@ interface OnTranscribeListener {
 ### 获取ASR/TTS 内容  
 - transcription.text 是文本内容。
 
-### 判断是ASR还是TTS内容
-- 通过transcription.isUserSpeaking判断，true时为ASR结果，false为TTS结果。
-
 ### 判断是流式结果还是最终结果
 - 通过transcription.final判断，true为最终结果，false为中间结果。
 
 **onTranscribe** 回调函数返回值的设定
-- 返回true时，代表你告知系统你消费了此次结果，系统将不再把字幕显示在底部的字幕条上。
-- （**建议**）返回false时，将不影响后续系统对于ASR/TTS结果的分发。
+- 返回true时，代表你告知系统你消费了此次结果，将拦截系统消息继续传递，系统将不再把字幕显示在底部的字幕条上。
+- （**建议**）返回false时，说明你只监听，但不拦截，将不影响后续系统对于ASR/TTS结果的分发。
 
 > 📣 **注意：onTranscribe 回调是在子线程中。**
 
