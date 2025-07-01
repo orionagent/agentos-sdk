@@ -237,7 +237,7 @@ class MainActivity : AppCompatActivity() {
                 Parameter(
                     "sentence",
                     ParameterType.STRING,
-                    "回复给用户的话，给于安慰",
+                    "回复给用户的话，给予安慰",
                     true
                 )
             ),
