@@ -1,7 +1,13 @@
 # AgentOS SDK 开发指南
 
-## 当前AgentOS SDK版本
-v0.3.3
+## ⚠️ 重要版本说明
+
+**当前SDK版本：v0.3.3**
+
+- **小秘2机器人**：暂时仅支持 v0.2.2 版本，v0.3.3 支持即将推出
+- **Mini机器人**：完全支持 v0.3.3 版本的所有功能
+
+建议根据目标设备选择对应的SDK版本进行开发。
 
 ## 📋 概述
 AgentOS SDK 为开发者提供了完整的猎户星空智能机器人应用开发能力，包括大模型集成、机器人控制、语音交互等功能。
@@ -11,6 +17,8 @@ AgentOS SDK 为开发者提供了完整的猎户星空智能机器人应用开�
 ### 1. 核心文档
 - **AgentOS SDK 文档**：[AgentOS_SDK_Doc_v0.3.3.md](Agent/v0.3.3/AgentOS_SDK_Doc_v0.3.3.md)
   - 大模型相关能力接口：对话管理、语音合成、智能交互等
+- **API 参考文档**：[API_Reference.md](Agent/v0.3.3/API_Reference.md)
+  - AgentOS SDK v0.3.3完整的API参考文档，包含所有核心类、接口、方法、属性、构造函数、参数说明、返回值、使用示例等详细说明
 - **机器人原生接口**：[RobotAPI.md](Robot/v11.3C/RobotAPI.md)
   - 机器人原生控制接口：运动控制、导航、传感器、相机、充电、定位等
 - **类路径参考**：[ClassPathList.md](Agent/v0.3.3/ClassPathList.md)
@@ -41,8 +49,8 @@ AgentOS SDK 为开发者提供了完整的猎户星空智能机器人应用开�
 ### 开发流程
 1. **环境准备**：安装 Android Studio，配置开发环境
 2. **文档学习**：阅读 AgentOS SDK 文档和机器人原生接口文档
-3. **示例参考**：参考 `SampleCodes.md` 获取示例代码
-4. **类路径确认**：通过 `ClassPathList.md` 确认正确的类导入路径
+3. **示例参考**：参考 [SampleCodes.md](Agent/v0.3.3/SampleCodes.md) 获取示例代码
+4. **API 查阅**：通过 [API_Reference.md](Agent/v0.3.3/API_Reference.md) 了解详细的类和方法使用说明
 5. **功能集成**：按需集成 AgentOS SDK 和机器人原生API
 6. **测试验证**：测试验证功能实现效果
 

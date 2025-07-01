@@ -28,7 +28,7 @@ alwaysApply: true
   提供项目中所有关键类的完整包路径清单，包含Agent SDK和RobotOS SDK的所有核心import路径。涵盖Agent生命周期、Action定义与执行、参数与注解、LLM集成、回调监听、任务与消息处理、机器人底层服务、导航定位、动作控制、传感器数据、人脸识别、语音交互、设备管理等模块的完整导入路径。开发时必须参考此文档确保正确的类路径导入。
 
 - **SampleCodes.md**  
-  提供各功能模块的典型示例代码，供开发参考和快速实现。包含完整的依赖配置、Agent实现、Action系统、核心API使用等示例。
+  提供各功能模块的典型示例代码，供开发参考和快速实现。包含完整的依赖配置、Agent实现、Action系统、核心API使用等示例。**严格区分Kotlin和Java代码，两种语言有不同的语法和API调用方式，生成代码时必须严格按照对应语言的示例，不得混用！**
 
 ---
 
@@ -43,9 +43,25 @@ alwaysApply: true
 
 ## 3. SDK使用规范
 
+### 3.1 文档查阅优先级（重要）
+
+**任何开发需求或编译运行错误，与Agent或Robot相关的问题，必须严格按照以下优先级查阅资料：**
+
+1. **第一优先级：完整查阅项目文档**
+   - 所有Agent相关问题必须先查阅 **AgentOS_SDK_Doc_v0.3.3.md** 和 **API_Reference.md**
+   - 所有Robot相关问题必须先查阅 **RobotAPI.md**
+   - 参考 **SampleCodes.md** 中的完整示例代码
+   - 确认 **ClassPathList.md** 中的正确导入路径
+
+2. **第二优先级：项目文档无相关资料时**
+   - 仅在项目文档中完全没有任何相关信息时，才可查阅网络资料或Android官方标准文档
+
+**严禁在未完整查阅项目文档的情况下直接使用网络资料或通用Android开发资料！**
+
+### 3.2 具体使用规范
+
 - 所有机器人控制功能必须基于 **RobotAPI.md** 指定的 RobotOS SDK 开发
-- 所有Android功能必须先查阅 RobotOS SDK 开发文档，如果文档中没有任何相关信息再查询Android官方的标准文档
-- RobotOS SDK提供了摄像头，视觉，底盘运动，室内地图，导航等多个能力，遇到类似的功能开发需求，先完整查阅RobotOS SDK 开发文档
+- RobotOS SDK提供了摄像头、视觉、底盘运动、室内地图、导航等多个能力，遇到类似功能开发需求，必须先完整查阅RobotOS SDK开发文档
 - 所有大模型Agent开发功能必须基于 **AgentOS_SDK_Doc_v0.3.3.md** 指定的 AgentOS SDK 开发
 - 开发时优先参考 **SampleCodes.md**，结合 **ClassPathList.md** 确认正确导入类路径
 - **重要：所有API使用必须参考API_Reference.md中的详细说明，包括方法签名、参数类型、返回值、使用注意事项等**
@@ -63,31 +79,79 @@ alwaysApply: true
 - **所有示例代码必须包含完整的import语句，参考ClassPathList.md**
 - **所有API调用必须按照API_Reference.md中的规范使用，注意参数类型、返回值处理、异常情况等**
 - Action参数命名使用英文，多个单词用下划线连接，避免与Action或Parameter对象的属性名相同
-- 异步操作必须使用AOCoroutineScope.launch{}，不得在ActionExecutor.onExecute()中执行耗时操作
+
+### 4.1 Kotlin vs Java 代码区别（重要）
+
+**严格区分Kotlin和Java语法，不得混用！生成代码时必须严格按照对应语言的语法规范：**
+
+#### Kotlin代码特点：
+- 异步操作使用协程：`AOCoroutineScope.launch{}`
+- 空安全语法：`?.` `!!` `?:`
+- 数据类：`data class`
+- 扩展函数和属性
+- Lambda表达式简洁语法
+- 字符串模板：`"$variable"`
+- 可空类型声明：`String?`
+
+#### Java代码特点：
+- 异步操作使用线程池（不是协程）
+- 传统空值检查：`if (obj != null)`
+- 普通类：`public class`
+- 传统方法调用
+- 匿名内部类或Lambda（Java 8+）
+- 字符串拼接：`"text" + variable`
+- 非空类型默认，需要手动检查null
+- **没有默认参数**：所有方法参数都必须显式传递
+
+#### 关键API调用差异：
+- **AgentCore调用**：
+  - Kotlin: `AgentCore.methodName()`
+  - Java: `AgentCore.INSTANCE.methodName()`
+- **异步处理**：
+  - Kotlin: `AOCoroutineScope.launch { // 协程代码 }`
+  - Java: `AsyncTaskHelper.execute(() -> { // 线程代码 });`
+- **监听器实现**：
+  - Kotlin: `object : OnTranscribeListener { }`
+  - Java: `new OnTranscribeListener() { }`
+- **方法参数**：
+  - Kotlin: 支持默认参数，可省略部分参数
+  - Java: 无默认参数，必须传递所有参数或使用重载方法
+- **常见Java参数错误示例**：
+  - ❌ `AgentCore.INSTANCE.tts("hello")` // 缺少必需参数
+  - ✅ `AgentCore.INSTANCE.tts("hello", 5000, null)` // 所有参数都传递
+
+**重要：生成Java代码时绝对不能使用Kotlin语法，反之亦然！**
 
 ---
 
 ## 5. 重要提醒
 
+- **文档查阅优先级：任何Agent/Robot相关问题必须先完整查阅项目文档，文档无相关资料时才可查阅网络资料**
+- **严格区分Kotlin和Java语法，生成代码时不得混用语言特性**
+- **Java没有默认参数：生成Java代码时必须传递所有必需参数，不能省略**
+- **严格按照API_Reference.md中的生命周期管理、注册方式、参数命名规范等要求开发**
 - 每个Action执行完成后必须调用action.notify()方法
 - 动态注册Action需要设置executor
 - 静态注册Action需要在actionRegistry.json中配置
 - 一个App只能有一个AppAgent实例
 - 每个页面只能有一个PageAgent实例
-- **ActionExecutor.onExecute()方法有2秒超时限制，耗时操作必须在协程中异步执行**
+- **ActionExecutor.onExecute()方法有2秒超时限制，耗时操作必须异步执行：**
+  - **Kotlin**: 使用协程 `AOCoroutineScope.launch{}`
+  - **Java**: 使用线程池 `AsyncTaskHelper.execute()`
 - **所有TTS、LLM等异步操作完成后才能调用action.notify()**
 - 使用TaskResult<T>处理异步任务结果，通过status判断成功失败(1=成功,2=失败)
-- **严格按照API_Reference.md中的生命周期管理、注册方式、参数命名规范等要求开发**
 - 目标设备屏幕规格：物理分辨率1920*1080px，屏幕密度3.5，逻辑分辨率约500*308dp。开发时必须先通过代码获取实际屏幕尺寸，然后根据可用高度动态调整UI布局。不要设置android:screenOrientation="landscape"，不要创建单独的适配文件，统一在layout文件夹处理响应式布局。UI组件尺寸和间距必须适配极小的可用空间，避免内容超出屏幕显示。
 
 ---
 
 ## 6. 开发流程
 
-1. 集成AgentSDK（配置仓库、添加依赖、创建注册表）
-2. 设定App的人设和目标
-3. 创建业务页面，设置页面级目标
-4. 定义并注册Action到Agent SDK（参考ClassPathList.md确保正确导入，参考API_Reference.md确保正确使用）
-5. 实现Action的处理逻辑（注意异步处理和超时限制，参考API_Reference.md中的重要提示）
-6. 测试语音触发和Action执行
+1. **开发前准备**：完整阅读相关项目文档（AgentOS_SDK_Doc、API_Reference、RobotAPI、SampleCodes、ClassPathList），确认使用Kotlin还是Java，严格按照对应语言的语法规范
+2. 集成AgentSDK（配置仓库、添加依赖、创建注册表）
+3. 设定App的人设和目标
+4. 创建业务页面，设置页面级目标
+5. 定义并注册Action到Agent SDK（参考ClassPathList.md确保正确导入，参考API_Reference.md确保正确使用）
+6. 实现Action的处理逻辑（注意异步处理和超时限制，参考API_Reference.md中的重要提示）
+7. 测试语音触发和Action执行
+8. **问题解决**：遇到问题时先完整查阅项目文档寻找解决方案，编译错误时优先检查是否按照对应语言语法规范（特别是Java的参数传递），文档无相关资料时才可查阅网络资料或Android官方文档
 
