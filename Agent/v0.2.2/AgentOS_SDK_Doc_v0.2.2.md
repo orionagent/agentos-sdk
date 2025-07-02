@@ -86,7 +86,7 @@ dependencies {
 }
 ```
 
- **appId** ：Agent应用的appId，需在[接待后台](https://jiedai.ainirobot.com/web/portal/#/frame/hmag-agentos/hmag-agentos.agentapp/)申请
+ **appId** ：Agent应用的唯一标识符，需要在[接待后台](https://jiedai.ainirobot.com/)的Agent系统中申请Agent应用开发来获取
 
  **platform** ：当前运行的平台，如：**opk**或**apk**
 
