@@ -53,9 +53,17 @@ AgentOS SDK 为开发者提供了完整的猎户星空智能机器人应用开�
 - **目标平台**：Android
 
 #### AI辅助开发 (推荐)
-如果您使用 Cursor 等 AI 开发工具：
-- 将项目提供的 `.cursor` 文件夹放置到项目根目录下
-- AI Rules 配置将自动生效，提升开发效率
+
+
+**🤖 Cursor AI 专用开发指南**
+- **完整指南**：[AGENTOS_CURSOR_AI_GUIDE.md](AGENTOS_CURSOR_AI_GUIDE.md)
+  - Cursor AI 集成步骤详解
+  - AgentOS SDK 专用开发规则配置
+  - AI 辅助开发最佳实践
+- **配置包**：`cursor-rules-dependencies.zip`
+  - 包含完整的 Cursor Rules 配置
+  - 支持智能代码生成和错误检测
+  - 提供专业的 AgentOS SDK 开发建议
 
 ## 📚 开发规范
 
@@ -79,6 +87,7 @@ AgentOS SDK 为开发者提供了完整的猎户星空智能机器人应用开�
 
 ## 📖 其他资源
 - **常见问题**：[FAQ.md](FAQ.md)
+- **Cursor AI 开发指南**：[AGENTOS_CURSOR_AI_GUIDE.md](AGENTOS_CURSOR_AI_GUIDE.md)
 - **AI开发规则**：[AI_Rules/](AI_Rules/)
 
 ## 📌 版本信息
@@ -86,4 +95,4 @@ AgentOS SDK 为开发者提供了完整的猎户星空智能机器人应用开�
 - **机器人API版本**：v11.3C
 
 ---
-*更新时间：2025年06月25日*
+*更新时间：2025年07月02日*

@@ -18,7 +18,7 @@ RobotOS基于安卓平台开发，同时提供了一套针对android apk的sdk�
 ### 1. 导入SDK依赖
 
 #### 添加JAR包依赖
-1. 在项目根目录中找到SDK文件，文件名格式为 `robotservice_xx.jar`（例如：`robotservice_11.3.jar`）
+1. 获取SDK文件：在Robot版本目录中查找 `robotservice_xx.jar` 文件（如 `Robot/v11.3C/robotservice_11.3.jar`）。SDK文件遵循 `robotservice_<version>.jar` 命名规范，请根据实际版本选择对应目录
 2. 将JAR包文件复制到Android项目的 `app/libs/` 目录下
 3. 在 `app/build.gradle` 文件中添加依赖配置：
 
