@@ -42,7 +42,7 @@
 ### 2. 集成 AgentOS SDK 开发规则
 
 #### 步骤 1：下载规则配置包
-1. 下载提供的 `cursor-rules-dependencies.zip` 文件
+1. 下载提供的 [`cursor-rules-dependencies.zip`](https://github.com/orionagent/agentos-sdk/blob/main/cursor-rules-dependencies.zip) 文件
 2. 确保下载完整且未损坏
 
 #### 步骤 2：解压并集成规则

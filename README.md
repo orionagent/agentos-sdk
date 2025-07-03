@@ -56,11 +56,11 @@ AgentOS SDK 为开发者提供了完整的猎户星空智能机器人应用开�
 
 
 **🤖 Cursor AI 专用开发指南**
-- **完整指南**：[AGENTOS_CURSOR_AI_GUIDE.md](AGENTOS_CURSOR_AI_GUIDE.md)
+- **完整指南**：[AGENTOS_CURSOR_AI_GUIDE.md](https://github.com/orionagent/agentos-sdk/blob/main/AGENTOS_CURSOR_AI_GUIDE.md)
   - Cursor AI 集成步骤详解
   - AgentOS SDK 专用开发规则配置
   - AI 辅助开发最佳实践
-- **配置包**：`cursor-rules-dependencies.zip`
+- **配置包**：[cursor-rules-dependencies.zip](https://github.com/orionagent/agentos-sdk/blob/main/cursor-rules-dependencies.zip)
   - 包含完整的 Cursor Rules 配置
   - 支持智能代码生成和错误检测
   - 提供专业的 AgentOS SDK 开发建议
@@ -87,7 +87,7 @@ AgentOS SDK 为开发者提供了完整的猎户星空智能机器人应用开�
 
 ## 📖 其他资源
 - **常见问题**：[FAQ.md](FAQ.md)
-- **Cursor AI 开发指南**：[AGENTOS_CURSOR_AI_GUIDE.md](AGENTOS_CURSOR_AI_GUIDE.md)
+- **Cursor AI 开发指南**：[AGENTOS_CURSOR_AI_GUIDE.md](https://github.com/orionagent/agentos-sdk/blob/main/AGENTOS_CURSOR_AI_GUIDE.md)
 - **AI开发规则**：[AI_Rules/](AI_Rules/)
 
 ## 📌 版本信息
