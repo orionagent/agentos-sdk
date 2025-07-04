@@ -39,6 +39,8 @@ AgentOS SDK 为开发者提供了完整的猎户星空智能机器人应用开�
   - AgentOS SDK v0.3.3完整的API参考文档，包含所有核心类、接口、方法、属性、构造函数、参数说明、返回值、使用示例等详细说明
 - **机器人原生接口**：[RobotAPI.md](Robot/v11.3C/RobotAPI.md)
   - 机器人原生控制接口：运动控制、导航、传感器、相机、充电、定位等
+- **机器人云端服务接口**：[OpenAPI 文档](https://openapi.orionstar.com/opendocs/zh/index)
+  - 机器人云端管理平台：涵盖企业信息管理、访客系统、远程控制、数据统计等API服务
 - **类路径参考**：[ClassPathList.md](Agent/v0.3.3/ClassPathList.md)
   - 项目中所有关键类的完整包路径
 - **示例代码**：[SampleCodes.md](Agent/v0.3.3/SampleCodes.md)
