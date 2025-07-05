@@ -21,6 +21,14 @@
     - [1.2.5 创建PageAgent](#125-创建pageagent)
     - [1.2.6 完整示例](#126-完整示例)
     - [1.2.7 开发总结](#127-开发总结)
+  - [1.3 Agent角色配置 - 让您的AI更有个性](#13-agent角色配置---让您的ai更有个性)
+    - [1.3.1 概述](#131-概述)
+    - [1.3.2 三大核心配置](#132-三大核心配置)
+    - [1.3.3 配置层级与优先级](#133-配置层级与优先级)
+    - [1.3.4 API接口详解](#134-api接口详解)
+    - [1.3.5 扩展配置能力](#135-扩展配置能力)
+    - [1.3.6 配置最佳实践](#136-配置最佳实践)
+    - [1.3.7 典型应用场景](#137-典型应用场景)
 - [2. Action详解](#2-action详解)
   - [2.1 Action概念](#21-action概念)
     - [2.1.1 基础属性](#211-基础属性)
@@ -291,6 +299,8 @@ class MainActivity : AppCompatActivity() {
 
 上述快速开始部分提供了基础接入方式。更完整的示例项目包含了多种情感场景的表情展示功能，您可以直接下载运行体验。
 
+**示例项目地址**: [AgentSDKSample](https://github.com/orionagent/AgentSDKSample)
+
 ### 1.2.7 开发总结
 
 **核心开发流程**
@@ -301,6 +311,132 @@ class MainActivity : AppCompatActivity() {
    - 定义Action的名称、描述和参数
    - 实现Action的处理逻辑
    - 通过语音触发测试Action执行
+
+# 1.3 Agent角色配置 - 让您的AI更有个性
+
+## 1.3.1 概述
+
+AgentOS SDK提供了强大的角色配置功能，让您可以为AI助手定制独特的身份、风格和目标。通过三个核心配置方法，您可以打造出具有鲜明个性的智能助手。
+
+## 1.3.2 三大核心配置
+
+### 人设配置 (setPersona)
+**作用**：定义AI助手的身份特征和基本属性
+**侧重点**：静态身份信息，回答"我是谁"
+**应用场景**：角色身份、性格特点、背景设定
+
+### 风格配置 (setStyle)
+**作用**：设置AI助手的对话风格和表达方式
+**侧重点**：交流方式，回答"如何说话"
+**应用场景**：语言风格、表达方式、情感色彩
+
+### 目标配置 (setObjective)
+**作用**：明确AI助手的任务目标和行为准则
+**侧重点**：业务流程和特殊要求，回答"要做什么"
+**应用场景**：业务目标、行为规范、特殊要求
+
+## 1.3.3 配置层级与优先级
+
+### 配置层级
+```
+PageAgent配置 > AppAgent配置 > 系统默认
+```
+
+**说明**：PageAgent未设置时，自动继承AppAgent的配置
+
+## 1.3.4 API接口详解
+
+### setPersona()
+```kotlin
+setPersona(persona: String): Agent
+```
+
+**参数说明：**
+- `persona: String` - 人设描述，如："你叫小豹，是一个聊天机器人"
+
+### setStyle()
+```kotlin
+setStyle(style: String): Agent
+```
+
+**参数说明：**
+- `style: String` - 对话风格，如："professional, friendly, humorous"
+
+### setObjective()
+```kotlin
+setObjective(objective: String): Agent
+```
+
+**参数说明：**
+- `objective: String` - 规划目标，要清晰明确，以便于大模型理解
+
+> **说明**：三个方法均支持链式调用，在AppAgent和PageAgent中都可使用。具体使用示例请参考前面的快速开始章节。
+
+## 1.3.5 扩展配置能力
+
+当基础的三项配置无法满足复杂需求时，可以结合使用**感知信息上报**功能（详见[3.8节](#38-感知信息上报)）进行更灵活的信息传递：
+
+```kotlin
+// 上传复杂的页面信息和业务状态
+val pageInfo = """
+当前商品：${product.name}
+用户状态：${user.memberLevel}会员
+特殊提示：该商品正在促销中
+"""
+
+AgentCore.uploadInterfaceInfo(pageInfo)
+```
+
+> **提示**：`uploadInterfaceInfo`方法的详细用法请参考[3.8 感知信息上报](#38-感知信息上报)章节。
+
+## 1.3.6 配置最佳实践
+
+### 核心原则
+- **人设要具体**：使用具体的角色定义，避免抽象描述
+- **风格要一致**：保持整个应用的风格统一性  
+- **目标要明确**：确保AI理解具体的业务目标
+
+### 示例对比
+
+**❌ 不推荐**
+```kotlin
+setPersona("你是一个助手")
+setObjective("帮助用户")
+```
+
+**✅ 推荐**
+```kotlin
+setPersona("你是'小豹购物'的专属购物顾问，拥有3年电商经验")
+setObjective("根据用户喜好和预算，推荐最合适的商品并提供购买建议")
+```
+
+## 1.3.7 典型应用场景
+
+### 电商应用
+```kotlin
+// 全局配置
+setPersona("资深购物顾问")
+setObjective("帮助用户做出明智的购买决策")
+
+// 页面级配置
+// 商品列表页：帮助用户快速筛选商品
+// 详情页：详细介绍商品特性
+// 购物车：协助完成订单确认
+```
+
+### 教育应用  
+```kotlin
+// 全局配置
+setPersona("经验丰富的教育助手")
+setStyle("耐心、鼓励、循序渐进")
+setObjective("帮助用户掌握知识，激发学习兴趣")
+
+// 页面级配置
+// 课程页：引导完成当前课程学习
+// 练习页：提供习题解答和学习建议
+```
+
+---
 
 # 2. Action详解
 
@@ -1487,12 +1623,12 @@ annotation class ActionParameter(
 ### 模板项目
 提供基础的项目结构和配置，适合快速开始AgentOS SDK开发。
 
-**项目地址**: https://github.com/orionagent/AgentSDKSampleEmpty
+**项目地址**: [AgentSDKSampleEmpty](https://github.com/orionagent/AgentSDKSampleEmpty)
 
 ### 完整示例项目
 包含多种功能示例和最佳实践，展示AgentOS SDK的完整能力。
 
-**项目地址**: https://github.com/orionagent/AgentSDKSample
+**项目地址**: [AgentSDKSample](https://github.com/orionagent/AgentSDKSample)
 
 ## 5.2 开发资源
 
