@@ -1,84 +1,93 @@
-# Agent SDK for APK V0.3.3文档
+# AgentOS SDK for APK V0.3.3文档
 
-> ## 📣 **版本信息**
-> 当前SDK版本: 0.3.3
+## 📋 版本信息
 
-## 📋 目录
+![SDK](https://img.shields.io/badge/SDK_Version-v0.3.3-blue)
+![Platform](https://img.shields.io/badge/Platform-Android-green)
+![API](https://img.shields.io/badge/API-26+-orange)
+![Language](https://img.shields.io/badge/Language-Kotlin%20%7C%20Java-purple)
+
+## 📚 目录
 
 - [1. 概述](#1-概述)
   - [1.1 环境要求](#11-环境要求)
     - [1.1.1 开发环境](#111-开发环境)
     - [1.1.2 运行环境](#112-运行环境)
   - [1.2 快速开始](#12-快速开始)
-    - [1.2.1 配置仓库](#121-配置仓库)
-    - [1.2.2 添加依赖](#122-添加依赖)
-    - [1.2.3 添加注册表](#123-添加注册表)
-    - [1.2.4 添加AppAgent](#124-添加appagent)
-    - [1.2.5 添加PageAgent](#125-添加pageagent)
+    - [1.2.1 配置Maven仓库](#121-配置maven仓库)
+    - [1.2.2 添加SDK依赖](#122-添加sdk依赖)
+    - [1.2.3 配置Action注册表](#123-配置action注册表)
+    - [1.2.4 创建AppAgent](#124-创建appagent)
+    - [1.2.5 创建PageAgent](#125-创建pageagent)
     - [1.2.6 完整示例](#126-完整示例)
-    - [1.2.7 总结](#127-总结)
+    - [1.2.7 开发总结](#127-开发总结)
 - [2. Action详解](#2-action详解)
-  - [2.1 什么是Action](#21-什么是action)
+  - [2.1 Action概念](#21-action概念)
     - [2.1.1 基础属性](#211-基础属性)
-    - [2.1.2 Action参数](#212-action参数)
-  - [2.2 Action注册](#22-action注册)
+    - [2.1.2 参数定义](#212-参数定义)
+  - [2.2 Action注册机制](#22-action注册机制)
     - [2.2.1 App级Action](#221-app级action)
     - [2.2.2 Page级Action](#222-page级action)
-  - [2.3 Action执行](#23-action执行)
+  - [2.3 Action执行流程](#23-action执行流程)
     - [2.3.1 执行回调](#231-执行回调)
-    - [2.3.2 执行结果](#232-执行结果)
+    - [2.3.2 执行结果通知](#232-执行结果通知)
   - [2.4 系统内置Action](#24-系统内置action)
-- [3. 核心功能接口](#3-核心功能接口)
-  - [1. 麦克风开关](#1-麦克风开关)
-  - [2. 获取ASR和TTS的结果](#2-获取asr和tts的结果)
-  - [3. Agent状态监听](#3-agent状态监听)
-  - [4. 关闭语音条](#4-关闭语音条)
-  - [5. 播放TTS/停止播放TTS](#5-播放tts停止播放tts)
-  - [6. 大模型接口](#6-大模型接口)
-  - [7. 文本指令](#7-文本指令)
-  - [8. 感知信息上报](#8-感知信息上报)
-  - [9. 清空对话历史](#9-清空对话历史)
-  - [10. 免唤醒开关](#10-免唤醒开关)
-  - [11. 禁用强制规划](#11-禁用强制规划)
-  - [12. 跳转到小豹应用](#12-跳转到小豹应用)
+- [3. 核心API接口](#3-核心api接口)
+  - [3.1 麦克风控制](#31-麦克风控制)
+  - [3.2 ASR与TTS监听](#32-asr与tts监听)
+  - [3.3 Agent状态监听](#33-agent状态监听)
+  - [3.4 语音条控制](#34-语音条控制)
+  - [3.5 TTS语音合成](#35-tts语音合成)
+  - [3.6 大模型接口](#36-大模型接口)
+  - [3.7 文本指令](#37-文本指令)
+  - [3.8 感知信息上报](#38-感知信息上报)
+  - [3.9 对话历史管理](#39-对话历史管理)
+  - [3.10 免唤醒功能](#310-免唤醒功能)
+  - [3.11 禁用大模型规划](#311-禁用大模型规划)
+  - [3.12 应用跳转](#312-应用跳转)
 - [4. 进阶功能](#4-进阶功能)
-  - [注解实现Action动态注册](#注解实现action动态注册)
-    - [App级动态注册](#app级动态注册)
-    - [Page级动态注册](#page级动态注册)
-    - [注解类说明](#注解类说明)
-- [5. 项目源码](#5-项目源码)
+  - [4.1 注解驱动的Action注册](#41-注解驱动的action注册)
+    - [4.1.1 App级动态注册](#411-app级动态注册)
+    - [4.1.2 Page级动态注册](#412-page级动态注册)
+    - [4.1.3 注解类说明](#413-注解类说明)
+- [5. 项目资源](#5-项目资源)
 - [6. 技术支持](#6-技术支持)
 
 ---
 
 # 1. 概述
 
-> Agent SDK 是一个用于机器人交互的Android开发套件，提供了应用与机器人Agent服务进行通信的能力。SDK支持应用级和页面级的Agent开发，可以实现自然语言交互、动作规划和执行等功能。
+AgentOS SDK是一个面向Android平台的智能交互开发套件，为开发者提供了构建智能机器人应用的完整解决方案。SDK支持应用级和页面级的Agent开发，实现自然语言交互、智能动作规划和执行等核心功能。
 
 ## 1.1 环境要求
 
 ### 1.1.1 开发环境
 
-* Android SDK 版本: 最低支持API 26 (Android 8.0)
-* JDK版本: Java 11
-* Kotlin、Java语言开发
-- 建议开发环境：
-  - Android Studio：基础环境构建和调试
-  - Cursor：提供AI编码能力
+**基础要求**
+- **Android SDK**: 最低支持 API 26 (Android 8.0)
+- **JDK版本**: Java 11
+- **开发语言**: Kotlin / Java
+- **构建工具**: Gradle
+
+**推荐开发环境**
+- **Android Studio**: 用于基础环境构建和调试
+- **Cursor**: 提供AI辅助编码能力，[详细配置指南](../../AGENTOS_CURSOR_AI_GUIDE.md)
 
 ### 1.1.2 运行环境
 
-AgentOS Product Version: V1.3.0.250515
-
-RobotApi Version: 11.3
+**系统要求**
+- **AgentOS产品版本**: V1.3.0.250515
+- **RobotAPI版本**: 11.3
 
 ## 1.2 快速开始
 
-> 如果没有任何Android开发经验，请先下载安装[Android Studio](https://developer.android.com/studio?hl=zh-cn)，然后下载我们提供的空项目，用Android Studio打开此空项目后再开始接下来的步骤。
+> **前置条件**: 如果您是Android开发新手，请先安装[Android Studio](https://developer.android.com/studio?hl=zh-cn)，并下载我们提供的空项目模板，使用Android Studio打开后再进行以下步骤。
 
-### 1.2.1 配置仓库
+### 1.2.1 配置Maven仓库
 
-如果你的gradle脚本使用的 **Groovy** ，那在项目根目录下会有一个**settings.gradle**文件，在此文件中以下位置添加maven配置（以下代码中 **【重要配置】标记的部分** ）
+**Groovy DSL配置**
+
+如果您的项目使用Groovy构建脚本，请在项目根目录的`settings.gradle`文件中添加以下配置：
 
 ```Groovy
 dependencyResolutionManagement {
@@ -96,7 +105,9 @@ dependencyResolutionManagement {
 }
 ```
 
-如果你的gradle脚本使用的是 **Kotlin** ，那么在项目根目录下会有一个**settings.gradle.kts**文件，在此文件中以下位置添加maven配置（以下代码中 **【重要配置】标记的部分** ）
+**Kotlin DSL配置**
+
+如果您的项目使用Kotlin构建脚本，请在项目根目录的`settings.gradle.kts`文件中添加以下配置：
 
 ```Kotlin
 dependencyResolutionManagement {
@@ -112,9 +123,11 @@ dependencyResolutionManagement {
 }
 ```
 
-### 1.2.2 添加依赖
+### 1.2.2 添加SDK依赖
 
-如果你的gradle脚本使用的 **Groovy** ，那在**项目根目录**的 **app/** **目录下会有一个****build.gradle****文件，在此文件中以下位置添加maven配置（以下代码中 **【重要配置】标记的部分** ）
+**Groovy DSL配置**
+
+在`app/build.gradle`文件中添加以下依赖：
 
 ```Groovy
 dependencies {
@@ -127,7 +140,9 @@ dependencies {
 }
 ```
 
-如果你的gradle脚本使用的是 **Kotlin** ，那么在**项目根目录**的 **app/** **目录下会有一个****build.gradle.kts****文件，在此文件中以下位置添加maven配置（以下代码中 **【重要配置】标记的部分** ）
+**Kotlin DSL配置**
+
+在`app/build.gradle.kts`文件中添加以下依赖：
 
 ```Kotlin
 dependencies {
@@ -140,9 +155,9 @@ dependencies {
 }
 ```
 
-### 1.2.3 添加注册表
+### 1.2.3 配置Action注册表
 
-查看项目根目录的**app/src/main**目录下，是否包含**assets**目录，如果没有请先创建**assets**目录，然后在**assets**目录下创建**actionRegistry.json**文件，并在文件中添加以下配置
+在`app/src/main`目录下创建`assets`目录（如不存在），然后创建`actionRegistry.json`文件：
 
 ```JSON
 {
@@ -152,22 +167,18 @@ dependencies {
 }
 ```
 
- **appId** ：Agent应用的appId，需在[接待后台](https://jiedai.ainirobot.com/web/portal/#/frame/hmag-agentos/hmag-agentos.agentapp/)申请
+**配置说明**
+- **appId**: Agent应用的唯一标识符，需在[接待后台](https://jiedai.ainirobot.com/web/portal/#/frame/hmag-agentos/hmag-agentos.agentapp/)申请
+- **platform**: 运行平台标识，支持`opk`或`apk`
+- **actionList**: 对外暴露的Action列表，在注册表中声明的Action需要在AppAgent的`onExecuteAction`方法中处理
 
- **platform** ：当前运行的平台，如：**opk**或**apk**
+> **应用场景**: 在本示例中，我们将开发一个具有情感感知能力的智能助手"豹姐姐"，她能够识别用户的情绪变化并做出相应的回应。
 
- **actionList** ：可以从外部调起的action（只能是app级），在注册表中声明的action需要在AppAgent的onExecuteAction方法中处理action的执行，注：如果不想对外暴露action，actionList可以设置为空数组[]
+### 1.2.4 创建AppAgent
 
-> 📣 在这个项目中，我们将一起开发一个有个性、能感知情绪的虚拟助手。她不仅能和你对话，还能察觉你的情绪变化，并做出恰当回应——是的，她不再是冷冰冰的程序，而是一位会关心你感受的"豹姐姐"！
+> **重要约束**: 一个应用中只能存在一个AppAgent实例。
 
-### 1.2.4 添加AppAgent
-
-> 📣 **注意事项**
-> 1. 一个App中只能有一个AppAgent实例
-
-> 📣 在这里，我们为虚拟助手：豹姐姐，进行角色人设、角色目标等基础设定。
-
-在项目的MainApplication的onCreate方法中添加以下代码（ **加粗部分** ），如果没有MainApplication.kt文件，请参考[示例项目](#示例项目)
+在`MainApplication`的`onCreate`方法中添加以下代码：
 
 ```Kotlin
 package com.ainirobot.agent.sample
@@ -203,26 +214,21 @@ class MainApplication : Application() {
     }
 }
 ```
-> 📣 到这一步，我们的 App 已经有了一个拥有"个性"的虚拟角色。接下来，我们要给她添加一些技能（Action），让她学会根据用户的情绪做出反应！
 
-### 1.2.5 添加PageAgent
+### 1.2.5 创建PageAgent
 
-> 📣 **注意事项**
-> 1. 每个页面只能有一个PageAgent实例
+> **重要约束**: 每个页面只能存在一个PageAgent实例。
 
-示例：在此页面中添加三个Action分别表示感受到用户**高兴、伤心、生气**三种情绪，并根据不同情境跟用户对话
+**设计理念**: 实现情感感知型智能助手
 
-> 📣 **设计思路：让助手"有情绪感知"**
-> 在日常交流中，人的情绪变化往往比语言更关键。本节我们为助手定义几个情绪感知型技能（Action）
+在日常交流中，情感识别往往比语言内容更为重要。本节将为助手定义情感感知能力：
 
-**情绪感知技能列表：**
-- 😊 **展示笑脸，语音回复** - 当感知到用户高兴、满意或正面情绪时
-- 😢 **展示伤心，语音安慰** - 当感知到用户难过、失落或负面情绪时  
-- 😠 **展示生气，语音回应** - 当感知到用户愤怒、不满或激动情绪时
+**情感响应Action列表**
+- 😊 **积极情绪响应** - 感知到用户高兴、满意等正面情绪时的回应
+- 😢 **消极情绪安慰** - 感知到用户难过、失落等负面情绪时的安慰
+- 😠 **愤怒情绪疏导** - 感知到用户愤怒、不满等激动情绪时的疏导
 
-你可以把它理解成："当助手感知到用户的某种情绪（用户输入），就会下发一个对应的 Action，让虚拟助手用语音和表情做出回应"。
-
-在MainActivity.kt中添加以下代码（代码中只添加了一个显示表情的Action，你可以按示例添加另外两个）
+在`MainActivity.kt`中添加以下代码：
 
 ```Kotlin
 package com.ainirobot.agent.sample
@@ -279,35 +285,32 @@ class MainActivity : AppCompatActivity() {
 }
 ```
 
-
-> 📣 **注意：在任何一个Action执行完成后都需要调用action的notify()方法**
-
-> 🎉 **现在你完成了一个能察觉你的情绪变化，并做出恰当回应的"豹姐姐"助手**
+> **关键提醒**: 任何Action执行完成后都必须调用`action.notify()`方法通知系统执行状态。
 
 ### 1.2.6 完整示例
 
-上边的QUICK START是为了方便接入，下面的[示例项目](#示例项目)也很简单，但添加了不同场景显示不同表情的功能，可能会更有趣一些，可以直接下载运行。
+上述快速开始部分提供了基础接入方式。更完整的示例项目包含了多种情感场景的表情展示功能，您可以直接下载运行体验。
 
-### 1.2.7 总结
+### 1.2.7 开发总结
 
-开启一个基于Agent SDK的App ，主要有以下主要核心步骤。
-1. 集成Agent SDK（配置仓库、添加依赖、创建注册表）
-2. 设定App的人设、设定App级别的目标
-3. 创建业务页面，并设置页面级的目标，上传页面信息
-4. （很重要，这是你的应用和AgentOS交互的核心环节）基于App全局/特定页面，定义并注册Action到Agent SDK，可以同时注册多个Action。
-  - 第一步：定义Action的名字，描述，参数及描述
-  - 第二步：实现Action的处理逻辑
-  - 第三步：通过语音触发，看看是否能顺利规划并且执行到你定义的Action
+**核心开发流程**
+1. **SDK集成**: 配置Maven仓库、添加依赖、创建Action注册表
+2. **角色设定**: 定义App的人设和目标
+3. **页面开发**: 创建业务页面，设置页面级目标，上传页面信息
+4. **Action系统**: 定义并注册Action到AgentOS SDK
+   - 定义Action的名称、描述和参数
+   - 实现Action的处理逻辑
+   - 通过语音触发测试Action执行
 
 # 2. Action详解
 
-## 2.1 什么是Action
+## 2.1 Action概念
 
-> AgentOS的核心是识别用户的意图执行合适的技能，而这个技能即为Action，如：用户问“我明天去深圳需要带伞吗？”，识别用户的意图是查询天气，就调用对应的查天气的技能（Action），比如：orion.agent.action.WEATHER
+AgentOS的核心机制是通过识别用户意图来执行相应的技能模块，这些技能模块被称为Action。例如，当用户询问"我明天去深圳需要带伞吗？"时，系统会识别出查询天气的意图，并调用相应的天气查询Action（如：`orion.agent.action.WEATHER`）。
 
 ### 2.1.1 基础属性
 
-Action下基础属性及描述如下：
+Action类的核心属性定义如下：
 
 ```Kotlin
 package com.ainirobot.agent.action
@@ -353,13 +356,13 @@ open class Action(
 }
 ```
 
-> 📣 **注：创建Action时需要清晰描述Action的各项属性，方便大模型理解Action的功能，能够更精确的选择合适的Action**
+> **最佳实践**: 创建Action时需要清晰、准确地描述各项属性，以便大模型能够准确理解Action的功能并做出精确的选择。
 
-### 2.1.2 Action参数
+### 2.1.2 参数定义
 
-Action参数是想让大模型从用户的Query中抽取的核心内容，如：“我想查一下北京今天的天气”，那么可以从中抽取city和date两个字段。
+Action参数用于从用户的查询中提取关键信息。例如，对于"我想查一下北京今天的天气"这个查询，可以提取`city`和`date`两个参数。
 
-参数描述对象的基本属性如下：
+参数对象的属性定义：
 
 ```kotlin
 data class Parameter(
@@ -386,19 +389,24 @@ data class Parameter(
 )
 ```
 
-> 📣 **注：参数的desc也要能精确反应此参数的定义，让大模型的理解更精准；而对于参数的name最好使用英文单词，多个单词间以下划线\_连接；另外，name一定不要与Action对象或Parameter对象的属性名相同或类似，避免出现歧义，** 🚨 **<span style="background-color: #ff4444; color: black; padding: 2px 4px; border-radius: 3px;">这非常重要！！！这非常重要！！！这非常重要！！！</span>**
+> **重要提醒**: 
+> - 参数的`desc`属性必须能够精确反映参数的定义，确保大模型理解准确
+> - 参数名`name`建议使用英文，多个单词用下划线连接
+> - **参数名不得与Action对象或Parameter对象的属性名相同或相似**，以避免歧义
 
-## 2.2 Action注册
+## 2.2 Action注册机制
 
-> Action分为App级和Page级两种，区别在于其活跃的生命周期不同。
+Action按生命周期分为App级和Page级两种类型，它们的活跃周期不同。
 
 ### 2.2.1 App级Action
 
-> App级Action即为全局Action，Action在整个应用运行（处于前台）期间都会被响应，如果应用退出或进入后台则不会被响应，App级的Action注册支持**动态注册**和**静态注册**两种。
+App级Action是全局Action，在整个应用运行期间（处于前台时）都会响应用户请求。当应用退出或进入后台时，这些Action将不再响应。App级Action支持**动态注册**和**静态注册**两种方式。
 
 #### 动态注册
 
-动态注册的App级Action，是为了在应用整个生命周期内响应用户的实时意图， **在应用处于前台期间一直生效，应用退出或进入后台时则不再响应** 。 **需要在AppAgent的onCreate方法中调用注册，如以下示例，注册了一个**退出的Action：
+动态注册的App级Action用于在应用整个生命周期内响应用户的实时意图。需要在AppAgent的`onCreate`方法中调用注册。
+
+**示例：注册退出Action**
 
 ```Kotlin
 import com.ainirobot.agent.AppAgent
@@ -413,15 +421,17 @@ object : AppAgent(this) {
       */
       override fun onCreate() {
         // 动态注册Action
-        // 示例：此处注册了系统Action：EXIT，当用户说“退出”时，会触发BACK事件
+        // 示例：此处注册了系统Action：EXIT，当用户说"退出"时，会触发BACK事件
         registerAction(Actions.EXIT)
     }
 }
 ```
 
-**动态注册**支持注册在当前应用中**新创建**的私有Action，也支持注册外部的Action，如：**系统Action**或者其它 **AgentOS App** （集成AgentSDK的应用）中**静态注册的Action。**
+**外部Action注册**
 
-以下示例，注册一个打开**天气App**中的 **打开天气首页Action** ：
+动态注册支持注册当前应用的私有Action，也支持注册外部Action（如系统Action或其他AgentOS应用中静态注册的Action）。
+
+**示例：注册天气应用的Action**
 
 ```Kotlin
 import android.os.Bundle
@@ -447,11 +457,14 @@ registerAction(
 
 #### 静态注册
 
-首先，只有 **App级的Action才可以静态注册** ，静态注册的Action是为了向外部提供调起当前应用的入口，默认并不会在当前App运行期间生效，如果想要在当前App中也生效，需要再次动态注册即可。
+静态注册专门用于向外部提供调用当前应用的入口。静态注册的Action默认不会在当前应用运行期间生效，如需在当前应用中也生效，需要再次进行动态注册。
 
-**静态注册**必须在**actionRegistry.json**注册表中配置，并添加详细的参数描述等。
+**配置要求**
+- 只有App级Action才可以静态注册
+- 必须在`actionRegistry.json`注册表中配置
+- 需要添加详细的参数描述
 
-以下示例，是在**天气App**中向外部提供一个可以**打开天气首页查天气**的Action：
+**示例：天气应用的静态注册配置**
 
 ```JSON
 {
@@ -481,13 +494,11 @@ registerAction(
 }
 ```
 
-> 📣 **注：required为false，表示参数可以为空，如果为空时需要执行端自行处理，如：使用当前定位的城市，时间默认为今天等。**
+> **参数说明**: `required`为`false`表示参数可选，当参数为空时需要执行端自行处理（如使用当前定位城市、默认今天日期等）。
 
-静态注册的Action，最终的执行器是在AppAgent的**onExecuteAction**方法中，如果对外公开了多个Action，则需要通过actionName判断不同的Action并分别处理。
+**静态注册Action的执行处理**
 
-以下还是**天气App**为例，我们在上一步中，已经在**天气App**的**注册表**中添加了[com.agent.tool.WEATHER\_HOME](https://cheetah-mobile.feishu.cn/docx/FwCQdP1WboqJm3xv5Yic8SxdnWf?fromScene=spaceOverview#doxcnwGQmqyHAiMPRdoQw7dEf0g)的Action，那天气App中AppAgent的**onExecuteAction**方法必须处理此Action。
-
-以下示例
+静态注册的Action需要在AppAgent的`onExecuteAction`方法中处理：
 
 ```Kotlin
 import android.os.Bundle
@@ -515,19 +526,19 @@ object : AppAgent(this) {
 }
 ```
 
-> 📣 **注：简单来说，静态注册的Action为了让外部调用，动态注册的Action为了让当前应用内部调用**
+> **注册方式总结**: 
+> - **静态注册**: 用于向外部提供调用接口
+> - **动态注册**: 用于当前应用内部调用
 
 ### 2.2.2 Page级Action
 
-> Page级的Action需要在页面（Activity或Fragment）初始化时声明，且只在当前页面对用户可见时生效，当页面退出或者被其它页面覆盖则不再生效
+Page级Action需要在页面（Activity或Fragment）初始化时声明，仅在当前页面对用户可见时生效。当页面退出或被其他页面覆盖时，这些Action将不再生效。
 
 #### 动态注册
 
-因为**Page级Action**只在当前页面生效，所以它 **只能动态注册，不能在注册表中注册** ，即不能向外部提供接口
+由于Page级Action只在当前页面生效，因此**只能动态注册，不能在注册表中静态注册**，即不能向外部提供接口。
 
-以下示例定义了三个Action，根据用户的情绪显示三种不同的表情
-
-在Activity的onCreate方法中创建
+**示例：情感响应Action注册**
 
 ```kotlin
 PageAgent(this)
@@ -610,18 +621,18 @@ PageAgent(this)
     )
 ```
 
-#### Action过滤
+#### Action过滤机制
 
-如果你在App级注册了N个全局的Action，但在当前页面上不想规划其中一个或多个全局Action，那么可以通过以下方式排除掉指定的全局Action
+当您在App级注册了多个全局Action，但在特定页面不希望某些全局Action被触发时，可以使用以下过滤方式：
 
-**过滤指定的一个Action**
+**过滤单个Action**
 
 ```Kotlin
 // 过滤掉指定的全局Action，参数为Action的name
 pageAgent.blockAction("com.xxx.yyy.TTT")
 ```
 
-**过滤指定的多个Action**
+**过滤多个Action**
 
 ```Kotlin
 // 过滤的Action列表
@@ -641,13 +652,13 @@ pageAgent.blockActions(
 pageAgent.blockAllActions()
 ```
 
-## 2.3 Action执行
-
-> Action执行上面已经说的很详细，此处只是为了再强调一下
+## 2.3 Action执行流程
 
 ### 2.3.1 执行回调
 
-动态注册Action的具体执行，需要为Action对象设置一个执行器，在执行器中添加你要执行的代码，如：
+**动态注册Action的执行**
+
+动态注册的Action需要设置执行器，在执行器中实现具体的业务逻辑：
 
 ```Kotlin
 import android.os.Bundle
@@ -679,7 +690,9 @@ Action(
 )
 ```
 
-静态注册Action的具体执行，需要在AppAgent的onExecuteAction方法中实现，如：
+**静态注册Action的执行**
+
+静态注册的Action需要在AppAgent的`onExecuteAction`方法中实现：
 
 ```Kotlin
 override fun onExecuteAction(
@@ -690,22 +703,26 @@ override fun onExecuteAction(
 }
 ```
 
-> 📣 **注：不管是哪种注册方式，执行的回调都带有一个Boolean的返回值，表示你是否已经处理过此Action，如果你不处理，请返回false，如果要自定义处理且不需要后续处理，则返回true**
+> **返回值说明**: 
+> - `true`: 表示已自定义处理此Action，不需要后续处理
+> - `false`: 表示不处理此Action，交由系统继续处理
 
-### 2.3.2 执行结果
+### 2.3.2 执行结果通知
 
-**<span style="background-color: #ff4444; color: black; padding: 4px 8px; border-radius: 4px; font-weight: bold;">这非常重要，必不可少！这非常重要，必不可少！这非常重要，必不可少！这非常重要，必不可少！这非常重要，必不可少！这非常重要，必不可少！这非常重要，必不可少！这非常重要，必不可少！这非常重要，必不可少！！！</span>**
+> **🚨 重要警告**  
+> **以下规则是Action系统正常运行的关键，违反将导致系统异常，开发者必须严格遵守：**
 
-1. 首先，**任何Action的执行** **回调** **方法中都不能执行耗时操作。**
-2. 其次，如果你要处理一个Action，除了**在执行的** **回调** **方法返回值返回true**之外，还需要在**Action执行完成后手动调用action的成员方法notify()** 把执行状态或结果同步给系统，具体的时机用户可以自行定义，如：页面加载完成、天气播报完成、到达一个目的地等。
-3. 最后，执行的回调方法默认都是 **子线程** 。
+**执行约束**
+1. **Action执行回调方法中不能执行耗时操作**
+2. **处理Action时，除了返回`true`外，还必须在Action执行完成后调用`action.notify()`方法**
+3. **执行回调方法默认运行在子线程中**
 
-> 📣 **注意：耗时操作的正确处理方式**
-> - onExecute方法应该立即返回true
-> - 将耗时操作（如网络请求、文件操作、TTS播放等）放到协程或者线程中执行
-> - 耗时操作完成后，调用action.notify()方法通知系统执行结果
+**耗时操作的正确处理方式**
+- `onExecute`方法应该立即返回`true`
+- 将耗时操作（如网络请求、文件操作、TTS播放等）放到协程或线程中执行
+- 耗时操作完成后，调用`action.notify()`方法通知系统执行结果
 
-notify是Action类的成员方法，说明如下：
+**notify方法说明**
 
 ```Kotlin
 package com.ainirobot.agent.action
@@ -722,9 +739,9 @@ fun notify(
 )
 ```
 
-<span style="color: red;">**错误的例子**</span>
+**❌ 错误示例**
 
-**kotlin版**
+**Kotlin版本**
 
 ```Kotlin
 class MyActionExecutor : ActionExecutor {
@@ -742,7 +759,7 @@ class MyActionExecutor : ActionExecutor {
 }
 ```
 
-**java版**
+**Java版本**
 
 ```Java
 @Override
@@ -760,9 +777,9 @@ public boolean onExecute(Action action, Bundle params) {
 }
 ```
 
-<span style="color: red;">**正确的例子**</span>
+**✅ 正确示例**
 
-**kotlin版**
+**Kotlin版本**
 
 ```Kotlin
 class MyActionExecutor : ActionExecutor {
@@ -788,8 +805,7 @@ class MyActionExecutor : ActionExecutor {
 }
 ```
 
-
-**java版**
+**Java版本**
 
 ```Java
 @Override
@@ -808,14 +824,13 @@ public boolean onExecute(Action action, Bundle params) {
 }
 ```
 
-
 ## 2.4 系统内置Action
 
-> 系统Action是系统内置的功能Action，包含部分系统的功能、指令和应用等，系统Action的**namespace**是**orion.agent.action。**
->
-> 系统Action并不是都由系统实现了执行逻辑，有些还是需要用户自行处理逻辑，只是系统内置了这些Action的定义而已，如：orion.agent.action.CLICK（点击事件）
+系统内置Action是AgentOS预定义的功能模块，包含系统功能、指令和应用等。系统Action的命名空间为`orion.agent.action`。
 
-1. 系统处理的Action
+> **注意**: 并非所有系统Action都由系统实现了执行逻辑，部分Action（如`orion.agent.action.CLICK`点击事件）仍需要用户自行处理。
+
+**系统自动处理的Action**
 
 ```Kotlin
 package com.ainirobot.agent.action
@@ -856,9 +871,9 @@ object Actions {
 }
 ```
 
-> 📣 **注：CANCEL、BACK和EXIT默认处理为模拟点击Back键**
+> **默认行为**: `CANCEL`、`BACK`和`EXIT`默认处理为模拟点击Back键。
 
-2. 需用户处理的Action
+**需要用户处理的Action**
 
 ```Kotlin
 package com.ainirobot.agent.action
@@ -875,17 +890,19 @@ object Actions {
 }
 ```
 
-# 3. 核心功能接口
+# 3. 核心API接口
 
-1. ## 麦克风开关
-### 介绍
+## 3.1 麦克风控制
 
-• 默认只要集成了AgentSDK的应用，在应用进入前台时会自动打开麦克风，应用退出或进入后台会自动关闭麦克风，当然你也可以自行开启和关闭，通过以下方式
+### 功能介绍
+麦克风控制功能提供了对音频输入的精确管理。默认情况下，集成AgentOS SDK的应用会在进入前台时自动开启麦克风，在应用退出或进入后台时自动关闭麦克风。开发者也可以根据业务需求手动控制麦克风状态。
 
 ### 应用场景
-• 需要手动闭麦的场景。
+- 需要临时静音的场景
+- 播放音视频内容时防止音频干扰
+- 特定业务流程中的音频控制需求
 
-• 播放音视频时防止干扰时。
+### API接口
 
 ```Kotlin
 import com.ainirobot.agent.AgentCore
@@ -895,12 +912,19 @@ AgentCore.isMicrophoneMuted = true // 静音
 AgentCore.isMicrophoneMuted = false // 取消静音
 ```
 
-2. ## 获取ASR和TTS的结果
+## 3.2 ASR与TTS监听
 
-### 介绍
-- 通过设置setOnTranscribeListener监听系统回调的方式，获取到对话交互的内容。
+### 功能介绍
+通过设置监听器，开发者可以获取到语音识别（ASR）和语音合成（TTS）的实时内容和状态，实现对语音交互过程的全面监控。
+
 ### 应用场景
-- 如果你的应用想获取到ASR识别/TTS播报的内容，可以通过以下方法。
+- 需要获取语音识别结果进行业务处理
+- 监控TTS播放内容和状态
+- 实现自定义的语音交互UI
+
+### API接口
+
+**设置监听器**
 
 ```Kotlin
 import com.ainirobot.agent.OnTranscribeListener
@@ -910,6 +934,9 @@ import com.ainirobot.agent.OnTranscribeListener
  */
 fun setOnTranscribeListener(listener: OnTranscribeListener): Agent
 ```
+
+**监听器接口定义**
+
 ```Kotlin
 import com.ainirobot.agent.base.Transcription
 
@@ -925,22 +952,29 @@ interface OnTranscribeListener {
 }
 ```
 
-- setOnTranscribeListener是AppAgent和PageAgent的成员方法。
+> **注意**: `setOnTranscribeListener`是AppAgent和PageAgent的成员方法。
 
-### 获取ASR/TTS 内容  
-- transcription.text 是文本内容。
+### 使用说明
 
-### 判断是流式结果还是最终结果
-- 通过transcription.final判断，true为最终结果，false为中间结果。
+**获取内容**
+- `transcription.text`: 获取文本内容
 
-**onTranscribe** 回调函数返回值的设定
-- 返回true时，代表你告知系统你消费了此次结果，将拦截系统消息继续传递，系统将不再把字幕显示在底部的字幕条上。
-- （**建议**）返回false时，说明你只监听，但不拦截，将不影响后续系统对于ASR/TTS结果的分发。
+**判断结果类型**
+- `transcription.final`: `true`表示最终结果，`false`表示中间结果
 
-> 📣 **注意：onTranscribe 回调是在子线程中。**
+**返回值处理**
+- 返回`true`: 表示消费了此次结果，系统将不再显示字幕到底部字幕条
+- 返回`false`: 表示仅监听不拦截，不影响系统后续处理（推荐）
 
-## 3. Agent状态监听
-此接口监听了Agent在思考或处理过程中的一系列状态，同样它也是AppAgent和PageAgent的成员方法。
+> **线程提醒**: `onTranscribe`回调在子线程中执行。
+
+## 3.3 Agent状态监听
+
+### 功能介绍
+Agent状态监听提供了对Agent思考和处理过程的实时监控，帮助开发者了解Agent的工作状态并实现相应的UI反馈。
+
+### API接口
+
 ```Kotlin
 import com.ainirobot.agent.PageAgent
 import com.ainirobot.agent.OnAgentStatusChangedListener
@@ -956,8 +990,9 @@ PageAgent(this)
     })
 ```
 
-```Kotlin
+**监听器接口定义**
 
+```Kotlin
 /**
  * Agent状态变化监听
  */
@@ -967,10 +1002,25 @@ interface OnAgentStatusChangedListener {
 
 }
 ```
-**status**，目前只包含：**listening（正在听）**、**thinking（思考中）**、**processing（处理中）**、**reset_status（状态复位）**四种状态，以后可能会扩展
-**message**，当**status**是**processing**时，**message**可能会有值，如：**“正在选择工具...”、“正在获取天气...”、“正在总结答案...”**等，当**status**为其它状态时**message**为空
 
-## 4. 关闭语音条
+### 状态说明
+
+**状态类型**
+- `listening`: 正在听取用户输入
+- `thinking`: 思考中，正在分析用户意图
+- `processing`: 处理中，正在执行相关操作
+- `reset_status`: 状态复位，回到初始状态
+
+**消息说明**
+- 当`status`为`processing`时，`message`可能包含具体的处理信息，如："正在选择工具..."、"正在获取天气..."、"正在总结答案..."等
+- 其他状态时`message`为空
+
+## 3.4 语音条控制
+
+### 功能介绍
+控制系统默认语音条的显示和隐藏，满足不同应用场景的UI需求。
+
+### API接口
 
 ```Kotlin
 import com.ainirobot.agent.AgentCore
@@ -984,14 +1034,18 @@ var isEnableVoiceBar: Boolean
         appAgent?.isEnableVoiceBar = value
     }
 ```
-## 5. 播放TTS/停止播放TTS
 
-### 介绍
-- 主动调用系统的接口，合成指定文本为音频，并自动进行播报
+## 3.5 TTS语音合成
+
+### 功能介绍
+主动调用系统的语音合成接口，将指定文本转换为音频并自动播放，支持同步和异步两种调用方式。
+
 ### 应用场景
-- 需要在一些业务流程中，驱动机器人说出某一句话时，比如应用启动时，让机器人播报“欢迎光临”，就可以主动调用。
+- 应用启动时播放欢迎语
+- 业务流程中的语音提示
+- 主动与用户进行语音交互
 
-**播报TTS**
+### API接口
 
 **同步调用接口**
 
@@ -1033,7 +1087,7 @@ fun tts(
 }
 ```
 
-**停止播报**
+**停止播放**
 
 ```Kotlin
 import com.ainirobot.agent.AgentCore
@@ -1046,8 +1100,15 @@ fun stopTTS() {
 }
 ```
 
-## 6. 大模型接口
-- 同步接口调用
+## 3.6 大模型接口
+
+### 功能介绍
+提供对大模型的直接调用能力，支持复杂的对话场景和自定义的智能交互需求。
+
+### API接口
+
+**同步调用接口**
+
 ```Kotlin
 import com.ainirobot.agent.AgentCore
 import com.ainirobot.agent.assit.LLMResponse
@@ -1074,7 +1135,9 @@ suspend fun llmSync(
     return this.appAgent?.api?.llmSync(messages, config, timeoutMillis, isStreaming) ?: TaskResult(2)
 }
 ```
-- 异步接口调用
+
+**异步调用接口**
+
 ```kotlin
 import com.ainirobot.agent.AgentCore
 import com.ainirobot.agent.base.llm.LLMConfig
@@ -1100,13 +1163,17 @@ fun llm(
 }
 ```
 
-## 7. 文本指令
+## 3.7 文本指令
 
-- 介绍
-  - 当你需要在没有用户语音交互的时候希望触发大模型的规划和执行时，推荐使用。
-- 应用场景
-  - 用户手动点击一个页面的按钮“确定”，等效于用户说了“确定”，通过query方法即可。
-  - 比如应用启动页面，在用户开始交互之前，主动去跟用户交互，可以通过query方法去驱动。
+### 功能介绍
+通过文本形式模拟用户语音输入，触发大模型的规划和Action执行，实现程序化的智能交互。
+
+### 应用场景
+- 用户手动点击按钮时，等效于语音输入（如点击"确定"按钮等效于说"确定"）
+- 应用启动时主动发起交互
+- 自动化测试和调试
+
+### API接口
 
 ```Kotlin
 import com.ainirobot.agent.AgentCore
@@ -1121,11 +1188,18 @@ fun query(text: String) {
 }
 ```
 
-## 8. 感知信息上报
-- 介绍
-  - 当你需要上传一些你的应用的场景的感知信息，辅助AgentOS去理解和规划你的任务时，建议调用。
-- 应用场景
-  - 比如你的屏幕上有很多的信息，你希望AgentOS感知到用户看到的信息（比如用户可以问，我想看看第3个），你可以把屏幕的信息整理成一定的格式上报，比如当前任务进展、比如数据清单。
+## 3.8 感知信息上报
+
+### 功能介绍
+上传应用的场景感知信息，帮助AgentOS更好地理解当前页面内容和用户上下文，提升交互的准确性和相关性。
+
+### 应用场景
+- 上报屏幕显示的信息列表，支持用户通过语音引用（如"我想看看第3个"）
+- 上报当前任务进展状态
+- 上报页面组件的层次结构信息
+
+### API接口
+
 ```Kotlin
 import com.ainirobot.agent.AgentCore
 
@@ -1139,12 +1213,18 @@ fun uploadInterfaceInfo(interfaceInfo: String) {
 }
 ```
 
-## 9. 清空对话历史
-**介绍**
-- 清空上下文对话历史，防止之前的对话干扰到新的对话。
+## 3.9 对话历史管理
 
-**应用场景**
-- 比如应用重置了对话的内容，用户更换了一个话题等等
+### 功能介绍
+清空大模型的对话上下文记录，防止历史对话干扰当前交互，确保对话的准确性和相关性。
+
+### 应用场景
+- 应用重置对话内容时
+- 用户切换到新的话题时
+- 需要开始全新对话场景时
+
+### API接口
+
 ```Kotlin
 import com.ainirobot.agent.AgentCore
 
@@ -1156,8 +1236,12 @@ fun clearContext() {
 }
 ```
 
-## 10. 免唤醒开关
-免唤醒是AgentOS的一项重要功能，它能自动过滤环境音以及周围的其他人声，只服务于当前正在与机器人交互的用户；默认此功能为开，会严格限制收音，只采集机器人面前用户的声音，且会智能识别用户是否在说话。
+## 3.10 免唤醒功能
+
+### 功能介绍
+免唤醒是AgentOS的核心功能，能够自动过滤环境噪音和周围其他人声，专注服务于当前与机器人交互的用户。该功能默认开启，会智能识别用户的说话意图并严格限制收音范围。
+
+### API接口
 
 ```Kotlin
 import com.ainirobot.agent.AgentCore
@@ -1172,8 +1256,13 @@ var isEnableWakeFree: Boolean
     }
 ```
 
-## 11. 禁用强制规划
-默认情况下，AgentOS与用户的每一次交互返回的结果都是以Action作为载体，但在有些场景下用户可能不需要规划Action，只想调用大模型与用户交流，那么此时就可以禁用掉强制规划Action的功能，具体接口如下：
+## 3.11 禁用大模型规划
+
+### 功能介绍
+控制是否禁用大模型规划功能。默认情况下，AgentOS与用户的每次交互都会通过大模型进行规划。当设置为`true`时，将禁用大模型规划，用户可以自行处理大模型的调用。
+
+### API接口
+
 ```Kotlin
 import com.ainirobot.agent.AgentCore
 
@@ -1188,10 +1277,12 @@ var isDisablePlan: Boolean
     }
 ```
 
-## 12. 跳转到小豹应用
+## 3.12 应用跳转
 
-### 介绍
-- AgentCore提供快速跳转到小豹应用的功能。
+### 功能介绍
+提供快速跳转到小豹应用的功能，实现应用间的无缝切换。
+
+### API接口
 
 ```Kotlin
 import com.ainirobot.agent.AgentCore
@@ -1205,17 +1296,20 @@ import android.content.Context
 fun jumpToXiaobao(context: Context)
 ```
 
-> 📣 **注意：调用此方法前请确保小豹应用已安装，如果未安装会在日志中输出相应提示信息。**
+> **注意**: 调用此方法前请确保小豹应用已安装，如果未安装会在日志中输出相应提示信息。
 
 # 4. 进阶功能
 
-## 注解实现Action动态注册
+## 4.1 注解驱动的Action注册
 
-> 如果觉得手动注册麻烦，那么我们还提供了更简单便捷的注册方式，只需要在Application、Activity或Fragment中添加成员方法并添加注解，那么SDK会在运行时自动识别这些Action并注册
+### 功能介绍
+对于希望简化Action注册流程的开发者，AgentOS SDK提供了基于注解的自动注册机制。通过在方法上添加注解，SDK会在运行时自动识别并注册这些Action，大大简化了开发流程。
 
-### App级动态注册
+### 4.1.1 App级动态注册
 
-在应用内使用注解方式自动注册时，需要使用 **AppAgent** (Application)构造方法，然后在**Application**中创建 **成员方法** ，最后添加注解即可
+在Application中使用注解方式自动注册Action时，需要使用`AppAgent(Application)`构造方法，然后在Application中创建成员方法并添加相应注解。
+
+**示例代码**
 
 ```kotlin
 import android.app.Application
@@ -1278,9 +1372,11 @@ class MainApplication : Application() {
 }
 ```
 
-### Page级动态注册
+### 4.1.2 Page级动态注册
 
-在页面内部使用注解方式自动注册时，需要使用 **PageAgent** (Activity)或 **PageAgent** (Fragment)构造方法，然后在对应的**Activity**或**Fragment**中创建 **成员方法** ，最后添加注解即可
+在页面中使用注解方式自动注册Action时，需要使用`PageAgent(Activity)`或`PageAgent(Fragment)`构造方法，然后在对应的Activity或Fragment中创建成员方法并添加注解。
+
+**示例代码**
 
 ```kotlin
 import android.os.Bundle
@@ -1326,13 +1422,13 @@ class MainActivity : AppCompatActivity() {
 }
 ```
 
-### 注解类说明
+### 4.1.3 注解类说明
 
-> 注解类有两个：**AgentAction**和**ActionParameter**
+AgentOS SDK提供了两个核心注解：`@AgentAction`和`@ActionParameter`。
 
-#### **AgentAction**
+#### @AgentAction注解
 
-AgentAction是作用于**成员方法**上，用来标记该方法是一个Action
+`@AgentAction`用于标记方法为Action处理器，定义Action的基本信息。
 
 ```kotlin
 package com.ainirobot.agent.annotations
@@ -1355,9 +1451,9 @@ annotation class AgentAction(
 )
 ```
 
-#### **ActionParameter**
+#### @ActionParameter注解
 
-ActionParameter是作用于**方法参数**上，用来标记Action的参数
+`@ActionParameter`用于标记方法参数，定义Action的参数信息。
 
 ```kotlin
 package com.ainirobot.agent.annotations
@@ -1384,16 +1480,26 @@ annotation class ActionParameter(
 )
 ```
 
-# 5. 项目源码
+# 5. 项目资源
 
-#### 模版项目
+## 5.1 示例项目
 
-https://github.com/orionagent/AgentSDKSampleEmpty
+### 模板项目
+提供基础的项目结构和配置，适合快速开始AgentOS SDK开发。
 
-#### 示例项目
+**项目地址**: https://github.com/orionagent/AgentSDKSampleEmpty
 
-https://github.com/orionagent/AgentSDKSample
+### 完整示例项目
+包含多种功能示例和最佳实践，展示AgentOS SDK的完整能力。
 
+**项目地址**: https://github.com/orionagent/AgentSDKSample
+
+## 5.2 开发资源
+
+### 接待后台
+用于申请AppId和管理Agent应用的后台系统。
+
+**访问地址**: https://jiedai.ainirobot.com/web/portal/#/frame/hmag-agentos/hmag-agentos.agentapp/
 
 
 # 6. 技术支持
