@@ -8,6 +8,42 @@ RobotOS提供了丰富的机器人业务API、机器人能力组件，使开发�
 
 RobotOS基于安卓平台开发，同时提供了一套针对android apk的sdk，用户可以应用RobotService.jar在机器人上开发android应用，运行RobotOS的机型均支持该sdk。
 
+## 🚨 重要：语音功能迁移说明
+
+**在AgentOS系统上，所有语音和NLP相关功能已迁移至AgentOS SDK，RobotAPI原有语音和NLP功能已停用：**
+
+### 已停用的RobotAPI语音和NLP功能
+- **ASR（语音识别）**：原RobotAPI的语音转文字功能
+- **TTS（语音合成）**：原RobotAPI的文字转语音功能  
+- **NLP（自然语言处理）**：原RobotAPI的自然语言理解和处理功能
+
+### 新的语音和大模型解决方案
+**所有语音和NLP功能现已统一使用AgentOS SDK提供：**
+- ✅ **免唤醒交互**：AgentOS SDK提供更智能的免唤醒语音交互
+- ✅ **ASR/TTS**：通过AgentOS SDK的`AgentCore.tts()`等接口实现
+- ✅ **智能对话**：集成大模型的自然语言理解和生成，替代原有NLP功能
+- ✅ **Action规划**：基于用户语音意图自动规划和执行动作
+- ✅ **大模型能力**：通过大模型实现更强大的自然语言理解，替代传统NLP
+
+### 迁移指引
+如果您的项目中使用了RobotAPI的语音或NLP功能，请：
+1. **移除RobotAPI相关代码**：删除原有的ASR、TTS、NLP、唤醒等RobotAPI调用
+2. **集成AgentOS SDK**：参考[AgentOS SDK文档](../../Agent/v0.3.3/AgentOS_SDK_Doc_v0.3.3.md)进行集成
+3. **功能对照迁移**：
+   - RobotAPI唤醒 → AgentOS SDK免唤醒交互
+   - RobotAPI ASR → AgentOS SDK语音识别监听
+   - RobotAPI TTS → AgentOS SDK `AgentCore.tts()`接口
+   - RobotAPI NLP → AgentOS SDK大模型接口和Action规划
+
+### 协作使用
+**RobotAPI与AgentOS SDK协作关系：**
+- **AgentOS SDK**：负责所有AI智能交互（语音交互、智能对话、大模型能力、Action规划执行）
+- **RobotAPI**：负责机器人硬件控制（运动、导航、传感器、视觉等）
+
+**RobotAPI旧语音功能参考文档**：
+以下文档帮助开发者了解RobotAPI原有的语音功能，便于识别和删除项目中的旧代码：
+- [语音](https://orionbase.orionstar.com/doc?m=21&h=6065a29&lang=cn#text%E8%BD%ACmp3)
+
 ## 版本
 
 **V11.3 版本 API Latest**
