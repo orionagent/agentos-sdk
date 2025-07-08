@@ -910,6 +910,16 @@ object Actions {
 
 > **默认行为**: `CANCEL`、`BACK`和`EXIT`默认处理为模拟点击Back键。
 
+### 知识库问答使用示例
+
+以`KNOWLEDGE_QA`为例，说明如何注册系统内置Action以及知识库问答的触发机制：
+
+```Kotlin
+registerAction(Actions.KNOWLEDGE_QA)
+```
+
+开发者注册此Action后，当用户通过语音询问机器人，如果命中接待后台配置的知识库时会自动执行，系统会自动处理知识库查询并播放配置好的TTS回答。
+
 **需要用户处理的Action**
 
 ```Kotlin
@@ -1662,7 +1672,7 @@ annotation class ActionParameter(
 ### 接待后台
 用于申请AppId和管理Agent应用的后台系统。
 
-**访问地址**: https://jiedai.ainirobot.com/web/portal/#/frame/hmag-agentos/hmag-agentos.agentapp/
+[点击访问接待后台](https://jiedai.ainirobot.com/web/portal/#)
 
 
 # 7. 技术支持
