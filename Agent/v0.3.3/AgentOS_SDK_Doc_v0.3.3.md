@@ -322,6 +322,92 @@ class MainActivity : AppCompatActivity() {
 
 AgentOS的核心机制是通过识别用户意图来执行相应的技能模块，这些技能模块被称为Action。例如，当用户询问"我明天去深圳需要带伞吗？"时，系统会识别出查询天气的意图，并调用相应的天气查询Action（如：`orion.agent.action.WEATHER`）。
 
+### Action规划机制
+
+大模型通过文本描述理解和选择Action，优先级如下：
+
+**1. Action描述（`desc`）**
+- 大模型主要依据此属性判断是否符合用户意图
+- 必须清晰、准确、具体地描述Action的功能和使用场景
+- 避免模糊表述，确保大模型能准确理解
+
+```kotlin
+// ✅ 符合规范的描述
+desc = "查询指定城市和日期的天气情况，包括温度、湿度、风力等信息"
+
+// ❌ 违反规范的描述
+desc = "天气"  // 过于简单，缺乏具体功能说明
+desc = "处理用户请求"  // 过于泛化，无法区分具体功能
+```
+
+**2. Action名称（`name`）**
+- 作为辅助判断依据，补充描述信息
+- 应具有明确的业务含义，避免泛化命名
+- 多个Action的名称要有明显区分度
+
+```kotlin
+// ✅ 符合规范的名称
+name = "com.example.weather.QUERY_WEATHER"
+name = "com.example.music.PLAY_SONG"
+
+// ❌ 违反规范的名称
+name = "ACTION1"  // 无业务含义
+name = "HANDLE"   // 过于泛化
+name = "com.example.DO_SOMETHING"  // 不明确具体功能
+```
+
+**3. 参数描述（`Parameter.desc`）**
+- 影响大模型对参数的理解和提取准确性
+- 每个参数的描述都要精确反映其定义和用途
+- 帮助大模型从用户输入中正确提取对应信息
+
+```kotlin
+// ✅ 符合规范的参数描述
+Parameter("city", ParameterType.STRING, "要查询天气的城市名称，如北京、上海", false)
+Parameter("song_name", ParameterType.STRING, "要播放的歌曲名称", true)
+
+// ❌ 违反规范的参数描述
+Parameter("city", ParameterType.STRING, "城市", false)  // 过于简单
+Parameter("data", ParameterType.STRING, "数据", false)  // 含义不明确
+Parameter("param1", ParameterType.STRING, "参数1", false)  // 无实际含义
+```
+
+> **核心原则**：所有通过文本描述的属性都直接影响大模型的理解和规划准确性，务必重视每一个描述的质量。
+
+### 命名规范约束
+
+**Action名称规范**
+- **格式要求**：`com.company.module.ACTION_NAME`（公司域名+模块+Action简名）
+- **简名大写**：Action简名部分必须使用大写字母
+- **业务含义**：名称应具有明确的业务含义，避免泛化命名
+- **唯一性**：确保在应用内唯一，避免与其他app的Action冲突
+
+```kotlin
+// ✅ 符合规范
+"com.example.weather.QUERY_WEATHER"
+"com.example.music.PLAY_SONG"
+
+// ❌ 违反规范
+"com.example.weather.query_weather"  // 简名未大写
+"ACTION1"  // 无域名前缀，无业务含义
+```
+
+**Parameter名称规范**
+- **语言要求**：使用英文命名
+- **连接方式**：多个单词用下划线连接
+- **避免冲突**：不得与Action或Parameter对象的属性名相同或相似
+- **语义清晰**：名称应能清楚表达参数用途
+
+```kotlin
+// ✅ 符合规范
+"city_name", "start_date", "user_id"
+
+// ❌ 违反规范
+"cityName"  // 使用驼峰命名
+"name"      // 与Parameter对象属性名冲突
+"data1"     // 无明确语义
+```
+
 ### 2.1.1 基础属性
 
 Action类的核心属性定义如下：
@@ -331,8 +417,7 @@ package com.ainirobot.agent.action
 
 open class Action(
     /**
-      * action全名，结构最好是公司域名+action简名，避免与其它app中的action冲突
-      * action简名必须大写，示例：com.orion.action.WEATHER
+      * action全名，避免与其它app中的action冲突
       */
       name: String,
     /**
@@ -373,7 +458,6 @@ open class Action(
 **最佳实践**: 创建Action时需要清晰、准确地描述各项属性，以便大模型能够准确理解Action的功能并做出精确的选择。
 
 **关键要求**:
-- **名称唯一性**: Action名称应具有明确的业务含义，避免泛化命名
 - **描述具体化**: `desc`属性必须详细描述Action的具体功能和使用场景
 - **避免歧义**: 多个Action的描述不能过于相似，确保大模型能够准确区分
 
@@ -408,10 +492,51 @@ data class Parameter(
 )
 ```
 
-> **重要提醒**: 
-> - 参数的`desc`属性必须能够精确反映参数的定义，确保大模型理解准确
-> - 参数名`name`建议使用英文，多个单词用下划线连接
-> - **参数名不得与Action对象或Parameter对象的属性名相同或相似**，以避免歧义
+**天气查询示例**
+
+```kotlin
+val weatherAction = Action(
+    "orion.agent.action.WEATHER",
+    "查询天气",
+    "查询指定城市和日期的天气情况",
+    parameters = listOf(
+        Parameter(
+            "city",
+            ParameterType.STRING,
+            "要查询天气的城市名称",
+            false
+        ),
+        Parameter(
+            "date",
+            ParameterType.STRING,
+            "要查询的日期，如今天、明天、后天",
+            false
+        )
+    ),
+    executor = object : ActionExecutor {
+        override fun onExecute(action: Action, params: Bundle?): Boolean {
+            // 获取参数
+            val city = params?.getString("city") ?: "当前位置"
+            val date = params?.getString("date") ?: "今天"
+            
+            // 处理天气查询逻辑
+            // ...
+            
+            return true
+        }
+    }
+)
+```
+
+**参数解析示例**
+
+注册Action成功后，当用户对机器人说："明天北京天气怎么样？"时，大模型会自动规划到天气Action并回调到`onExecute`方法，传递解析后的参数：
+
+```
+解析后的参数值:
+city: '北京'
+date: '明天'
+```
 
 ## 2.2 Action注册机制
 
