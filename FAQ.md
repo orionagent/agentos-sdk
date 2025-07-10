@@ -25,6 +25,7 @@
 
 5. [常见问题及解决方案](#常见问题及解决方案)
    - [语音交互无响应](#语音交互无响应)
+   - [非Activity/Fragment开发方式的PageAgent生命周期管理](#非activityfragment开发方式的pageagent生命周期管理)
 
 ## 你需要知道的概念
 
@@ -194,4 +195,42 @@ adb install -r -d xx.apk  # xx.apk是你文件所在的绝对路径
 5. **免唤醒功能状态**：如应用正在调用摄像头，可通过关闭免唤醒功能或关闭摄像头调用进行测试。确认为免唤醒问题后，建议临时关闭免唤醒功能以避免与摄像头调用冲突，或采用摄像头数据流共享方式避免资源抢占。
 6. **ASR/TTS服务状态**：确认ASR（自动语音识别）与TTS（文本转语音）服务的监听字幕条处于开启状态。
 7. **Action注册验证**：确保应用已注册至少一个SAY Action，避免大模型Action规划失效导致无响应。
+
+### 非Activity/Fragment开发方式的PageAgent生命周期管理
+
+**问题描述**：使用Flutter等跨平台框架或自定义UI框架开发时，无法直接使用Activity/Fragment构造PageAgent，需要手动管理PageAgent的生命周期。
+
+**解决方案**：
+1. **手动创建PageAgent**：使用pageId构造函数创建PageAgent实例，不依赖Activity/Fragment生命周期。
+2. **生命周期管理**：开发者需要在适当的时机手动调用PageAgent的生命周期方法：
+   - **页面显示时**：调用`begin()`方法激活PageAgent，使注册的Action开始生效
+   - **页面隐藏时**：调用`end()`方法暂停PageAgent，停止Action响应
+   - **页面销毁时**：调用`destroy()`方法释放PageAgent资源
+3. **状态同步**：确保PageAgent的生命周期状态与实际页面可见性保持一致，避免在页面不可见时仍然响应语音交互。
+
+**代码示例**：
+```kotlin
+// 创建PageAgent实例，需要提供唯一的pageId
+val pageAgent = PageAgent("your_page_id")
+
+// 注册Action（在begin()之前）
+pageAgent.registerAction(yourAction)
+
+// 页面显示时激活
+pageAgent.begin()
+
+// 页面隐藏时暂停
+pageAgent.end()
+
+// 页面销毁时释放
+pageAgent.destroy()
+```
+
+
+
+**注意事项**：
+- 必须严格按照页面的实际生命周期调用对应方法
+- 避免在页面已销毁后仍然保持PageAgent活跃状态
+- 确保Action注册在PageAgent激活之前完成
+- **页面切换管理**：在页面切换时，必须及时结束前一个PageAgent，然后创建并激活新页面的PageAgent
 
