@@ -58,8 +58,15 @@
     - [5.1.1 App级动态注册](#511-app级动态注册)
     - [5.1.2 Page级动态注册](#512-page级动态注册)
     - [5.1.3 注解类说明](#513-注解类说明)
-- [6. 项目资源](#6-项目资源)
-- [7. 技术支持](#7-技术支持)
+- [6. Action设计最佳实践](#6-action设计最佳实践)
+  - [6.1 常见设计误区](#61-常见设计误区)
+  - [6.2 最佳实践原则](#62-最佳实践原则)
+  - [6.3 正确示例：拆分为多个专门Action](#63-正确示例拆分为多个专门action)
+  - [6.4 设计检查清单](#64-设计检查清单)
+- [7. 项目资源](#7-项目资源)
+  - [7.1 示例项目](#71-示例项目)
+  - [7.2 开发资源](#72-开发资源)
+- [8. 技术支持](#8-技术支持)
 
 ---
 
@@ -1778,9 +1785,137 @@ annotation class ActionParameter(
 )
 ```
 
-# 6. 项目资源
+# 6. Action设计最佳实践
 
-## 6.1 示例项目
+> **⚠️ 重要提醒**：Action设计的质量直接影响大模型的理解和执行效果。不当的设计可能导致功能无法正确触发、参数解析错误、用户体验差等问题。请务必遵循本节的最佳实践原则。
+
+在实际开发中，很多开发者在设计Action时容易陷入一些常见误区。以下通过对比示例来说明Action设计的最佳实践。
+
+## 6.1 常见设计误区
+
+**❌ 错误示例：功能过于复杂的Action**
+
+```kotlin
+Action(
+    name = "com.service.robot.HANDLE_TASK",
+    displayName = "处理任务",
+    desc = "智能服务机器人助手，可以执行多种服务任务，包括但不限于信息播报、任务提醒、物品配送等各类服务，根据用户需求灵活响应",
+    parameters = listOf(
+        Parameter("task_type", ParameterType.STRING, "任务类型", true),
+        Parameter("target_location", ParameterType.STRING, "目标位置", false),
+        Parameter("content", ParameterType.STRING, "任务内容", false),
+        Parameter("items", ParameterType.STRING, "相关物品", false),
+        Parameter("schedule_time", ParameterType.STRING, "执行时间", false)
+    )
+)
+```
+
+**问题分析：**
+- 功能职责不明确，一个Action承担多种任务
+- 参数过多且含义模糊
+- 描述过于宽泛，大模型难以准确理解使用场景
+- 缺乏参数枚举限制，容易产生不可控的输入
+
+## 6.2 最佳实践原则
+
+写 `Action` 时，记住三个核心点：
+
+**1. 单一职责原则：一个 Action 只做一类任务**
+- 每个Action只负责一个明确的功能，避免多个功能混在一起
+- 避免通过参数来区分不同的业务逻辑
+- 如果发现需要判断 `type` 参数再决定具体干什么，说明设计得太笼统，应该拆分
+- Action名称和描述要准确详细，让大模型能清楚理解功能边界和使用场景
+
+**2. 参数设计精准：每个参数都要写清楚类型、描述、是否必填，以及枚举限制（如果适用）**
+- 参数数量适中（建议1-3个）
+- 每个参数都有明确的业务含义和准确的描述
+- 需要限制取值范围时使用ParameterType.ENUM和enumValues，避免自由字符串带来混乱
+- 合理设置必填和可选参数
+
+**3. 槽位语义明确：对用户输入可能出现的槽位要有明确语义与验证机制**
+- 分析并设计用户可能输入的关键信息槽位（如房间号、事项类型、目的地等）
+- 为每个槽位定义清晰的语义范围和取值规则
+- 确保槽位信息能被准确提取和验证，避免歧义解析
+
+## 6.3 正确示例：拆分为多个专门Action
+
+**✅ 示例1：引领带路Action（1个参数）**
+
+```kotlin
+Action(
+    name = "com.service.robot.LEADING_TO_DESTINATION",
+    displayName = "引领带路",
+    desc = "机器人引领用户前往指定目的地，提供路线指引和陪同服务",
+    parameters = listOf(
+        Parameter(
+            name = "destination",
+            type = ParameterType.STRING,
+            desc = "目的地名称，如卫生间、电梯、服务台、会议室等",
+            required = true
+        )
+    )
+)
+```
+
+**✅ 示例2：播放音乐Action（2个参数）**
+
+```kotlin
+Action(
+    name = "com.entertainment.robot.PLAY_MUSIC",
+    displayName = "播放音乐",
+    desc = "播放指定歌手的指定歌曲",
+    parameters = listOf(
+        Parameter(
+            name = "song_name",
+            type = ParameterType.STRING,
+            desc = "歌曲名称",
+            required = false
+        ),
+        Parameter(
+            name = "artist_name",
+            type = ParameterType.STRING,
+            desc = "歌手名称",
+            required = false
+        )
+    )
+)
+```
+
+**✅ 示例3：调节空调Action（1个参数，使用枚举类型）**
+
+```kotlin
+Action(
+    name = "com.smart.home.ADJUST_AIRCON",
+    displayName = "调节空调",
+    desc = "调节空调的运行模式",
+    parameters = listOf(
+        Parameter(
+            name = "mode",
+            type = ParameterType.ENUM,
+            desc = "空调模式",
+            required = true,
+            enumValues = listOf("制冷", "制热", "除湿", "送风", "自动")
+        )
+    )
+)
+```
+
+## 6.4 设计检查清单
+
+在设计Action时，请检查以下要点：
+
+- [ ] **功能单一**：Action是否只负责一个明确的业务功能？
+- [ ] **参数精简**：参数数量是否合理（建议1-3个）？
+- [ ] **描述准确**：Action和参数的描述是否具体明确？
+- [ ] **枚举限制**：需要限制取值范围的参数是否使用了ParameterType.ENUM？
+- [ ] **必填合理**：required参数设置是否符合业务逻辑？
+- [ ] **命名规范**：是否遵循了命名规范约束？
+
+> **🔥 核心提醒**：如果发现Action需要通过参数来判断执行不同的业务逻辑，这通常意味着设计过于复杂，应该考虑拆分为多个专门的Action。良好的Action设计是AgentOS应用成功的关键基础！
+
+# 7. 项目资源
+
+## 7.1 示例项目
 
 ### 模板项目
 提供基础的项目结构和配置，适合快速开始AgentOS SDK开发。
@@ -1792,7 +1927,7 @@ annotation class ActionParameter(
 
 **项目地址**: [AgentSDKSample](https://github.com/orionagent/AgentSDKSample)
 
-## 6.2 开发资源
+## 7.2 开发资源
 
 ### 接待后台
 用于申请AppId和管理Agent应用的后台系统。
@@ -1800,6 +1935,6 @@ annotation class ActionParameter(
 [点击访问接待后台](https://jiedai.ainirobot.com/web/portal/#)
 
 
-# 7. 技术支持
+# 8. 技术支持
 
 如有任何问题，请联系技术支持团队。
