@@ -26,6 +26,9 @@
 5. [常见问题及解决方案](#常见问题及解决方案)
    - [语音交互无响应](#语音交互无响应)
    - [非Activity/Fragment开发方式的PageAgent生命周期管理](#非activityfragment开发方式的pageagent生命周期管理)
+   - [RobotOS系统迁移到AgentOS需要重新实现功能吗](#robotos系统迁移到agentos需要重新实现功能吗)
+   - [AgentOS会自动调用小豹应用的功能吗](#agentos会自动调用小豹应用的功能吗)
+   - [人设和PageAgent都无法满足业务需求怎么办](#人设和pageagent都无法满足业务需求怎么办)
 
 ## 你需要知道的概念
 
@@ -233,4 +236,75 @@ pageAgent.destroy()
 - 避免在页面已销毁后仍然保持PageAgent活跃状态
 - 确保Action注册在PageAgent激活之前完成
 - **页面切换管理**：在页面切换时，必须及时结束前一个PageAgent，然后创建并激活新页面的PageAgent
+
+### RobotOS系统迁移到AgentOS需要重新实现功能吗
+
+**是的，需要迁移业务逻辑。**
+
+- **触发方式变更**：RobotOS通过领域和技能匹配 → AgentOS通过Action匹配
+- **代码迁移**：将原有业务逻辑代码迁移到Action回调中
+- **示例**：导航功能原来在技能匹配后执行，现在需要在导航Action回调中执行相同逻辑
+
+### AgentOS会自动调用小豹应用的功能吗
+
+**不会自动调用，需要开发者自行实现。**
+
+- **核心原则**：AgentOS不会自动调用小豹应用或系统组件
+- **开发要求**：所有功能都需要在Action中自行实现
+- **示例**：日历查询需要开发者调用日历API并处理结果，而非调用小豹内置组件
+- **跳转支持**：可使用`AgentCore.jumpToXiaobao()`方法跳转到小豹应用首页
+
+### 人设和PageAgent都无法满足业务需求怎么办
+
+**优先优化人设和Action设计，必要时使用高级接口。**
+
+#### 基础优化方案
+- **人设优化**：完善人设信息，提升智能交互效果
+- **Action设计**：优化Action逻辑，满足业务功能需求
+
+#### 动态信息更新
+- **接口**：`uploadInterfaceInfo()`
+- **适用场景**：UI变化、任务进度更新、需要通知大模型的新信息
+- **作用**：实时更新应用状态，保持大模型信息同步
+
+#### 复杂对话场景
+- **接口**：`llmSync()` 和 `llm()`
+- **适用场景**：复杂对话、自定义智能交互需求
+- **实现方式**：
+
+```kotlin
+val introQuery = "简短的自我介绍，不超过30字"
+
+// 构建消息列表
+val messages = mutableListOf<LLMMessage>()
+
+// 添加系统提示词
+messages.add(
+    LLMMessage(
+        LLMRole.SYSTEM,
+        """你现在扮演的角色是：${roleData.name}
+        |角色设定：${roleData.persona}
+        |行为准则：${roleData.objective}
+        |
+        |现在需要你进行简短的自我介绍，要求：
+        |1. 完全沉浸在角色中，展现角色特色
+        |2. 自我介绍要自然亲切，不超过30字
+        |3. 要体现角色的个性和特点
+        |4. 不要暴露是AI的身份
+        |5. 要让用户感受到角色的魅力""".trimMargin()
+    )
+)
+
+// 添加用户请求
+val userMessage = LLMMessage(LLMRole.USER, introQuery)
+messages.add(userMessage)
+
+val config = LLMConfig(
+    temperature = 0.8f,
+    maxTokens = 80  // 限制初始介绍的长度
+)
+
+// 生成回复（流式播放，机器人的回复会在onTranscribe中获取到）
+AgentCore.llmSync(messages, config, 20 * 1000)
+```
 
