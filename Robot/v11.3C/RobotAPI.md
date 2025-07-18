@@ -28,7 +28,7 @@ RobotOS基于安卓平台开发，同时提供了一套针对android apk的sdk�
 ### 迁移指引
 如果您的项目中使用了RobotAPI的语音或NLP功能，请：
 1. **移除RobotAPI相关代码**：删除原有的ASR、TTS、NLP、唤醒等RobotAPI调用
-2. **集成AgentOS SDK**：参考[AgentOS SDK文档](../../Agent/v0.3.3/AgentOS_SDK_Doc_v0.3.3.md)进行集成
+2. **集成AgentOS SDK**：参考[AgentOS SDK文档](../../Agent/v0.3.5/AgentOS_SDK_Doc_v0.3.5.md)进行集成
 3. **功能对照迁移**：
    - RobotAPI唤醒 → AgentOS SDK免唤醒交互
    - RobotAPI ASR → AgentOS SDK语音识别监听

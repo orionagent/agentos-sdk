@@ -9,7 +9,7 @@ alwaysApply: true
 在开始任何开发任务前，必须先阅读以下关键文档：
 
 [README.md](mdc:README.md)
-@Agent/v0.3.3/
+@Agent/v0.3.5/
 @Robot/v11.3C/
 [FAQ.md](mdc:FAQ.md)
 
@@ -19,7 +19,7 @@ alwaysApply: true
 大模型相关能力接口和使用方法，包含对话管理、语音合成、智能交互等功能。
 
 ### 📋 **API_Reference.md**
-AgentOS SDK v0.3.3 完整的API参考文档，详细描述所有核心类、接口、方法、属性、构造函数、参数说明、返回值、使用示例等。
+AgentOS SDK v0.3.5 完整的API参考文档，详细描述所有核心类、接口、方法、属性、构造函数、参数说明、返回值、使用示例等。
 
 ### 🤖 **RobotAPI.md**
 机器人原生控制接口，包含底层运动控制、导航、传感器信息等功能。
@@ -50,7 +50,7 @@ AgentOS SDK v0.3.3 完整的API参考文档，详细描述所有核心类、接�
 #### 🥇 **第一优先级：完整查阅项目文档**
 
 **按问题类型查阅对应文档：**
-- **Agent 开发问题**：优先查阅 **AgentOS_SDK_Doc_v0.3.3.md**（了解功能接口）→ **API_Reference.md**（获取详细API说明）
+- **Agent 开发问题**：优先查阅 **AgentOS_SDK_Doc_v0.3.5.md**（了解功能接口）→ **API_Reference.md**（获取详细API说明）
 - **Robot 控制问题**：优先查阅 **RobotAPI.md**（了解底层控制接口）
 - **代码实现问题**：参考 **SampleCodes.md**（获取完整示例代码）
 - **导入路径问题**：确认 **ClassPathList.md**（获取正确的包路径）
