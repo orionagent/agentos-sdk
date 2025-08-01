@@ -1354,10 +1354,6 @@ import com.ainirobot.agent.AgentCore
  * 是否开启语音条，默认开启
  */
 var isEnableVoiceBar: Boolean
-    get() = appAgent?.isEnableVoiceBar ?: true
-    set(value) {
-        appAgent?.isEnableVoiceBar = value
-    }
 ```
 
 ## 4.5 TTS语音合成
@@ -1386,9 +1382,7 @@ import com.ainirobot.agent.AgentCore
  *
  * @return TaskResult<String> 任务执行结果，status=1表示成功，status=2表示失败
  */
-suspend fun ttsSync(text: String, timeoutMillis: Long = 180000): TaskResult<String> {
-    return this.appAgent?.api?.ttsSync(text, timeoutMillis) ?: TaskResult(2)
-}
+suspend fun ttsSync(text: String, timeoutMillis: Long = 180000): TaskResult<String>
 ```
 
 **异步调用接口**
@@ -1407,9 +1401,7 @@ fun tts(
     text: String,
     timeoutMillis: Long = 180000,
     callback: TTSCallback? = null
-) {
-    this.appAgent?.api?.tts(text, timeoutMillis, callback)
-}
+)
 ```
 
 **停止播放**
@@ -1420,9 +1412,7 @@ import com.ainirobot.agent.AgentCore
 /**
  * 强制打断TTS播放
  */
-fun stopTTS() {
-    this.appAgent?.api?.stopTTS()
-}
+fun stopTTS()
 ```
 
 ## 4.6 大模型接口
@@ -1458,9 +1448,7 @@ suspend fun llmSync(
     config: LLMConfig,
     timeoutMillis: Long = 180000,
     isStreaming: Boolean = true
-): TaskResult<LLMResponse> {
-    return this.appAgent?.api?.llmSync(messages, config, timeoutMillis, isStreaming) ?: TaskResult(2)
-}
+): TaskResult<LLMResponse>
 ```
 
 **异步调用接口**
@@ -1485,9 +1473,7 @@ fun llm(
     timeoutMillis: Long = 180000,
     isStreaming: Boolean = true,
     callback: LLMCallback? = null
-) {
-    this.appAgent?.api?.llm(messages, config, timeoutMillis, isStreaming, callback)
-}
+)
 ```
 
 ## 4.7 文本指令
@@ -1510,9 +1496,7 @@ import com.ainirobot.agent.AgentCore
   *
   *  @param  text 用户问题的文本，如：今天天气怎么样？
   */
-fun query(text: String) {
-    this.appAgent?.api?.query(text)
-}
+fun query(text: String)
 ```
 
 ## 4.8 感知信息上报
@@ -1535,9 +1519,7 @@ import com.ainirobot.agent.AgentCore
  *
  * @param interfaceInfo 页面信息描述，最好带有页面组件的层次结构，但内容不宜过长
  */
-fun uploadInterfaceInfo(interfaceInfo: String) {
-    this.appAgent?.api?.uploadInterfaceInfo(interfaceInfo)
-}
+fun uploadInterfaceInfo(interfaceInfo: String)
 ```
 
 ## 4.9 对话历史管理
@@ -1558,9 +1540,7 @@ import com.ainirobot.agent.AgentCore
 /**
  * 清空大模型对话上下文记录
  */
-fun clearContext() {
-    this.appAgent?.api?.clearContext()
-}
+fun clearContext()
 ```
 
 ## 4.10 免唤醒功能
@@ -1577,10 +1557,6 @@ import com.ainirobot.agent.AgentCore
  * 是否开启免唤醒功能，默认true，开启
  */
 var isEnableWakeFree: Boolean
-    get() = appAgent?.isEnableWakeFree ?: true
-    set(value) {
-        appAgent?.isEnableWakeFree = value
-    }
 ```
 
 ## 4.11 禁用大模型规划
@@ -1598,10 +1574,6 @@ import com.ainirobot.agent.AgentCore
  * 用户如果需要自行处理大模型的调用则可设置为true
  */
 var isDisablePlan: Boolean
-    get() = appAgent?.isDisablePlan ?: false
-    set(value) {
-        appAgent?.isDisablePlan = value
-    }
 ```
 
 ## 4.12 应用跳转
