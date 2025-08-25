@@ -2,6 +2,17 @@
 
 请在此记录 AgentOS SDK 的变更日志。
 
+## [0.3.7] - 2025-08-20
+### 新增
+- **TTS音频文件播放功能**: 新增 `playTtsAudioFile()` 和 `stopTtsAudioFile()` 接口
+- **适配ROM合线版本兼容性**: 优化SDK与最新ROM版本的兼容性
+
+### 兼容性
+- **豹小秘2机器人**: Release Latest系统 (ROM: V11.4.2025082001, AgentOS: V1.4.0.250818.C)
+- **mini机器人**: 暂不支持
+
+---
+
 ## [0.3.5] - 2025-07-11
 ### 新增
 - 新增 `OnActionStatusChangedListener` 接口，监听系统自动处理的 Action 状态变化事件
