@@ -1,6 +1,14 @@
 # CHANGELOG
 
-请在此记录 AgentOS SDK 的变更日志。
+## [0.4.4] - 2025-09-26
+### 新增
+- SDK自动集成RobotService.jar依赖，无需手动添加
+
+### 兼容性
+- **豹小秘2机器人**: ROM V11.6.2025092601, AgentOS v1.6.0.250925.C
+- **Mini机器人**: ROM V11.6.2025100912, AgentOS V1.6.0.250925C
+
+---
 
 ## [0.3.7] - 2025-08-20
 ### 新增
@@ -47,4 +55,4 @@ pageAgent.setOnActionStatusChangedListener { actionName, status, message ->
 - **豹小秘2机器人**: Beta系统 (ROM: V10.3.2025051917)
 
 ### 状态
-⚠️ **已停止维护** - 请升级到v0.3.x版本 
+⚠️ **已停止维护** - 请升级到v0.3.x版本

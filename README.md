@@ -8,14 +8,10 @@
 
 ### 版本对应关系
 
-- **Mini机器人**：最新版本 → AgentOS SDK v0.3.5 (推荐)
-- **豹小秘2机器人**：最新版本 → AgentOS SDK v0.3.7 (强制要求)
+- **Mini机器人**：最新版本 → AgentOS SDK v0.4.4 (推荐)
+- **豹小秘2机器人**：最新版本 → AgentOS SDK v0.4.4 (推荐)
 
-⚠️ **强制要求**：必须严格按照版本对应关系选择SDK，版本不匹配将导致功能异常
-
-> **📌 生产环境推荐配置**：  
-> - **豹小秘2**：AgentOS SDK v0.3.7 + 最新Release系统  
-> - **Mini机器人**：AgentOS SDK v0.3.5 + 稳定性优化版
+⚠️ **重要提示**：推荐使用最新ROM版本以获得最佳性能和稳定性
 
 ### 平台兼容性矩阵
 
@@ -23,23 +19,23 @@
 
 | 系统版本 | ROM版本 | AgentOS版本 | SDK版本 | 维护状态 |
 |---------|---------|------------|---------|---------|
-| Release | V10.3.2025071001 | V1.3.0.250630.C | v0.3.5 | ✅ 生产就绪 |
-| Release Latest | V11.4.2025082001 | V1.4.0.250818.C | v0.3.7 | ✅ 最新版本 |
+| Release Latest | V11.6.2025092601 | v1.6.0.250925.C | v0.4.4 | ✅ 最新版本 (推荐) |
+| Release | V11.4.2025082001 | V1.4.0.250818.C | v0.3.7 | ⚠️ 旧版本 |
 
 
 #### 🔹 Mini机器人
 
 | 系统版本 | ROM版本 | AgentOS版本 | SDK版本 | 维护状态 |
 |---------|---------|------------|---------|---------|
-| Release | V10.3.2025070215 | V1.3.0.250630.C | v0.3.3 | ✅ 稳定版本 |
-| Release Enhanced | V10.3.2025071101 | V1.3.0.250630.C | v0.3.5 | ✅ 推荐版本 |
+| Release Latest | V11.6.2025100912 | V1.6.0.250925C | v0.4.4 | ✅ 最新版本 (推荐) |
+| Release Enhanced | V10.3.2025071101 | V1.3.0.250630.C | v0.3.5 | ⚠️ 旧版本 |
 
-> **稳定性优化版特性**：改善网络连接稳定性，提升生产环境可靠性
+> **💡 提示**：推荐使用最新Release系统以获得完整功能支持和最佳性能体验
 
 ### 生产环境推荐配置
 
-- **豹小秘2机器人**：**AgentOS SDK v0.3.7** - 最新版本
-- **Mini机器人**：**AgentOS SDK v0.3.5** - 稳定优化版本，确保兼容性
+- **豹小秘2机器人**：**AgentOS SDK v0.4.4** + 最新Release系统 (v1.6.0.250925.C)
+- **Mini机器人**：**AgentOS SDK v0.4.4** + 最新Release系统 (V1.6.0.250925C)
 
 ---
 
@@ -65,20 +61,20 @@ AgentOS SDK 是猎户星空智能机器人的官方开发工具包，提供完�
 ### 核心文档
 
 #### AgentOS SDK 文档
-- **豹小秘2文档**：[AgentOS_SDK_Doc_v0.3.7.md](Agent/v0.3.7/AgentOS_SDK_Doc_v0.3.7.md)
+- **SDK开发文档**：[AgentOS_SDK_Doc_v0.4.4.md](Agent/v0.4.4/AgentOS_SDK_Doc_v0.4.4.md)
   - 大模型相关能力接口：对话管理、语音合成、智能交互等
-- **Mini机器人文档**：[AgentOS_SDK_Doc_v0.3.5.md](Agent/v0.3.5/AgentOS_SDK_Doc_v0.3.5.md)
-  - 大模型相关能力接口：对话管理、语音合成、智能交互等
-- **API参考**：[v0.3.7版本](Agent/v0.3.7/API_Reference.md) / [v0.3.5版本](Agent/v0.3.5/API_Reference.md)
+  - 适用于豹小秘2和Mini机器人最新版本
+- **API参考**：[v0.4.4版本](Agent/v0.4.4/API_Reference.md)
   - 完整的API参考文档，包含所有核心类、接口、方法、属性、构造函数、参数说明、返回值、使用示例等详细说明
-- **类路径参考**：[v0.3.7版本](Agent/v0.3.7/ClassPathList.md) / [v0.3.5版本](Agent/v0.3.5/ClassPathList.md)
+- **类路径参考**：[v0.4.4版本](Agent/v0.4.4/ClassPathList.md)
   - 项目中所有关键类的完整包路径
-- **示例代码**：[v0.3.7版本](Agent/v0.3.7/SampleCodes.md) / [v0.3.5版本](Agent/v0.3.5/SampleCodes.md)
+- **示例代码**：[v0.4.4版本](Agent/v0.4.4/SampleCodes.md)
   - 各功能模块的典型实现示例
 
 #### 机器人原生接口
 - **RobotOS API**：[RobotAPI.md](Robot/v11.3C/RobotAPI.md)
   - 机器人原生控制接口：运动控制、导航、传感器、相机、充电、定位等
+  - **v0.4.4+ 重要更新**：SDK已自动集成RobotService依赖，无需手动添加jar包
 
 #### 云端服务接口
 - **OpenAPI文档**：[https://openapi.orionstar.com/opendocs/zh/index](https://openapi.orionstar.com/opendocs/zh/index)
@@ -120,8 +116,8 @@ AgentOS SDK 是猎户星空智能机器人的官方开发工具包，提供完�
 #### 标准开发步骤
 1. **环境准备**：安装 Android Studio，配置开发环境
 2. **文档学习**：阅读 AgentOS SDK 文档和机器人原生接口文档
-3. **示例参考**：参考示例代码 ([豹小秘2用v0.3.7](Agent/v0.3.7/SampleCodes.md) / [Mini用v0.3.5](Agent/v0.3.5/SampleCodes.md))
-4. **API查阅**：通过API参考文档 ([豹小秘2用v0.3.7](Agent/v0.3.7/API_Reference.md) / [Mini用v0.3.5](Agent/v0.3.5/API_Reference.md)) 了解详细的类和方法使用说明
+3. **示例参考**：参考示例代码 ([v0.4.4版本](Agent/v0.4.4/SampleCodes.md))
+4. **API查阅**：通过API参考文档 ([v0.4.4版本](Agent/v0.4.4/API_Reference.md)) 了解详细的类和方法使用说明
 5. **功能集成**：按需集成 AgentOS SDK 和机器人原生API
 6. **测试验证**：测试验证功能实现效果
 
@@ -142,7 +138,6 @@ AgentOS SDK 是猎户星空智能机器人的官方开发工具包，提供完�
 
 ## 版本信息
 
-- **豹小秘2推荐版本**：AgentOS SDK v0.3.7
-- **Mini机器人推荐版本**：AgentOS SDK v0.3.5
+- **推荐SDK版本**：AgentOS SDK v0.4.4（豹小秘2 & Mini机器人通用）
 - **机器人API版本**：v11.3C
-- **文档更新时间**：2025年08月20日
+- **文档更新时间**：2025年09月26日
