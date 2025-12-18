@@ -73,11 +73,17 @@ AgentOS SDK 是猎户星空智能机器人的官方开发工具包，提供完�
   - 项目中所有关键类的完整包路径
 - **示例代码**：[v0.4.5版本](Agent/v0.4.5/SampleCodes.md)
   - 各功能模块的典型实现示例
+- **SDK Development Documentation (English)**：[AgentOS_SDK_Doc_v0.4.5_en.md](Agent/v0.4.5/AgentOS_SDK_Doc_v0.4.5_en.md)
+  - Comprehensive guide for LLM capabilities, conversation management, TTS, intelligent interaction, wake-free functionality, and more
+  - Applicable to the latest versions of Leopard Secretary 2 and Mini robots
 
 #### 机器人原生接口
 - **RobotOS API**：[RobotAPI.md](Robot/v11.3C/RobotAPI.md)
   - 机器人原生控制接口：运动控制、导航、传感器、相机、充电、定位等
   - **v0.4.4+ 重要更新**：SDK已自动集成RobotService依赖，无需手动添加jar包
+- **RobotOS API (English)**：[RobotAPI_en.md](Robot/v11.3C/RobotAPI_en.md)
+  - Complete reference for robot native control interfaces: motion control, navigation, sensors, camera, charging, localization, and more
+  - **Important Update for v0.4.4+**: SDK automatically integrates RobotService dependency, no need to manually add jar packages
 
 #### 云端服务接口
 - **OpenAPI文档**：[https://openapi.orionstar.com/opendocs/zh/index](https://openapi.orionstar.com/opendocs/zh/index)
