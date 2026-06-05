@@ -64,8 +64,8 @@ dependencyResolutionManagement {
 dependencies {
     implementation 'com.orionstar.agent:sdk:0.3.2-SNAPSHOT'
     
-    // 以下是Android标准库，默认kotlin项目都会依赖，
-    // 如果编译报未找到错误，再添加以下依赖库
+    // translated textAndroidtranslated textkotlintranslated text
+    // translated text
     implementation 'androidx.core:core-ktx:1.13.1'
     implementation 'androidx.appcompat:appcompat:1.6.1'
 }
@@ -77,8 +77,8 @@ dependencies {
 dependencies {
     implementation("com.orionstar.agent:sdk:0.3.2-SNAPSHOT")
     
-    // 以下是Android标准库，默认kotlin项目都会依赖，
-    // 如果编译报未找到错误，再添加以下依赖库
+    // translated textAndroidtranslated textkotlintranslated text
+    // translated text
     implementation("androidx.core:core-ktx:1.13.1")
     implementation("androidx.appcompat:appcompat:1.6.1")
 }
@@ -119,41 +119,41 @@ class MainApplication : Application() {
     override fun onCreate() {
         super.onCreate()
 
-        // 创建应用级 Agent
+        // translated textAgent
         object : AppAgent(this) {
 
             /**
-             * AppAgent 初始化回调
-             * 用于配置 Agent 的基本属性和动态注册 Action
+             * AppAgent translated text
+             * translated textAgent translated textAction
              */
             override fun onCreate() {
-                // 设定 AI 助手的角色人设
+                // translated textAI translated text
                 setPersona(
-                    "你叫豹姐姐，是一位聪明、亲切又略带俏皮的虚拟助手，擅长倾听与共情。你在对话中能够敏锐捕捉用户情绪，用适当的表情反应来陪伴用户。"
+                    "translated text"
                 )
 
-                // 设定对话风格
-                setStyle("语气温和、有耐心")
+                // translated text
+                setStyle("translated text")
 
-                // 设定 AI 助手的任务目标
+                // translated textAI translated text
                 setObjective(
-                    "根据与用户的对话展示不同的表情，以响应用户的情绪，让用户感受到理解、陪伴与情感共鸣，从而提升交流的舒适感和信任感。"
+                    "translated text"
                 )
 
-                // 动态注册系统 Action
+                // translated textAction
                 registerAction(Actions.EXIT)
             }
 
             /**
-             * 处理静态注册的 Action 执行
-             * 只有在 actionRegistry.json 中静态注册的 Action 才会触发此方法
+             * translated textAction translated text
+             * translated textactionRegistry.json translated textAction translated text
              */
             override fun onExecuteAction(
                 action: Action,
                 params: Bundle?
             ): Boolean {
-                // 处理静态注册的 Action
-                // 返回 false 表示不需要自行处理，返回 true 表示已处理完成
+                // translated textAction
+                // translated textfalse translated texttrue translated text
                 return false
             }
         }
@@ -186,9 +186,9 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        // ... 标准 Android 初始化代码
+        // ... translated textAndroid translated text
 
-        // 创建页面级 Agent 并注册多个情感响应 Action
+        // translated textAgent translated textAction
         createPageAgent()
     }
 
@@ -200,18 +200,18 @@ class MainActivity : AppCompatActivity() {
     }
 
     /**
-     * 创建笑脸 Action
+     * translated textAction
      */
     private fun createSmileAction(): Action {
         return Action(
             name = "com.agent.demo.SHOW_SMILE_FACE",
-            displayName = "笑",
-            desc = "响应用户的开心、满意或正面情绪",
+            displayName = "Smile",
+            desc = "Respond to the user's positive emotions",
             parameters = listOf(
                 Parameter(
                     "sentence",
                     ParameterType.STRING,
-                    "回复给用户的话",
+                    "Reply text for the user",
                     true
                 )
             ),
@@ -226,18 +226,18 @@ class MainActivity : AppCompatActivity() {
     }
 
     /**
-     * 创建哭脸 Action
+     * translated textAction
      */
     private fun createCryAction(): Action {
         return Action(
             name = "com.agent.demo.SHOW_CRY_FACE",
-            displayName = "哭",
-            desc = "响应用户的难过、失落或求助情绪",
+            displayName = "translated text",
+            desc = "translated text",
             parameters = listOf(
                 Parameter(
                     "sentence",
                     ParameterType.STRING,
-                    "回复给用户的话，给予安慰",
+                    "translated text",
                     true
                 )
             ),
@@ -252,18 +252,18 @@ class MainActivity : AppCompatActivity() {
     }
 
     /**
-     * 创建生气 Action
+     * translated textAction
      */
     private fun createAngryAction(): Action {
         return Action(
             name = "com.agent.demo.SHOW_ANGRY_FACE",
-            displayName = "生气",
-            desc = "响应用户的愤怒、不满或投诉情绪",
+            displayName = "translated text",
+            desc = "translated text",
             parameters = listOf(
                 Parameter(
                     "sentence",
                     ParameterType.STRING,
-                    "回复给用户的话，尽可能消除用户的负面情绪",
+                    "translated text",
                     true
                 )
             ),
@@ -278,7 +278,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     /**
-     * 显示表情图片
+     * translated text
      */
     private fun showFaceImage(resId: Int) {
         runOnUiThread {
@@ -287,15 +287,15 @@ class MainActivity : AppCompatActivity() {
     }
 
     /**
-     * 处理 Action 执行
+     * translated textAction translated text
      */
     private fun handleAction(action: Action, params: Bundle?) {
         AOCoroutineScope.launch {
-            // 使用 TTS 播放回复内容
+            // translated textTTS translated text
             params?.getString("sentence")?.let { 
                 AgentCore.ttsSync(it) 
             }
-            // 通知 Action 执行完成
+            // translated textAction translated text
             action.notify(isTriggerFollowUp = false)
         }
     }
@@ -308,11 +308,11 @@ class MainActivity : AppCompatActivity() {
 
 ```kotlin
 class Action(
-    name: String,           // Action 全名，建议格式：com.company.action.ACTION_NAME
-    displayName: String,    // 显示名称
-    desc: String,           // 功能描述，用于 AI 理解何时调用
-    parameters: List<Parameter>?, // 参数列表
-    executor: ActionExecutor?     // 执行器
+    name: String,           // Action translated textcom.company.action.ACTION_NAME
+    displayName: String,    // translated text
+    desc: String,           // translated textAI translated text
+    parameters: List<Parameter>?, // translated text
+    executor: ActionExecutor?     // translated text
 )
 ```
 
@@ -320,11 +320,11 @@ class Action(
 
 ```kotlin
 data class Parameter(
-    val name: String,           // 参数名
-    val type: ParameterType,    // 参数类型
-    val desc: String,           // 参数描述
-    val required: Boolean,      // 是否必需
-    var enumValues: List<String>? = null // 枚举值（type为ENUM时使用）
+    val name: String,           // translated text
+    val type: ParameterType,    // translated text
+    val desc: String,           // translated text
+    val required: Boolean,      // translated text
+    var enumValues: List<String>? = null // translated texttypetranslated textENUMtranslated text
 )
 ```
 
@@ -340,11 +340,11 @@ interface ActionExecutor {
 
 ```kotlin
 enum class ParameterType {
-    STRING,    // 字符串
-    INT,       // 整数
-    FLOAT,     // 浮点数
-    BOOLEAN,   // 布尔值
-    ENUM       // 枚举
+    STRING,    // translated text
+    INT,       // translated text
+    FLOAT,     // translated text
+    BOOLEAN,   // translated text
+    ENUM       // translated text
 }
 ```
 
@@ -353,47 +353,47 @@ enum class ParameterType {
 ### 1. Agent description
 
 ```kotlin
-// TTS 同步播放
+// TTS translated text
 AgentCore.ttsSync(text: String)
 
-// Action 执行完成通知
+// Action translated text
 action.notify(isTriggerFollowUp: Boolean)
 ```
 
 ### 2. description
 
 ```kotlin
-// 使用 AgentSDK 提供的协程作用域
+// translated textAgentSDK translated text
 AOCoroutineScope.launch {
-    // 异步操作
+    // translated text
 }
 ```
 
 ### 3. AppAgent descriptionMethods
 
 ```kotlin
-// 设置角色人设
+// translated text
 setPersona(persona: String)
 
-// 设置对话风格
+// translated text
 setStyle(style: String)
 
-// 设置任务目标
+// translated text
 setObjective(objective: String)
 
-// 动态注册 Action
+// translated textAction
 registerAction(action: Action)
 ```
 
 ### 4. PageAgent description
 
 ```kotlin
-// 创建页面级 Agent
+// translated textAgent
 PageAgent(activity: Activity)
-    .registerAction(action: Action)  // 注册 Action
-    .blockAction(actionName: String) // 排除指定 Action
-    .blockActions(actionNames: List<String>) // 排除多个 Action
-    .blockAllActions() // 排除所有 Action
+    .registerAction(action: Action)  // translated textAction
+    .blockAction(actionName: String) // translated textAction
+    .blockActions(actionNames: List<String>) // translated textAction
+    .blockAllActions() // translated textAction
 ```
 
 ## AgentSDK description

@@ -1461,11 +1461,11 @@ Actiondescription。
 ```kotlin
 @AgentAction(
     name = "com.agent.demo.SHOW_SMILE_FACE",
-    displayName = "笑",
-    desc = "响应用户的开心、满意或正面情绪"
+    displayName = "Smile",
+    desc = "Respond to the user's positive emotions"
 )
 private fun showSmileFace(action: Action, @ActionParameter(...) sentence: String): Boolean {
-    // 实现逻辑
+    // Implementation logic
     return true
 }
 ```
@@ -1510,7 +1510,7 @@ descriptionvaluedescription。
 ```kotlin
 @ActionParameter(
     name = "sentence",
-    desc = "回复给用户的话",
+    desc = "Reply text for the user",
     required = true
 )
 sentence: String
@@ -1549,9 +1549,9 @@ description。
 **Usage Example:**
 ```kotlin
 AOCoroutineScope.launch {
-    // 在协程中执行耗时操作
+    // Run time-consuming work in a coroutine
     AgentCore.ttsSync("Hello")
-    // 完成后通知
+    // Notify when complete
     action.notify()
 }
 ```

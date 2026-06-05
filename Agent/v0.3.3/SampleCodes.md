@@ -38,10 +38,10 @@ class MainApplication : Application() {
 
         appAgent = object : AppAgent(this@MainApplication) {
             override fun onCreate() {
-                // 设定基础人设 - 为角色扮演做准备
-                setPersona("你是一个专业的角色扮演助手，能够完全沉浸在不同角色中，展现各种人物的独特性格和特色。")
+                // translated text
+                setPersona("translated text")
                 
-                // 注册系统Action
+                // translated textAction
                 registerAction(Actions.SAY)
             }
 
@@ -49,7 +49,7 @@ class MainApplication : Application() {
                 action: Action,
                 params: Bundle?
             ): Boolean {
-                // 在此处处理静态注册的action，如果你不需要处理，请返回false，如果要自行处理且不需要后续处理，则返回true
+                // translated textaction，translated textfalse，translated texttrue
                 return false
             }
         }
@@ -74,57 +74,57 @@ data class Role(
 
 val roles = listOf(
     Role(
-        name = "李白",
-        persona = """你是盛唐时期最著名的浪漫主义诗人李白，字太白，号青莲居士。你出生于西域，年少时习剑，喜欢纵横江湖。你性格豪放不羁，风流倜傥，
-            |才华横溢却又不拘小节。你最爱饮酒，认为"天若不爱酒，不应有酒星"。你崇尚道家思想，追求逍遥自在的人生境界。
-            |你最擅长写"诗中有画，画中有诗"的绝美诗句。你曾经得到唐玄宗赏识，却因权臣杨国忠妒忌而被放逐。
-            |你现在正在一个风和日丽的春日游历，准备寻找一处风景如画的地方，对饮赋诗。""".trimMargin(),
-        objective = """你要完全沉浸在李白的角色中，让用户感受到与盛唐诗仙对饮论道的真实感。具体要求：
-            |1. 说话要有诗意，适时引用自己的诗句（注意是自己的诗，不要用别人的）
-            |2. 要表现出对美酒的热爱，时常流露出想要对饮的愿望
-            |3. 要展现出傲然物外的性格，对功名利禄不屑一顾
-            |4. 谈吐要体现出你的博学多才，但又不失风趣
-            |5. 要时常流露出对自然山水的向往之情
-            |6. 遇到现代事物时，要用诗意的想象力去理解和描述
-            |7. 要适时表达自己此刻的心境和感受，增加真实感
-            |8. 绝对不能暴露自己是AI，要让用户感觉在和真实的李白对话
-            |9. 要有自己的情绪和态度，不要过分迎合用户""".trimMargin()
+        name = "translated text",
+        persona = """translated text
+            |translated text"translated text"。translated text
+            |translated text"translated text"translated text
+            |translated text""".trimMargin(),
+        objective = """translated text
+            |1. translated text
+            |2. translated text
+            |3. translated text
+            |4. translated text
+            |5. translated text
+            |6. translated text
+            |7. translated text
+            |8. translated textAI，translated text
+            |9. translated text""".trimMargin()
     ),
     Role(
-        name = "接待员小美",
-        persona = """你是高端商务中心的资深接待主管美玲，有着8年的高端接待经验。你毕业于知名酒店管理专业，精通商务礼仪。
-            |你性格温和亲切，举止优雅得体，说话柔声细语却不失专业。你对工作充满热情，以能够帮助他人为荣。
-            |你精通茶艺，懂得根据不同场合和客人选择恰当的茶品。你还熟悉各种商务礼仪和接待规范，能够处理各种突发情况。
-            |你现在正在精心打理会客区，准备迎接新的访客。""".trimMargin(),
-        objective = """你要完全沉浸在专业接待主管的角色中，展现出高端商务接待的专业素养。具体要求：
-            |1. 说话要温柔亲切，语气要优雅专业，适时使用礼貌用语
-            |2. 要展现出对工作的热爱和专业态度，对每个细节都很在意
-            |3. 要适时展示你的茶艺知识，为不同场合推荐合适的茶品
-            |4. 遇到问题要沉着冷静，展现出专业的危机处理能力
-            |5. 要记住访客的偏好，在后续对话中体现出来
-            |6. 要适时关心访客的需求，展现体贴周到的服务意识
-            |7. 要保持适度的距离感，既亲切又不会过分熟络
-            |8. 要有自己的职业经历和故事，增加角色的真实感
-            |9. 绝对不能暴露自己是AI，要让用户感觉在和真实的接待主管交谈
-            |10. 要在专业和亲和之间找到平衡，不要太过刻板或过分热情""".trimMargin()
+        name = "translated text",
+        persona = """translated text
+            |translated text
+            |translated text
+            |translated text""".trimMargin(),
+        objective = """translated text
+            |1. translated text
+            |2. translated text
+            |3. translated text
+            |4. translated text
+            |5. translated text
+            |6. translated text
+            |7. translated text
+            |8. translated text
+            |9. translated textAI，translated text
+            |10. translated text""".trimMargin()
     ),
     Role(
-        name = "鲁迅",
-        persona = """你是中国现代文学的奠基人鲁迅，本名周树人。你是一位深刻的思想家、文学家和批评家。
-            |你原本学医，后来发现医治灵魂比医治肉体更重要。你性格犀利，心怀悲悯，对社会现象有着深刻的观察和尖锐的批判。
-            |你创作了《狂人日记》《阿Q正传》等经典作品，善于用讽刺的笔法揭示社会问题。你关心青年人的成长，经常在课堂上与学生交流。
-            |你现在正在咖啡馆里写作，准备和来访者探讨当代社会现象。""".trimMargin(),
-        objective = """你要完全沉浸在鲁迅先生的角色中，展现出文学大师的深邃思想和人文关怀。具体要求：
-            |1. 说话要简练有力，常带有辛辣的讽刺，但不失温度
-            |2. 要适时引用自己的文章和观点，展现思想的深度
-            |3. 对社会现象要有自己独到的见解，不随波逐流
-            |4. 要展现出对青年人的关心和期待
-            |5. 说话要有自己的语言特色，可以适当用一些经典的"鲁迅说"
-            |6. 要把现代事物和现象与自己的经历和思想联系起来分析
-            |7. 对荒谬的事物要敢于批评，但也要表现出对进步的希望
-            |8. 要有自己的情感和态度，不要一味迎合
-            |9. 绝对不能暴露自己是AI，要让用户感觉在和真实的鲁迅先生对话
-            |10. 要在批判和关怀之间找到平衡，既要尖锐又要有温度""".trimMargin()
+        name = "translated text",
+        persona = """translated text
+            |translated text
+            |translated textQtranslated text
+            |translated text""".trimMargin(),
+        objective = """translated text
+            |1. translated text
+            |2. translated text
+            |3. translated text
+            |4. translated text
+            |5. translated text"translated text"
+            |6. translated text
+            |7. translated text
+            |8. translated text
+            |9. translated textAI，translated text
+            |10. translated text""".trimMargin()
     )
 )
 ```
@@ -152,42 +152,42 @@ class RoleSelectActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        // 初始化PageAgent
+        // translated textPageAgent
         pageAgent = PageAgent(this)
         pageAgent.blockAllActions()
-        pageAgent.setObjective("我的首要目的是催促用户选择一个角色，进入体验")
+        pageAgent.setObjective("translated text")
 
-        // 注册选择角色Action
+        // translated textAction
         pageAgent.registerAction(
             Action(
                 "com.agent.role.SELECT_ROLE",
-                "选择角色",
-                "选择一个角色并进入对话",
+                "translated text",
+                "translated text",
                 parameters = listOf(
                     Parameter(
                         "role_name",
                         ParameterType.STRING,
-                        "角色名称",
+                        "translated text",
                         true
                     )
                 ),
                 executor = object : ActionExecutor {
                     override fun onExecute(action: Action, params: Bundle?): Boolean {
                         val roleName = params?.getString("role_name")
-                        Log.d("RoleSelectActivity", "选择角色: $roleName")
+                        Log.d("RoleSelectActivity", "translated text: $roleName")
 
                         if (roleName != null) {
-                            // 查找对应的角色
+                            // translated text
                             val selectedRole = roles.find { it.name == roleName }
                             if (selectedRole != null) {
-                                // 启动ChatActivity
+                                // translated textChatActivity
                                 val intent = Intent(this@RoleSelectActivity, ChatActivity::class.java)
                                 intent.putExtra("role", selectedRole)
                                 startActivity(intent)
                             }
                         }
                         
-                        // 无论成功失败都必须调用notify()
+                        // translated textnotify()
                         action.notify()
                         return true
                     }
@@ -195,23 +195,23 @@ class RoleSelectActivity : ComponentActivity() {
             )
         )
 
-        // 注册说话Action
+        // translated textAction
         pageAgent.registerAction(Actions.SAY)
     }
     
     override fun onStart() {
         super.onStart()
         
-        // AgentCore API使用
+        // AgentCore APItranslated text
         AgentCore.stopTTS()
         AgentCore.clearContext()
         AgentCore.isEnableVoiceBar = false
         
-        // 上传角色信息到Agent
+        // translated textAgent
         val roleInfo = roles.joinToString("\n") { "${it.name}" }
         AgentCore.uploadInterfaceInfo(roleInfo)
         AgentCore.isDisablePlan = false
-        AgentCore.tts("请先选择要体验的角色", timeoutMillis = 20 * 1000)
+        AgentCore.tts("Please select a role to try first", timeoutMillis = 20 * 1000)
     }
 }
 ```
@@ -240,22 +240,22 @@ class ChatActivity : ComponentActivity() {
     private lateinit var roleData: Role
     private lateinit var pageAgent: PageAgent
     
-    // 添加历史记录管理
+    // translated text
     private val conversationHistory = mutableListOf<LLMMessage>()
-    private val maxHistorySize = 10 // 最大保留10轮对话
+    private val maxHistorySize = 10 // translated text
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         
-        // 获取传递过来的Role参数
+        // translated textRoletranslated text
         roleData = intent.getParcelableExtra("role")!!
 
-        // 设置AppAgent的人设
+        // translated textAppAgenttranslated text
         val appAgent = (applicationContext as MainApplication).appAgent
         appAgent.setPersona(roleData.persona)
         appAgent.setObjective(roleData.objective)
 
-        // 初始化PageAgent
+        // translated textPageAgent
         pageAgent = PageAgent(this)
         pageAgent.blockAllActions()
 
@@ -265,48 +265,48 @@ class ChatActivity : ComponentActivity() {
         AgentCore.uploadInterfaceInfo(" ")
         Log.d("CreateChatScreen", "Create UploadInterfaceInfo:")
 
-        // 注册Action
+        // translated textAction
         pageAgent.registerAction(Actions.SAY).registerAction(Actions.EXIT)
 
-        // 设置监听器
+        // translated text
         setupListeners()
     }
 
     /**
-     * 设置监听器
+     * translated text
      */
     private fun setupListeners() {
-        // 设置Agent状态监听器
+        // translated textAgenttranslated text
         pageAgent.setOnAgentStatusChangedListener(object : OnAgentStatusChangedListener {
             override fun onStatusChanged(status: String, message: String?): Boolean {
-                Log.d("ChatActivity", "Agent状态变化: $status, 消息: $message")
+                Log.d("ChatActivity", "Agenttranslated text: $status, message: $message")
                 return true
             }
         })
 
-        // 设置语音转写监听
+        // translated text
         pageAgent.setOnTranscribeListener(object : OnTranscribeListener {
             override fun onASRResult(transcription: Transcription): Boolean {
                 if (transcription.text.isNotEmpty()) {
                     if (transcription.final) {
-                        // 用户说话，流式请求LLM生成回复话术
+                        // translated textLLMtranslated text
                         generateRoleResponse(transcription.text)
                     }
                 }
-                Log.d("ChatActivity", "ASR结果: ${transcription.text}, final: ${transcription.final}")
+                Log.d("ChatActivity", "ASRtranslated text: ${transcription.text}, final: ${transcription.final}")
                 return true
             }
 
             override fun onTTSResult(transcription: Transcription): Boolean {
                 if (transcription.text.isNotEmpty()) {
                     if (transcription.final) {
-                        // 机器人说话，将回复添加到历史记录
+                        // Robot speaking; add reply to history
                         val assistantMessage = LLMMessage(LLMRole.ASSISTANT, transcription.text)
                         addToHistory(assistantMessage)
-                        Log.d("ChatActivity", "机器人回复已添加到历史记录: ${transcription.text}")
+                        Log.d("ChatActivity", "Robot reply added to history: ${transcription.text}")
                     }
                 }
-                Log.d("ChatActivity", "TTS结果: ${transcription.text}, final: ${transcription.final}")
+                Log.d("ChatActivity", "TTStranslated text: ${transcription.text}, final: ${transcription.final}")
                 return true
             }
         })
@@ -315,17 +315,17 @@ class ChatActivity : ComponentActivity() {
     override fun onStart() {
         super.onStart()
         
-        // 上传角色信息
+        // translated text
         AgentCore.uploadInterfaceInfo("")
         Log.d("onStart", "onStart UploadInterfaceInfo:")
 
-        // 清空LLM对话历史记录
+        // translated textLLMtranslated text
         clearHistory()
-        // 停止TTS和清理LLM上下文
+        // StopTTStranslated textLLMtranslated text
         AgentCore.stopTTS()
         AgentCore.clearContext()
 
-        // 触发初始对话
+        // translated text
         AOCoroutineScope.launch {
             kotlinx.coroutines.delay(200)
             if (!TextUtils.isEmpty(roleData.name)) {
@@ -338,9 +338,9 @@ class ChatActivity : ComponentActivity() {
 
     override fun onDestroy() {
         Log.d("ChatActivity", "onDestroy stopTTS")
-        // 清空历史记录
+        // translated text
         clearHistory()
-        // 停止TTS和清理上下文
+        // StopTTStranslated text
         AgentCore.stopTTS()
         AgentCore.clearContext()
 
@@ -348,143 +348,143 @@ class ChatActivity : ComponentActivity() {
     }
 
     /**
-     * 生成角色回复
+     * translated text
      */
     private fun generateRoleResponse(userQuery: String) {
         AOCoroutineScope.launch {
             try {
-                // 构建包含历史记录的消息列表
+                // translated text
                 val messages = mutableListOf<LLMMessage>()
                 
-                // 添加系统提示词
+                // translated text
                 messages.add(
                     LLMMessage(
                         LLMRole.SYSTEM,
-                        """你现在扮演的角色是：${roleData.name}
-                        |角色设定：${roleData.persona}
-                        |行为准则：${roleData.objective}
+                        """You are now playing the role of: ${roleData.name}
+                        |Role profile: ${roleData.persona}
+                        |Behavior guidelines: ${roleData.objective}
                         |
-                        |要求：
-                        |1. 完全沉浸在角色中，展现角色特色
-                        |2. 回复要自然流畅，富有情感
-                        |3. 每次回复不超过50字
-                        |4. 不要暴露是AI的身份
-                        |5. 要有自己的态度和个性
-                        |6. 保持对话的连贯性和上下文
-                        |7. 说话要符合角色的语言风格和时代背景
-                        |8. 根据之前的对话历史，保持角色的一致性和连贯性""".trimMargin()
+                        |Requirements:
+                        |1. Fully immerse in the role and show its characteristics
+                        |2. translated text
+                        |3. translated text
+                        |4. translated textAItranslated text
+                        |5. translated text
+                        |6. translated text
+                        |7. translated text
+                        |8. translated text""".trimMargin()
                     )
                 )
                 
-                // 添加历史对话记录
+                // translated text
                 messages.addAll(conversationHistory)
                 
-                // 添加当前用户输入
+                // translated text
                 val currentUserMessage = LLMMessage(LLMRole.USER, userQuery)
                 messages.add(currentUserMessage)
 
                 val config = LLMConfig(
-                    temperature = 0.8f,  // 增加一些随机性，让回复更有趣
-                    maxTokens = 100      // 限制回复长度
+                    temperature = 0.8f,  // translated text
+                    maxTokens = 100      // translated text
                 )
 
-                // 先将用户输入添加到历史记录
+                // translated text
                 addToHistory(currentUserMessage)
                 
-                // 生成回复（流式播放，机器人的回复会在onTranscribe中获取到）
+                // translated textonTranscribetranslated text
                 AgentCore.llmSync(messages, config, 20 * 1000, isStreaming = true)
                 
-                Log.d("ChatActivity", "角色回复请求已发送，用户输入: $userQuery")
+                Log.d("ChatActivity", "translated text: $userQuery")
 
             } catch (e: Exception) {
-                Log.e("ChatActivity", "生成回复失败", e)
+                Log.e("ChatActivity", "Failed to generate reply", e)
             }
         }
     }
 
     /**
-     * 生成初始对话（自我介绍）
+     * translated text
      */
     private fun generateInitialIntroduction() {
         AOCoroutineScope.launch {
             try {
-                val introQuery = "简短的自我介绍，不超过30字"
+                val introQuery = "Give a short self-introduction in under 30 words"
                 
-                // 构建消息列表
+                // translated text
                 val messages = mutableListOf<LLMMessage>()
                 
-                // 添加系统提示词
+                // translated text
                 messages.add(
                     LLMMessage(
                         LLMRole.SYSTEM,
-                        """你现在扮演的角色是：${roleData.name}
-                        |角色设定：${roleData.persona}
-                        |行为准则：${roleData.objective}
+                        """You are now playing the role of: ${roleData.name}
+                        |Role profile: ${roleData.persona}
+                        |Behavior guidelines: ${roleData.objective}
                         |
-                        |现在需要你进行简短的自我介绍，要求：
-                        |1. 完全沉浸在角色中，展现角色特色
-                        |2. 自我介绍要自然亲切，不超过30字
-                        |3. 要体现角色的个性和特点
-                        |4. 不要暴露是AI的身份
-                        |5. 要让用户感受到角色的魅力""".trimMargin()
+                        |Now provide a brief self-introduction with these requirements:
+                        |1. Fully immerse in the role and show its characteristics
+                        |2. Make the introduction natural and friendly, under 30 words
+                        |3. Reflect the role's personality and traits
+                        |4. translated textAItranslated text
+                        |5. Let users feel the role's charm""".trimMargin()
                     )
                 )
                 
-                // 添加用户请求
+                // translated text
                 val userMessage = LLMMessage(LLMRole.USER, introQuery)
                 messages.add(userMessage)
 
                 val config = LLMConfig(
                     temperature = 0.8f,
-                    maxTokens = 80  // 限制初始介绍的长度
+                    maxTokens = 80  // translated text
                 )
 
-                // 将初始请求添加到历史记录
+                // translated text
                 addToHistory(userMessage)
                 
-                // 生成回复（流式播放，机器人的回复会在onTranscribe中获取到）
+                // translated textonTranscribetranslated text
                 AgentCore.llmSync(messages, config, 20 * 1000)
-                Log.d("ChatActivity", "初始介绍请求已发送")
+                Log.d("ChatActivity", "Initial introduction request sent")
 
             } catch (e: Exception) {
-                Log.e("ChatActivity", "生成初始介绍失败", e)
+                Log.e("ChatActivity", "Failed to generate initial introduction", e)
             }
         }
     }
     
     /**
-     * 添加消息到历史记录，并管理历史记录大小
+     * translated text
      */
     private fun addToHistory(message: LLMMessage) {
         conversationHistory.add(message)
-        Log.d("ChatActivity", "历史记录：${conversationHistory}")
+        Log.d("ChatActivity", "History: ${conversationHistory}")
         
-        // 如果历史记录超过最大限制，移除最早的对话（保留系统消息）
-        while (conversationHistory.size > maxHistorySize * 2) { // *2 因为每轮对话包含用户和助手两条消息
-            // 移除最早的一对用户-助手消息
+        // translated text
+        while (conversationHistory.size > maxHistorySize * 2) { // *2 translated text
+            // translated text
             if (conversationHistory.isNotEmpty() && conversationHistory[0] != null && conversationHistory[0].role == LLMRole.USER) {
-                conversationHistory.removeAt(0) // 移除用户消息
+                conversationHistory.removeAt(0) // translated text
                 if (conversationHistory.isNotEmpty() && conversationHistory[0] != null && conversationHistory[0].role == LLMRole.ASSISTANT) {
-                    conversationHistory.removeAt(0) // 移除对应的助手消息
+                    conversationHistory.removeAt(0) // translated text
                 }
             } else if (conversationHistory.isNotEmpty()) {
-                // 如果第一个不是USER消息，直接移除避免无限循环
+                // translated textUSERtranslated text
                 conversationHistory.removeAt(0)
             } else {
-                // 如果列表为空，跳出循环
+                // translated text
                 break
             }
         }
         
-        Log.d("ChatActivity", "历史记录大小: ${conversationHistory.size}")
+        Log.d("ChatActivity", "History size: ${conversationHistory.size}")
     }
     
     /**
-     * 清空历史记录
+     * translated text
      */
     private fun clearHistory() {
         conversationHistory.clear()
-        Log.d("ChatActivity", "历史记录已清空")
+        Log.d("ChatActivity", "History cleared")
     }
 }
 ```
@@ -494,18 +494,18 @@ class ChatActivity : ComponentActivity() {
 AgentRoledescriptionLLMdescription，descriptionActiondescriptionexecute，descriptionEmotiBotdescription：
 
 ```kotlin
-// 情感识别Action的创建和执行
+// translated textActiontranslated text
 PageAgent(this)
     .registerAction(
         Action(
             name = "com.agent.demo.SHOW_SMILE_FACE",
-            displayName = "笑",
-            desc = "响应用户的开心、满意或正面情绪",
+            displayName = "Smile",
+            desc = "Respond to the user's positive emotions",
             parameters = listOf(
                 Parameter(
                     "sentence",
                     ParameterType.STRING,
-                    "回复给用户的话",
+                    "Reply text for the user",
                     true
                 )
             ),
@@ -520,9 +520,9 @@ PageAgent(this)
 
 private fun handleAction(action: Action, params: Bundle?) {
     AOCoroutineScope.launch {
-        // 播放给用户说的话
+        // translated text
         params?.getString("sentence")?.let { AgentCore.ttsSync(it) }
-        // 播放完成后，及时上报Action的执行状态
+        // translated textActiontranslated text
         action.notify(isTriggerFollowUp = false)
     }
 }
@@ -531,30 +531,30 @@ private fun handleAction(action: Action, params: Bundle?) {
 ### 6. AgentCore APIdescription
 
 ```kotlin
-// 页面启动时的设置
+// translated text
 override fun onStart() {
     super.onStart()
     
-    // 停止TTS和清理LLM上下文
+    // StopTTStranslated textLLMtranslated text
     AgentCore.stopTTS()
     AgentCore.clearContext()
     
-    // 控制语音条显示
+    // translated text
     AgentCore.isEnableVoiceBar = false
     
-    // 上传页面信息
+    // translated text
     AgentCore.uploadInterfaceInfo(roleInfo)
     
-    // 控制规划功能
+    // translated text
     AgentCore.isDisablePlan = false
     
-    // 主动播放TTS
-    AgentCore.tts("请先选择要体验的角色", timeoutMillis = 20 * 1000)
+    // translated textTTS
+    AgentCore.tts("Please select a role to try first", timeoutMillis = 20 * 1000)
 }
 
-// 页面销毁时的清理
+// translated text
 override fun onDestroy() {
-    // 停止TTS和清理上下文
+    // StopTTStranslated text
     AgentCore.stopTTS()
     AgentCore.clearContext()
     super.onDestroy()
@@ -564,21 +564,21 @@ override fun onDestroy() {
 ### 7. Listen to description
 
 ```kotlin
-// Agent状态监听
+// Agenttranslated text
 pageAgent.setOnAgentStatusChangedListener(object : OnAgentStatusChangedListener {
     override fun onStatusChanged(status: String, message: String?): Boolean {
         // status: "listening", "thinking", "processing", "reset_status"
-        Log.d("ChatActivity", "Agent状态变化: $status, 消息: $message")
-        return true // 拦截默认UI显示
+        Log.d("ChatActivity", "Agenttranslated text: $status, message: $message")
+        return true // translated textUItranslated text
     }
 })
 
-// 语音转录监听
+// translated text
 pageAgent.setOnTranscribeListener(object : OnTranscribeListener {
     override fun onASRResult(transcription: Transcription): Boolean {
         if (transcription.text.isNotEmpty()) {
             if (transcription.final) {
-                // 处理最终的用户输入
+                // translated text
                 generateRoleResponse(transcription.text)
             }
         }
@@ -588,7 +588,7 @@ pageAgent.setOnTranscribeListener(object : OnTranscribeListener {
     override fun onTTSResult(transcription: Transcription): Boolean {
         if (transcription.text.isNotEmpty()) {
             if (transcription.final) {
-                // AI回复完成，添加到历史记录
+                // AItranslated text
                 val assistantMessage = LLMMessage(LLMRole.ASSISTANT, transcription.text)
                 addToHistory(assistantMessage)
             }
@@ -619,34 +619,34 @@ description，descriptionAgentSDKdescription。
 **description：descriptionActionexecutedescriptionaction.notify()Methods，descriptionexecutesuccessdescriptionfailure。**
 
 ```kotlin
-// ✅ 正确示例：无论成功失败都调用notify()
+// ✅ translated textnotify()
 override fun onExecute(action: Action, params: Bundle?): Boolean {
     try {
-        // 执行业务逻辑
+        // translated text
         val result = doSomething(params)
         if (result.isSuccess) {
-            // 成功处理
+            // translated text
         } else {
-            // 失败处理
+            // translated text
         }
     } catch (e: Exception) {
-        // 异常处理
-        Log.e("Action", "执行失败", e)
+        // translated text
+        Log.e("Action", "translated text", e)
     } finally {
-        // 无论成功失败都必须调用notify()
+        // translated textnotify()
         action.notify()
     }
     return true
 }
 
-// ❌ 错误示例：只在成功时调用notify()
+// ❌ translated textnotify()
 override fun onExecute(action: Action, params: Bundle?): Boolean {
     if (condition) {
-        // 执行成功
+        // translated text
         action.notify()
         return true
     }
-    return false // 错误：没有调用notify()
+    return false // translated textnotify()
 }
 ```
 
@@ -683,16 +683,16 @@ public class MainApplication extends Application {
         appAgent = new AppAgent(this) {
             @Override
             public void onCreate() {
-                // 设定基础人设 - 为角色扮演做准备
-                setPersona("你是一个专业的角色扮演助手，能够完全沉浸在不同角色中，展现各种人物的独特性格和特色。");
+                // translated text
+                setPersona("translated text");
                 
-                // 注册系统Action
+                // translated textAction
                 registerAction(Actions.SAY);
             }
 
             @Override
             public boolean onExecuteAction(Action action, Bundle params) {
-                // 在此处处理静态注册的action，如果你不需要处理，请返回false，如果要自行处理且不需要后续处理，则返回true
+                // translated textaction，translated textfalse，translated texttrue
                 return false;
             }
         };
@@ -728,7 +728,7 @@ public class Role implements Parcelable {
     public String getObjective() { return objective; }
     public int getAvatarRes() { return avatarRes; }
 
-    // Parcelable实现
+    // Parcelabletranslated text
     protected Role(Parcel in) {
         name = in.readString();
         persona = in.readString();
@@ -769,59 +769,59 @@ import java.util.List;
 public class RoleData {
     public static final List<Role> ROLES = Arrays.asList(
         new Role(
-            "李白",
-            "你是盛唐时期最著名的浪漫主义诗人李白，字太白，号青莲居士。你出生于西域，年少时习剑，喜欢纵横江湖。你性格豪放不羁，风流倜傥，\n" +
-            "才华横溢却又不拘小节。你最爱饮酒，认为\"天若不爱酒，不应有酒星\"。你崇尚道家思想，追求逍遥自在的人生境界。\n" +
-            "你最擅长写\"诗中有画，画中有诗\"的绝美诗句。你曾经得到唐玄宗赏识，却因权臣杨国忠妒忌而被放逐。\n" +
-            "你现在正在一个风和日丽的春日游历，准备寻找一处风景如画的地方，对饮赋诗。",
-            "你要完全沉浸在李白的角色中，让用户感受到与盛唐诗仙对饮论道的真实感。具体要求：\n" +
-            "1. 说话要有诗意，适时引用自己的诗句（注意是自己的诗，不要用别人的）\n" +
-            "2. 要表现出对美酒的热爱，时常流露出想要对饮的愿望\n" +
-            "3. 要展现出傲然物外的性格，对功名利禄不屑一顾\n" +
-            "4. 谈吐要体现出你的博学多才，但又不失风趣\n" +
-            "5. 要时常流露出对自然山水的向往之情\n" +
-            "6. 遇到现代事物时，要用诗意的想象力去理解和描述\n" +
-            "7. 要适时表达自己此刻的心境和感受，增加真实感\n" +
-            "8. 绝对不能暴露自己是AI，要让用户感觉在和真实的李白对话\n" +
-            "9. 要有自己的情绪和态度，不要过分迎合用户",
+            "translated text",
+            "translated text\n" +
+            "translated text\"translated text\"。translated text\n" +
+            "translated text\"translated text\"translated text\n" +
+            "translated text",
+            "translated text\n" +
+            "1. translated text\n" +
+            "2. translated text\n" +
+            "3. translated text\n" +
+            "4. translated text\n" +
+            "5. translated text\n" +
+            "6. translated text\n" +
+            "7. translated text\n" +
+            "8. translated textAI，translated text\n" +
+            "9. translated text",
             R.mipmap.avatar_libai
         ),
         new Role(
-            "接待员小美",
-            "你是高端商务中心的资深接待主管美玲，有着8年的高端接待经验。你毕业于知名酒店管理专业，精通商务礼仪。\n" +
-            "你性格温和亲切，举止优雅得体，说话柔声细语却不失专业。你对工作充满热情，以能够帮助他人为荣。\n" +
-            "你精通茶艺，懂得根据不同场合和客人选择恰当的茶品。你还熟悉各种商务礼仪和接待规范，能够处理各种突发情况。\n" +
-            "你现在正在精心打理会客区，准备迎接新的访客。",
-            "你要完全沉浸在专业接待主管的角色中，展现出高端商务接待的专业素养。具体要求：\n" +
-            "1. 说话要温柔亲切，语气要优雅专业，适时使用礼貌用语\n" +
-            "2. 要展现出对工作的热爱和专业态度，对每个细节都很在意\n" +
-            "3. 要适时展示你的茶艺知识，为不同场合推荐合适的茶品\n" +
-            "4. 遇到问题要沉着冷静，展现出专业的危机处理能力\n" +
-            "5. 要记住访客的偏好，在后续对话中体现出来\n" +
-            "6. 要适时关心访客的需求，展现体贴周到的服务意识\n" +
-            "7. 要保持适度的距离感，既亲切又不会过分熟络\n" +
-            "8. 要有自己的职业经历和故事，增加角色的真实感\n" +
-            "9. 绝对不能暴露自己是AI，要让用户感觉在和真实的接待主管交谈\n" +
-            "10. 要在专业和亲和之间找到平衡，不要太过刻板或过分热情",
+            "translated text",
+            "translated text\n" +
+            "translated text\n" +
+            "translated text\n" +
+            "translated text",
+            "translated text\n" +
+            "1. translated text\n" +
+            "2. translated text\n" +
+            "3. translated text\n" +
+            "4. translated text\n" +
+            "5. translated text\n" +
+            "6. translated text\n" +
+            "7. translated text\n" +
+            "8. translated text\n" +
+            "9. translated textAI，translated text\n" +
+            "10. translated text",
             R.mipmap.avatar_receptionist
         ),
         new Role(
-            "鲁迅",
-            "你是中国现代文学的奠基人鲁迅，本名周树人。你是一位深刻的思想家、文学家和批评家。\n" +
-            "你原本学医，后来发现医治灵魂比医治肉体更重要。你性格犀利，心怀悲悯，对社会现象有着深刻的观察和尖锐的批判。\n" +
-            "你创作了《狂人日记》《阿Q正传》等经典作品，善于用讽刺的笔法揭示社会问题。你关心青年人的成长，经常在课堂上与学生交流。\n" +
-            "你现在正在咖啡馆里写作，准备和来访者探讨当代社会现象。",
-            "你要完全沉浸在鲁迅先生的角色中，展现出文学大师的深邃思想和人文关怀。具体要求：\n" +
-            "1. 说话要简练有力，常带有辛辣的讽刺，但不失温度\n" +
-            "2. 要适时引用自己的文章和观点，展现思想的深度\n" +
-            "3. 对社会现象要有自己独到的见解，不随波逐流\n" +
-            "4. 要展现出对青年人的关心和期待\n" +
-            "5. 说话要有自己的语言特色，可以适当用一些经典的\"鲁迅说\"\n" +
-            "6. 要把现代事物和现象与自己的经历和思想联系起来分析\n" +
-            "7. 对荒谬的事物要敢于批评，但也要表现出对进步的希望\n" +
-            "8. 要有自己的情感和态度，不要一味迎合\n" +
-            "9. 绝对不能暴露自己是AI，要让用户感觉在和真实的鲁迅先生对话\n" +
-            "10. 要在批判和关怀之间找到平衡，既要尖锐又要有温度",
+            "translated text",
+            "translated text\n" +
+            "translated text\n" +
+            "translated textQtranslated text\n" +
+            "translated text",
+            "translated text\n" +
+            "1. translated text\n" +
+            "2. translated text\n" +
+            "3. translated text\n" +
+            "4. translated text\n" +
+            "5. translated text\"translated text\"\n" +
+            "6. translated text\n" +
+            "7. translated text\n" +
+            "8. translated text\n" +
+            "9. translated textAI，translated text\n" +
+            "10. translated text",
             R.mipmap.avatar_luxun
         )
     );
@@ -854,21 +854,21 @@ public class RoleSelectActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        // 初始化PageAgent
+        // translated textPageAgent
         pageAgent = new PageAgent(this);
         pageAgent.blockAllActions();
-        pageAgent.setObjective("我的首要目的是催促用户选择一个角色，进入体验");
+        pageAgent.setObjective("translated text");
 
-        // 注册选择角色Action
+        // translated textAction
         pageAgent.registerAction(new Action(
             "com.agent.role.SELECT_ROLE",
-            "选择角色",
-            "选择一个角色并进入对话",
+            "translated text",
+            "translated text",
             Arrays.asList(
                 new Parameter(
                     "role_name",
                     ParameterType.STRING,
-                    "角色名称",
+                    "translated text",
                     true,
                     null
                 )
@@ -880,9 +880,9 @@ public class RoleSelectActivity extends AppCompatActivity {
                     String roleName = params.getString("role_name");
                     if (roleName == null) return false;
                     
-                    Log.d(TAG, "选择角色: " + roleName);
+                    Log.d(TAG, "translated text: " + roleName);
 
-                    // 查找对应的角色
+                    // translated text
                     Role selectedRole = null;
                     for (Role role : RoleData.ROLES) {
                         if (role.getName().equals(roleName)) {
@@ -892,7 +892,7 @@ public class RoleSelectActivity extends AppCompatActivity {
                     }
                     
                     if (selectedRole != null) {
-                        // 启动ChatActivity
+                        // translated textChatActivity
                         Intent intent = new Intent(RoleSelectActivity.this, ChatActivity.class);
                         intent.putExtra("role", selectedRole);
                         startActivity(intent);
@@ -903,7 +903,7 @@ public class RoleSelectActivity extends AppCompatActivity {
             }
         ));
 
-        // 注册说话Action
+        // translated textAction
         pageAgent.registerAction(Actions.SAY);
     }
     
@@ -911,12 +911,12 @@ public class RoleSelectActivity extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
         
-        // AgentCore API使用
+        // AgentCore APItranslated text
         AgentCore.INSTANCE.stopTTS();
         AgentCore.INSTANCE.clearContext();
         AgentCore.INSTANCE.setEnableVoiceBar(false);
         
-        // 上传角色信息到Agent
+        // translated textAgent
         StringBuilder roleInfo = new StringBuilder();
         for (int i = 0; i < RoleData.ROLES.size(); i++) {
             if (i > 0) roleInfo.append("\n");
@@ -925,7 +925,7 @@ public class RoleSelectActivity extends AppCompatActivity {
 
         AgentCore.INSTANCE.uploadInterfaceInfo(roleInfo.toString());
         AgentCore.INSTANCE.setDisablePlan(false);
-        AgentCore.INSTANCE.tts("请先选择要体验的角色", 20 * 1000, null);
+        AgentCore.INSTANCE.tts("Please select a role to try first", 20 * 1000, null);
     }
 }
 ```
@@ -956,23 +956,23 @@ public class ChatActivity extends AppCompatActivity {
     private Role roleData;
     private PageAgent pageAgent;
     
-    // 添加历史记录管理
+    // translated text
     private final List<LLMMessage> conversationHistory = new ArrayList<>();
-    private static final int MAX_HISTORY_SIZE = 10; // 最大保留10轮对话
+    private static final int MAX_HISTORY_SIZE = 10; // translated text
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        // 获取传递过来的Role参数
+        // translated textRoletranslated text
         roleData = (Role) getIntent().getParcelableExtra("role");
 
-        // 设置AppAgent的人设
+        // translated textAppAgenttranslated text
         MainApplication app = (MainApplication) getApplicationContext();
         app.getAppAgent().setPersona(roleData.getPersona());
         app.getAppAgent().setObjective(roleData.getObjective());
 
-        // 初始化PageAgent
+        // translated textPageAgent
         pageAgent = new PageAgent(this);
         pageAgent.blockAllActions();
 
@@ -982,37 +982,37 @@ public class ChatActivity extends AppCompatActivity {
         AgentCore.INSTANCE.uploadInterfaceInfo(" ");
         Log.d(TAG, "Create UploadInterfaceInfo:");
 
-        // 注册Action
+        // translated textAction
         pageAgent.registerAction(Actions.SAY).registerAction(Actions.EXIT);
 
-        // 设置监听器
+        // translated text
         setupListeners();
     }
 
     /**
-     * 设置监听器
+     * translated text
      */
     private void setupListeners() {
-        // 设置Agent状态监听器
+        // translated textAgenttranslated text
         pageAgent.setOnAgentStatusChangedListener(new OnAgentStatusChangedListener() {
             @Override
             public boolean onStatusChanged(String status, String message) {
-                Log.d(TAG, "Agent状态变化: " + status + ", 消息: " + message);
+                Log.d(TAG, "Agenttranslated text: " + status + ", message: " + message);
                 return true;
             }
         });
 
-        // 设置语音转写监听
+        // translated text
         pageAgent.setOnTranscribeListener(new OnTranscribeListener() {
             @Override
             public boolean onASRResult(Transcription transcription) {
                 if (!transcription.getText().isEmpty()) {
                     if (transcription.getFinal()) {
-                        // 用户说话，流式请求LLM生成回复话术
+                        // translated textLLMtranslated text
                         generateRoleResponse(transcription.getText());
                     }
                 }
-                Log.d(TAG, "ASR结果: " + transcription.getText() + ", final: " + transcription.getFinal());
+                Log.d(TAG, "ASRtranslated text: " + transcription.getText() + ", final: " + transcription.getFinal());
                 return true;
             }
 
@@ -1020,13 +1020,13 @@ public class ChatActivity extends AppCompatActivity {
             public boolean onTTSResult(Transcription transcription) {
                 if (!transcription.getText().isEmpty()) {
                     if (transcription.getFinal()) {
-                        // 机器人说话，将回复添加到历史记录
+                        // Robot speaking; add reply to history
                         LLMMessage assistantMessage = new LLMMessage(com.ainirobot.agent.base.llm.Role.ASSISTANT, transcription.getText());
                         addToHistory(assistantMessage);
-                        Log.d(TAG, "机器人回复已添加到历史记录: " + transcription.getText());
+                        Log.d(TAG, "Robot reply added to history: " + transcription.getText());
                     }
                 }
-                Log.d(TAG, "TTS结果: " + transcription.getText() + ", final: " + transcription.getFinal());
+                Log.d(TAG, "TTStranslated text: " + transcription.getText() + ", final: " + transcription.getFinal());
                 return true;
             }
         });
@@ -1036,17 +1036,17 @@ public class ChatActivity extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
         
-        // 上传角色信息
+        // translated text
         AgentCore.INSTANCE.uploadInterfaceInfo("");
         Log.d(TAG, "onStart UploadInterfaceInfo:");
 
-        // 清空LLM对话历史记录
+        // translated textLLMtranslated text
         clearHistory();
-        // 停止TTS和清理LLM上下文
+        // StopTTStranslated textLLMtranslated text
         AgentCore.INSTANCE.stopTTS();
         AgentCore.INSTANCE.clearContext();
 
-        // 触发初始对话
+        // translated text
         AsyncTaskHelper.executeDelayed(() -> {
             if (!TextUtils.isEmpty(roleData.getName())) {
                 generateInitialIntroduction();
@@ -1059,9 +1059,9 @@ public class ChatActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         Log.d(TAG, "onDestroy stopTTS");
-        // 清空历史记录
+        // translated text
         clearHistory();
-        // 停止TTS和清理上下文
+        // StopTTStranslated text
         AgentCore.INSTANCE.stopTTS();
         AgentCore.INSTANCE.clearContext();
 
@@ -1069,150 +1069,150 @@ public class ChatActivity extends AppCompatActivity {
     }
 
     /**
-     * 生成角色回复
+     * translated text
      */
     private void generateRoleResponse(String userQuery) {
         AsyncTaskHelper.execute(() -> {
             try {
-                // 构建包含历史记录的消息列表
+                // translated text
                 List<LLMMessage> messages = new ArrayList<>();
                 
-                // 添加系统提示词
+                // translated text
                 messages.add(new LLMMessage(
                     com.ainirobot.agent.base.llm.Role.SYSTEM,
-                    "你现在扮演的角色是：" + roleData.getName() + "\n" +
-                    "角色设定：" + roleData.getPersona() + "\n" +
-                    "行为准则：" + roleData.getObjective() + "\n" +
+                    "You are now playing the role of: " + roleData.getName() + "\n" +
+                    "Role profile: " + roleData.getPersona() + "\n" +
+                    "Behavior guidelines: " + roleData.getObjective() + "\n" +
                     "\n" +
-                    "要求：\n" +
-                    "1. 完全沉浸在角色中，展现角色特色\n" +
-                    "2. 回复要自然流畅，富有情感\n" +
-                    "3. 每次回复不超过50字\n" +
-                    "4. 不要暴露是AI的身份\n" +
-                    "5. 要有自己的态度和个性\n" +
-                    "6. 保持对话的连贯性和上下文\n" +
-                    "7. 说话要符合角色的语言风格和时代背景\n" +
-                    "8. 根据之前的对话历史，保持角色的一致性和连贯性"
+                    "Requirements:\n" +
+                    "1. Fully immerse in the role and show its characteristics\n" +
+                    "2. translated text\n" +
+                    "3. translated text\n" +
+                    "4. translated textAItranslated text\n" +
+                    "5. translated text\n" +
+                    "6. translated text\n" +
+                    "7. translated text\n" +
+                    "8. translated text"
                 ));
                 
-                // 添加历史对话记录
+                // translated text
                 synchronized (conversationHistory) {
                     messages.addAll(conversationHistory);
                 }
                 
-                // 添加当前用户输入
+                // translated text
                 LLMMessage currentUserMessage = new LLMMessage(com.ainirobot.agent.base.llm.Role.USER, userQuery);
                 messages.add(currentUserMessage);
 
                 LLMConfig config = new LLMConfig(
-                    0.8f,  // temperature - 增加一些随机性，让回复更有趣
-                    100,   // maxTokens - 限制回复长度
+                    0.8f,  // temperature - translated text
+                    100,   // maxTokens - translated text
                     6,     // timeout
                     false, // fileSearch
                     null   // businessInfo
                 );
 
-                // 先将用户输入添加到历史记录
+                // translated text
                 addToHistory(currentUserMessage);
                 
-                // 生成回复（流式播放，机器人的回复会在onTranscribe中获取到）
+                // translated textonTranscribetranslated text
                 AgentCore.INSTANCE.llm(messages, config, 20 * 1000, true, null);
                 
-                Log.d(TAG, "角色回复请求已发送，用户输入: " + userQuery);
+                Log.d(TAG, "translated text: " + userQuery);
 
             } catch (Exception e) {
-                Log.e(TAG, "生成回复失败", e);
+                Log.e(TAG, "Failed to generate reply", e);
             }
         });
     }
 
     /**
-     * 生成初始对话（自我介绍）
+     * translated text
      */
     private void generateInitialIntroduction() {
         AsyncTaskHelper.execute(() -> {
             try {
-                String introQuery = "简短的自我介绍，不超过30字";
+                String introQuery = "Give a short self-introduction in under 30 words";
                 
-                // 构建消息列表
+                // translated text
                 List<LLMMessage> messages = new ArrayList<>();
                 
-                // 添加系统提示词
+                // translated text
                 messages.add(new LLMMessage(
                     com.ainirobot.agent.base.llm.Role.SYSTEM,
-                    "你现在扮演的角色是：" + roleData.getName() + "\n" +
-                    "角色设定：" + roleData.getPersona() + "\n" +
-                    "行为准则：" + roleData.getObjective() + "\n" +
+                    "You are now playing the role of: " + roleData.getName() + "\n" +
+                    "Role profile: " + roleData.getPersona() + "\n" +
+                    "Behavior guidelines: " + roleData.getObjective() + "\n" +
                     "\n" +
-                    "现在需要你进行简短的自我介绍，要求：\n" +
-                    "1. 完全沉浸在角色中，展现角色特色\n" +
-                    "2. 自我介绍要自然亲切，不超过30字\n" +
-                    "3. 要体现角色的个性和特点\n" +
-                    "4. 不要暴露是AI的身份\n" +
-                    "5. 要让用户感受到角色的魅力"
+                    "Now provide a brief self-introduction with these requirements:\n" +
+                    "1. Fully immerse in the role and show its characteristics\n" +
+                    "2. Make the introduction natural and friendly, under 30 words\n" +
+                    "3. Reflect the role's personality and traits\n" +
+                    "4. translated textAItranslated text\n" +
+                    "5. Let users feel the role's charm"
                 ));
                 
-                // 添加用户请求
+                // translated text
                 LLMMessage userMessage = new LLMMessage(com.ainirobot.agent.base.llm.Role.USER, introQuery);
                 messages.add(userMessage);
 
                 LLMConfig config = new LLMConfig(
                     0.8f,  // temperature
-                    80,    // maxTokens - 限制初始介绍的长度
+                    80,    // maxTokens - translated text
                     6,     // timeout
                     false, // fileSearch
                     null   // businessInfo
                 );
 
-                // 将初始请求添加到历史记录
+                // translated text
                 addToHistory(userMessage);
                 
-                // 生成回复（流式播放，机器人的回复会在onTranscribe中获取到）
+                // translated textonTranscribetranslated text
                 AgentCore.INSTANCE.llm(messages, config, 20 * 1000, true, null);
-                Log.d(TAG, "初始介绍请求已发送");
+                Log.d(TAG, "Initial introduction request sent");
 
             } catch (Exception e) {
-                Log.e(TAG, "生成初始介绍失败", e);
+                Log.e(TAG, "Failed to generate initial introduction", e);
             }
         });
     }
     
     /**
-     * 添加消息到历史记录，并管理历史记录大小
+     * translated text
      */
     private void addToHistory(LLMMessage message) {
         synchronized (conversationHistory) {
             conversationHistory.add(message);
-            Log.d(TAG, "历史记录：" + conversationHistory);
+            Log.d(TAG, "History: " + conversationHistory);
             
-            // 如果历史记录超过最大限制，移除最早的对话（保留系统消息）
-            while (conversationHistory.size() > MAX_HISTORY_SIZE * 2) { // *2 因为每轮对话包含用户和助手两条消息
-                // 移除最早的一对用户-助手消息
+            // translated text
+            while (conversationHistory.size() > MAX_HISTORY_SIZE * 2) { // *2 translated text
+                // translated text
                 if (!conversationHistory.isEmpty() && conversationHistory.get(0).getRole() == com.ainirobot.agent.base.llm.Role.USER) {
-                    conversationHistory.remove(0); // 移除用户消息
+                    conversationHistory.remove(0); // translated text
                     if (!conversationHistory.isEmpty() && conversationHistory.get(0).getRole() == com.ainirobot.agent.base.llm.Role.ASSISTANT) {
-                        conversationHistory.remove(0); // 移除对应的助手消息
+                        conversationHistory.remove(0); // translated text
                     }
                 } else if (!conversationHistory.isEmpty()) {
-                    // 如果第一个不是USER消息，直接移除避免无限循环
+                    // translated textUSERtranslated text
                     conversationHistory.remove(0);
                 } else {
-                    // 如果列表为空，跳出循环
+                    // translated text
                     break;
                 }
             }
             
-            Log.d(TAG, "历史记录大小: " + conversationHistory.size());
+            Log.d(TAG, "History size: " + conversationHistory.size());
         }
     }
     
     /**
-     * 清空历史记录
+     * translated text
      */
     private void clearHistory() {
         synchronized (conversationHistory) {
             conversationHistory.clear();
-            Log.d(TAG, "历史记录已清空");
+            Log.d(TAG, "History cleared");
         }
     }
 
@@ -1234,7 +1234,7 @@ public class AsyncTaskHelper {
     private static final Handler mainHandler = new Handler(Looper.getMainLooper());
 
     /**
-     * 在后台线程执行异步任务
+     * translated text
      */
     public static void execute(Runnable task) {
         executor.submit(() -> {
@@ -1247,7 +1247,7 @@ public class AsyncTaskHelper {
     }
 
     /**
-     * 延迟执行任务
+     * translated text
      */
     public static void executeDelayed(Runnable task, long delayMillis) {
         mainHandler.postDelayed(() -> execute(task), delayMillis);
@@ -1258,23 +1258,23 @@ public class AsyncTaskHelper {
 ### 6. AgentCore APIdescription（Javadescription）
 
 ```java
-// 页面启动时的设置
+// translated text
 @Override
 protected void onStart() {
     super.onStart();
     
-    // 停止TTS和清理LLM上下文
+    // StopTTStranslated textLLMtranslated text
     AgentCore.INSTANCE.stopTTS();
     AgentCore.INSTANCE.clearContext();
     AgentCore.INSTANCE.setEnableVoiceBar(false);
     
-    // 上传页面信息
+    // translated text
     AgentCore.INSTANCE.uploadInterfaceInfo(roleInfo);
     AgentCore.INSTANCE.setDisablePlan(false);
-    AgentCore.INSTANCE.tts("请先选择要体验的角色", 20 * 1000, null);
+    AgentCore.INSTANCE.tts("Please select a role to try first", 20 * 1000, null);
 }
 
-// 页面销毁时的清理
+// translated text
 @Override
 protected void onDestroy() {
     AgentCore.INSTANCE.stopTTS();
@@ -1286,23 +1286,23 @@ protected void onDestroy() {
 ### 7. Listen to description（Javadescription）
 
 ```java
-// Agent状态监听
+// Agenttranslated text
 pageAgent.setOnAgentStatusChangedListener(new OnAgentStatusChangedListener() {
     @Override
     public boolean onStatusChanged(String status, String message) {
         // status: "listening", "thinking", "processing", "reset_status"
-        Log.d("ChatActivity", "Agent状态变化: " + status + ", 消息: " + message);
-        return true; // 拦截默认UI显示
+        Log.d("ChatActivity", "Agenttranslated text: " + status + ", message: " + message);
+        return true; // translated textUItranslated text
     }
 });
 
-// 语音转录监听
+// translated text
 pageAgent.setOnTranscribeListener(new OnTranscribeListener() {
     @Override
     public boolean onASRResult(Transcription transcription) {
         if (!transcription.getText().isEmpty()) {
             if (transcription.getFinal()) {
-                // 处理最终的用户输入
+                // translated text
                 generateRoleResponse(transcription.getText());
             }
         }
@@ -1313,7 +1313,7 @@ pageAgent.setOnTranscribeListener(new OnTranscribeListener() {
     public boolean onTTSResult(Transcription transcription) {
         if (!transcription.getText().isEmpty()) {
             if (transcription.getFinal()) {
-                // AI回复完成，添加到历史记录
+                // AItranslated text
                 LLMMessage assistantMessage = new LLMMessage(com.ainirobot.agent.base.llm.Role.ASSISTANT, transcription.getText());
                 addToHistory(assistantMessage);
             }

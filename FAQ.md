@@ -273,7 +273,7 @@ pageAgent.destroy()
 - **Implementation**:
 
 ```kotlin
-val introQuery = "简短的自我介绍，不超过30字"
+val introQuery = "Give a short self-introduction in under 30 words"
 
 // Build message list
 val messages = mutableListOf<LLMMessage>()
@@ -282,16 +282,16 @@ val messages = mutableListOf<LLMMessage>()
 messages.add(
     LLMMessage(
         LLMRole.SYSTEM,
-        """你现在扮演的角色是：${roleData.name}
-        |角色设定：${roleData.persona}
-        |行为准则：${roleData.objective}
+        """You are now playing the role of: ${roleData.name}
+        |Role profile: ${roleData.persona}
+        |Behavior guidelines: ${roleData.objective}
         |
-        |现在需要你进行简短的自我介绍，要求：
-        |1. 完全沉浸在角色中，展现角色特色
-        |2. 自我介绍要自然亲切，不超过30字
-        |3. 要体现角色的个性和特点
-        |4. 不要暴露是AI的身份
-        |5. 要让用户感受到角色的魅力""".trimMargin()
+        |Now provide a brief self-introduction with these requirements:
+        |1. Fully immerse in the role and show its characteristics
+        |2. Make the introduction natural and friendly, under 30 words
+        |3. Reflect the role's personality and traits
+        |4. translated textAItranslated text
+        |5. Let users feel the role's charm""".trimMargin()
     )
 )
 
