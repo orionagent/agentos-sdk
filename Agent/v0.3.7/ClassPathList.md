@@ -1,10 +1,10 @@
-# Agent SDK Import 路径概览
+# Agent SDK Import Path Overview
 
-本列表汇总了 Agent SDK 开发中常用的所有核心 import 路径，涵盖了 Agent 生命周期、动作（Action）定义与执行、参数与注解、LLM（大模型）集成、回调监听、任务与消息处理、以及常用工具类等模块。  
-开发者可根据实际业务需求，按需引用相关类，快速实现与 Agent 相关的交互、动作注册、语音处理、消息通信等功能。
+description Agent SDK description import description，description Agent description、description（Action）descriptionexecute、description、LLM（LLM）description、callbackListen to 、description、descriptionUtility Classesdescription。  
+description，description，description Agent description、descriptionRegister 、description、description。
 
-**说明：**  
-本 import 列表适用于 Agent SDK 的全功能开发场景，便于统一查阅和复制粘贴。实际开发时可根据 IDE 自动补全和具体业务需求精简引用。
+**Description：**  
+description import description Agent SDK description，description。description IDE description。
 
 ```kotlin
 import com.ainirobot.agent.base.ActionEntity
@@ -45,13 +45,13 @@ import com.ainirobot.agent.base.utils.ShortUuid
 
 ---
 
-# RobotOS SDK Import 路径概览
+# RobotOS SDK Import Path Overview
 
-本列表汇总了 RobotOS SDK 开发中常用的所有核心 import 路径，涵盖了机器人底层服务、导航定位、动作控制、传感器数据、人脸识别、语音交互、设备管理、异常处理等模块。  
-开发者可根据实际机器人功能需求，按需引用相关类，快速实现机器人的移动控制、传感器数据获取、人机交互、系统配置等底层功能。
+description RobotOS SDK description import description，description、description、description、description、description、description、description、description。  
+description，description，description、descriptionGet 、description、description。
 
-**说明：**  
-本 import 列表适用于 RobotOS SDK 的全功能开发场景，涵盖机器人硬件控制和系统服务的完整API。实际开发时可根据具体功能模块按需引用。
+**Description：**  
+description import description RobotOS SDK description，descriptionAPI。description。
 
 ```java
 import com.ainirobot.base.OrionBase;

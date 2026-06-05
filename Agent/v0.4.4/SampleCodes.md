@@ -1,10 +1,10 @@
-# AgentSDK 示例代码文档
+# AgentSDK Sample Code Documentation
 
-本文档主要基于 AgentRole（角色扮演）项目，展示 AgentSDK 的核心使用方法。
+description AgentRole（description）description，description AgentSDK descriptionMethods。
 
-## 必需配置
+## Required Configuration
 
-在 `app/src/main/assets/` 目录下创建 `actionRegistry.json` 文件（Kotlin和Java版本配置相同）：
+description `app/src/main/assets/` Table of Contentsdescription `actionRegistry.json` description（KotlindescriptionJavadescription）：
 
 ```json
 {
@@ -14,11 +14,11 @@
 }
 ```
 
-**注意：** 以下示例代码提供Kotlin和Java两个版本，功能完全相同，开发者可根据项目技术栈选择使用。
+**Note：** descriptionKotlindescriptionJavadescription，description，description。
 
-## 示例代码
+## Sample Code
 
-### 1. 应用级 Agent 实现
+### 1. App-level Agent Implementation
 
 ```kotlin
 package com.ainirobot.agent.sample
@@ -57,7 +57,7 @@ class MainApplication : Application() {
 }
 ```
 
-### 2. 角色数据定义
+### 2. Role Data Definition
 
 ```kotlin
 package com.ainirobot.agent.sample.ui.components
@@ -129,7 +129,7 @@ val roles = listOf(
 )
 ```
 
-### 3. 角色选择页面实现
+### 3. Role Selection Page Implementation
 
 ```kotlin
 package com.ainirobot.agent.sample
@@ -216,7 +216,7 @@ class RoleSelectActivity : ComponentActivity() {
 }
 ```
 
-### 4. 角色对话页面实现
+### 4. Role Conversation Page Implementation
 
 ```kotlin
 package com.ainirobot.agent.sample
@@ -489,9 +489,9 @@ class ChatActivity : ComponentActivity() {
 }
 ```
 
-### 5. Action创建和执行（补充：EmotiBot项目实现）
+### 5. Actiondescriptionexecute（description：EmotiBotdescription）
 
-AgentRole项目主要展示了LLM集成，对于Action的创建和执行，我们补充EmotiBot项目的实现：
+AgentRoledescriptionLLMdescription，descriptionActiondescriptionexecute，descriptionEmotiBotdescription：
 
 ```kotlin
 // 情感识别Action的创建和执行
@@ -528,7 +528,7 @@ private fun handleAction(action: Action, params: Bundle?) {
 }
 ```
 
-### 6. AgentCore API使用
+### 6. AgentCore APIdescription
 
 ```kotlin
 // 页面启动时的设置
@@ -561,7 +561,7 @@ override fun onDestroy() {
 }
 ```
 
-### 7. 监听器最佳实践
+### 7. Listen to description
 
 ```kotlin
 // Agent状态监听
@@ -598,25 +598,25 @@ pageAgent.setOnTranscribeListener(object : OnTranscribeListener {
 })
 ```
 
-## 总结
+## Summary
 
-本文档主要基于AgentRole项目展示了AgentSDK的核心功能：
+descriptionAgentRoledescriptionAgentSDKdescription：
 
-1. **AppAgent实现** - 角色扮演助手的应用级Agent配置
-2. **PageAgent使用** - 角色选择和对话页面的Agent实现
-3. **Action系统** - 角色选择Action的创建和执行（补充情感Action示例）
-4. **LLM深度集成** - 角色扮演的大模型调用和对话历史管理
-5. **监听器机制** - ASR/TTS监听和Agent状态监听的实际应用
-6. **生命周期管理** - 页面启动和销毁时的资源管理
-7. **协程处理** - 异步操作和错误处理的最佳实践
+1. **AppAgentdescription** - descriptionApp-level Agentdescription
+2. **PageAgentdescription** - descriptionAgentdescription
+3. **Actiondescription** - descriptionActiondescriptionexecute（descriptionActiondescription）
+4. **LLMdescription** - descriptionLLMdescription
+5. **Listen to description** - ASR/TTSListen to descriptionAgentdescriptionListen to description
+6. **description** - description
+7. **description** - description
 
-这些代码都来自实际运行的项目，展示了AgentSDK在复杂场景下的完整应用。
+description，descriptionAgentSDKdescription。
 
-## 重要提醒
+## description
 
-### Action.notify()调用规范
+### Action.notify()description
 
-**关键原则：每个Action执行完成后都必须调用action.notify()方法，无论执行成功还是失败。**
+**description：descriptionActionexecutedescriptionaction.notify()Methods，descriptionexecutesuccessdescriptionfailure。**
 
 ```kotlin
 // ✅ 正确示例：无论成功失败都调用notify()
@@ -652,13 +652,13 @@ override fun onExecute(action: Action, params: Bundle?): Boolean {
 
 ---
 
-# Java版本示例代码
+# Javadescription
 
-以下是基于AgentRoleJava项目的Java版本示例代码，展示了相同功能的Java实现。
+descriptionAgentRoleJavadescriptionJavadescription，descriptionJavadescription。
 
-## 示例代码（Java版本）
+## description（Javadescription）
 
-### 1. 应用级 Agent 实现
+### 1. App-level Agent Implementation
 
 ```java
 package com.example.agentrolejava;
@@ -700,7 +700,7 @@ public class MainApplication extends Application {
 }
 ```
 
-### 2. 角色数据定义
+### 2. Role Data Definition
 
 ```java
 // Role.java
@@ -828,7 +828,7 @@ public class RoleData {
 }
 ```
 
-### 3. 角色选择页面实现
+### 3. Role Selection Page Implementation
 
 ```java
 package com.example.agentrolejava;
@@ -930,7 +930,7 @@ public class RoleSelectActivity extends AppCompatActivity {
 }
 ```
 
-### 4. 角色对话页面实现
+### 4. Role Conversation Page Implementation
 
 ```java
 package com.example.agentrolejava;
@@ -1219,7 +1219,7 @@ public class ChatActivity extends AppCompatActivity {
 }
 ```
 
-### 5. 异步任务处理工具类
+### 5. descriptionUtility Classes
 
 ```java
 package com.example.agentrolejava;
@@ -1255,7 +1255,7 @@ public class AsyncTaskHelper {
 }
 ```
 
-### 6. AgentCore API使用（Java版本）
+### 6. AgentCore APIdescription（Javadescription）
 
 ```java
 // 页面启动时的设置
@@ -1283,7 +1283,7 @@ protected void onDestroy() {
 }
 ```
 
-### 7. 监听器最佳实践（Java版本）
+### 7. Listen to description（Javadescription）
 
 ```java
 // Agent状态监听
@@ -1323,16 +1323,16 @@ pageAgent.setOnTranscribeListener(new OnTranscribeListener() {
 });
 ```
 
-## Java版本总结
+## Javadescription
 
-本Java版本示例代码展示了与Kotlin版本相同的核心功能：
+descriptionJavadescriptionKotlindescription：
 
-1. **AppAgent实现** - 角色扮演助手的应用级Agent配置
-2. **PageAgent使用** - 角色选择和对话页面的Agent实现  
-3. **Action系统** - 角色选择Action的创建和执行
-4. **LLM深度集成** - 角色扮演的大模型调用和对话历史管理
-5. **监听器机制** - ASR/TTS监听和Agent状态监听的实际应用
-6. **生命周期管理** - 页面启动和销毁时的资源管理
-7. **异步任务处理** - 使用AsyncTaskHelper工具类在后台线程处理异步操作
+1. **AppAgentdescription** - descriptionApp-level Agentdescription
+2. **PageAgentdescription** - descriptionAgentdescription  
+3. **Actiondescription** - descriptionActiondescriptionexecute
+4. **LLMdescription** - descriptionLLMdescription
+5. **Listen to description** - ASR/TTSListen to descriptionAgentdescriptionListen to description
+6. **description** - description
+7. **description** - descriptionAsyncTaskHelperUtility Classesdescription
 
-Java版本代码摘录自实际运行的AgentRoleJava项目，展示了AgentSDK在Java环境下的完整应用模式。 
+JavadescriptionAgentRoleJavadescription，descriptionAgentSDKdescriptionJavadescription。 

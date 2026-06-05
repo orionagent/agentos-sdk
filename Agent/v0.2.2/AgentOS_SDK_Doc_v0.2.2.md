@@ -1,82 +1,184 @@
-# Agent SDK for APK V0.2.2文档 (Beta)
+# AgentOS SDK for APK V0.2.2 Documentation
 
-# 概述
+## 📋 Version Information
 
-> Agent SDK 是一个用于机器人交互的Android开发套件，提供了应用与机器人Agent服务进行通信的能力。SDK支持应用级和页面级的Agent开发，可以实现自然语言交互、动作规划和执行等功能。
+![SDK](https://img.shields.io/badge/SDK_Version-v0.2.2-blue)
+![Platform](https://img.shields.io/badge/Platform-Android-green)
+![API](https://img.shields.io/badge/API-26+-orange)
+![Language](https://img.shields.io/badge/Language-Kotlin%20%7C%20Java-purple)
 
-## 环境要求
+## 📚 Table of Contents
 
-### 开发环境
+- [1. Overview](#1-overview)
+  - [1.1 Environment Requirements](#11-environment-requirements)
+    - [1.1.1 Development Environment](#111-development-environment)
+    - [1.1.2 Runtime Environment](#112-runtime-environment)
+  - [1.2 Quick Start](#12-quick-start)
+    - [1.2.1 Configuring Maven Repository](#121-configuring-maven-repository)
+    - [1.2.2 Adding SDK Dependency](#122-adding-sdk-dependency)
+    - [1.2.3 Configuring Action Registry](#123-configuring-action-registry)
+    - [1.2.4 Creating AppAgent](#124-creating-appagent)
+    - [1.2.5 Creating PageAgent](#125-creating-pageagent)
+    - [1.2.6 Complete Example](#126-complete-example)
+    - [1.2.7 Development Summary](#127-development-summary)
+- [2. Action Details](#2-action-details)
+  - [2.1 Action Concept](#21-action-concept)
+    - [2.1.1 Basic Properties](#211-basic-properties)
+    - [2.1.2 Parameter Definition](#212-parameter-definition)
+  - [2.2 Action Registration Mechanism](#22-action-registration-mechanism)
+    - [2.2.1 App-Level Action](#221-app-level-action)
+    - [2.2.2 Page-Level Action](#222-page-level-action)
+  - [2.3 Action Execution Flow](#23-action-execution-flow)
+    - [2.3.1 Execution Callback](#231-execution-callback)
+    - [2.3.2 Execution Result Notification](#232-execution-result-notification)
+  - [2.4 System Built-in Actions](#24-system-built-in-actions)
+- [3. Agent Role Configuration - Personalize Your AI](#3-agent-role-configuration---personalize-your-ai)
+  - [3.1 Overview](#31-overview)
+  - [3.2 Three Core Configurations](#32-three-core-configurations)
+  - [3.3 Configuration Hierarchy and Priority](#33-configuration-hierarchy-and-priority)
+  - [3.4 API Interface Details](#34-api-interface-details)
+  - [3.5 Extended Configuration Capabilities](#35-extended-configuration-capabilities)
+  - [3.6 Configuration Best Practices](#36-configuration-best-practices)
+  - [3.7 Typical Application Scenarios](#37-typical-application-scenarios)
+- [4. Core API Interfaces](#4-core-api-interfaces)
+  - [4.1 Microphone Control](#41-microphone-control)
+  - [4.2 Wake-Free Functionality](#42-wake-free-functionality)
+  - [4.3 ASR and TTS Listening](#43-asr-and-tts-listening)
+  - [4.4 Agent Status Listening](#44-agent-status-listening)
+  - [4.5 Voice Bar Control](#45-voice-bar-control)
+  - [4.6 TTS Speech Synthesis](#46-tts-speech-synthesis)
+  - [4.7 TTS Audio File Playback](#47-tts-audio-file-playback)
+  - [4.8 Large Language Model Interface](#48-large-language-model-interface)
+  - [4.9 Text Commands](#49-text-commands)
+  - [4.10 Perception Information Reporting](#410-perception-information-reporting)
+  - [4.11 Conversation History Management](#411-conversation-history-management)
+  - [4.12 Disable Large Language Model Planning](#412-disable-large-language-model-planning)
+  - [4.13 Application Switching](#413-application-switching)
+  - [4.14 System Action Status Listening](#414-system-action-status-listening)
+  - [4.15 Wake Word Mode Control](#415-wake-word-mode-control)
+- [5. Advanced Features](#5-advanced-features)
+  - [5.1 Annotation-Driven Action Registration](#51-annotation-driven-action-registration)
+    - [5.1.1 App-Level Dynamic Registration](#511-app-level-dynamic-registration)
+    - [5.1.2 Page-Level Dynamic Registration](#512-page-level-dynamic-registration)
+    - [5.1.3 Annotation Class Description](#513-annotation-class-description)
+- [6. Action Design Best Practices](#6-action-design-best-practices)
+  - [6.1 Common Design Pitfalls](#61-common-design-pitfalls)
+  - [6.2 Best Practice Principles](#62-best-practice-principles)
+  - [6.3 Correct Example: Breaking Down Into Multiple Specialized Actions](#63-correct-example-breaking-down-into-multiple-specialized-actions)
+  - [6.4 Design Checklist](#64-design-checklist)
+- [7. Project Resources](#7-project-resources)
+  - [7.1 Sample Projects](#71-sample-projects)
+  - [7.2 Development Resources](#72-development-resources)
+- [8. Frequently Asked Questions (FAQ)](#8-frequently-asked-questions-faq)
+- [9. Technical Support](#9-technical-support)
 
-* Android SDK 版本: 最低支持API 26 (Android 8.0)
-* JDK版本: Java 11
-* Kotlin、Java语言开发
+---
 
-### 运行环境
+# 1. Overview
 
-AgentOS Product Version: V1.2.0.250515
+AgentOS SDK is an intelligent interaction development toolkit for the Android platform, providing developers with a complete solution for building intelligent robot applications. The SDK supports both app-level and page-level Agent development, implementing core functionalities such as natural language interaction, intelligent action planning, and execution.
 
-## 快速开始
+## 1.1 Environment Requirements
 
-> 如果没有任何Android开发经验，请先下载安装[Android Studio](https://developer.android.com/studio?hl=zh-cn)，然后下载我们提供的空项目，用Android Studio打开此空项目后再开始接下来的步骤。
+### 1.1.1 Development Environment
 
-1. ### 配置仓库
+**Basic Requirements**
+- **Android SDK**: Minimum support for API 26 (Android 8.0)
+- **JDK Version**: Java 11
+- **Development Language**: Kotlin / Java
+- **Build Tool**: Gradle
 
-如果你的gradle脚本使用的 **Groovy** ，那在项目根目录下会有一个**settings.gradle**文件，在此文件中以下位置添加maven配置（以下代码中 **加粗的部分** ）
+**Recommended Development Environment**
+- **Android Studio**: Used for basic environment setup and debugging
+- **Cursor**: Provides AI-assisted coding capabilities, [detailed configuration guide](../../AGENTOS_CURSOR_AI_GUIDE.md)
+
+### 1.1.2 Runtime Environment
+
+**System Requirements**
+- **AgentOS Product Version**: V1.3.0.250515
+- **RobotAPI Version**: 11.3
+
+## 1.2 Quick Start
+
+> **Prerequisites**: If you are new to Android development, please first install [Android Studio](https://developer.android.com/studio), download the empty project template we provide, and open it with Android Studio before proceeding with the following steps.
+
+### 1.2.1 Configuring Maven Repository
+
+**Groovy DSL Configuration**
+
+If your project uses Groovy build scripts, add the following configuration to the `settings.gradle` file in your project root directory:
 
 ```Groovy
 dependencyResolutionManagement {
         repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
         repositories {
                 mavenCentral()
-                maven { url  'https://jitpack.io'  }
+                maven { // IMPORTANT: Add Maven repository
+                    credentials {
+                        username = "agentMaven"
+                        password = "agentMaven"
+                    }
+                    url "https://npm.ainirobot.com/repository/maven-public/"
+                } // END: Maven repository configuration
         }
 }
 ```
 
-如果你的gradle脚本使用的是 **Kotlin** ，那么在项目根目录下会有一个**settings.gradle.kts**文件，在此文件中以下位置添加maven配置（以下代码中 **加粗的部分** ）
+**Kotlin DSL Configuration**
+
+If your project uses Kotlin build scripts, add the following configuration to the `settings.gradle.kts` file in your project root directory:
 
 ```Kotlin
 dependencyResolutionManagement {
         repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
         repositories {
                 mavenCentral()
-                maven { url = uri("https://jitpack.io") }
+                maven { // IMPORTANT: Add Maven repository
+                    credentials.username = "agentMaven"
+                    credentials.password = "agentMaven"
+                    url = uri("https://npm.ainirobot.com/repository/maven-public/")
+                } // END: Maven repository configuration
         }
 }
 ```
 
-2. ### 添加依赖
+### 1.2.2 Adding SDK Dependency
 
-如果你的gradle脚本使用的 **Groovy** ，那在**项目根目录**的** app/ **目录下会有一个**build.gradle**文件，在此文件中以下位置添加maven配置（以下代码中 **加粗的部分** ）
+> **💡 Important Update for v0.4.4**: The SDK has automatically integrated the RobotService.jar dependency. Developers no longer need to manually add the robot native API jar package. The SDK automatically manages all necessary dependencies through Maven.
+
+**Groovy DSL Configuration**
+
+Add the following dependency to the `app/build.gradle` file:
 
 ```Groovy
 dependencies {
-        implementation  'com.github.orionagent:agent-sdk:0.2.2'
-        
-        // 以下是Android标准库，默认kotlin项目都会依赖，
-        // 如果编译报未找到错误，再添加以下依赖库
-        implementation  'androidx.core:core-ktx:1.13.1'
-        implementation  'androidx.appcompat:appcompat:1.6.1'
+        implementation 'com.orionstar.agent:sdk:0.2.2-SNAPSHOT' // IMPORTANT: Agent SDK dependency
+
+        // The following are Android standard libraries, typically included in Kotlin projects by default
+        // Add the following libraries only if you encounter missing library errors during compilation
+        implementation 'androidx.core:core-ktx:1.13.1'
+        implementation 'androidx.appcompat:appcompat:1.6.1'
 }
 ```
 
-如果你的gradle脚本使用的是 **Kotlin** ，那么在**项目根目录**的** app/ **目录下会有一个**build.gradle.kts**文件，在此文件中以下位置添加maven配置（以下代码中 **加粗的部分** ）
+**Kotlin DSL Configuration**
+
+Add the following dependency to the `app/build.gradle.kts` file:
 
 ```Kotlin
 dependencies {
-        implementation("com.github.orionagent:agent-sdk:0.2.2")
-        
-        // 以下是Android标准库，默认kotlin项目都会依赖，
-        // 如果编译报未找到错误，再添加以下依赖库
+        implementation("com.orionstar.agent:sdk:0.2.2-SNAPSHOT") // IMPORTANT: Agent SDK dependency
+
+        // The following are Android standard libraries, typically included in Kotlin projects by default
+        // Add the following libraries only if you encounter missing library errors during compilation
         implementation("androidx.core:core-ktx:1.13.1")
         implementation("androidx.appcompat:appcompat:1.6.1")
 }
 ```
 
-3. ### 添加注册表
+### 1.2.3 Configuring Action Registry
 
-查看项目根目录的**app/src/main**目录下，是否包含**assets**目录，如果没有请先创建**assets**目录，然后在**assets**目录下创建**actionRegistry.json**文件，并在文件中添加以下配置
+Create an `assets` directory (if it doesn't exist) in the `app/src/main` directory, then create the `actionRegistry.json` file:
 
 ```JSON
 {
@@ -86,15 +188,18 @@ dependencies {
 }
 ```
 
- **appId** ：Agent应用的唯一标识符，需要在[接待后台](https://jiedai.ainirobot.com/)的Agent系统中申请Agent应用开发来获取
+**Configuration Explanation**
+- **appId**: Unique identifier for the Agent application, must be applied for in the [reception backend](https://jiedai.ainirobot.com/web/portal/#/frame/hmag-agentos/hmag-agentos.agentapp/)
+- **platform**: Platform identifier, supports `opk` or `apk`
+- **actionList**: List of Actions exposed externally. Actions declared in the registry must be handled in the AppAgent's `onExecuteAction` method
 
- **platform** ：当前运行的平台，如：**opk**或**apk**
+> **Application Scenario**: In this example, we will develop an intelligent assistant named "Leopard Sister" with emotion perception capabilities, who can recognize user emotional changes and respond accordingly.
 
- **actionList** ：可以从外部调起的action（只能是app级），在注册表中声名的action需要在AppAgent的[onExecuteAction](https://cheetah-mobile.feishu.cn/docx/FwCQdP1WboqJm3xv5Yic8SxdnWf?fromScene=spaceOverview#share-KHucdip2BoLGHZx74aYcIC1snAh)方法中处理action的执行，注：如果不想对外暴露action，actionList可以设置为空数组[]
+### 1.2.4 Creating AppAgent
 
-4. ### 添加AppAgent
+> **Important Constraint**: Only one AppAgent instance can exist in an application.
 
-在项目的MainApplication的onCreate方法中添加以下代码（ **加粗部分** ），如果没有MainApplication.kt文件，请参考**[示例项目](https://cheetah-mobile.feishu.cn/docx/FwCQdP1WboqJm3xv5Yic8SxdnWf?fromScene=spaceOverview#doxcnh7OkltLezA2VX1XufECh6f)**
+Add the following code to the `onCreate` method of `MainApplication`:
 
 ```Kotlin
 package com.ainirobot.agent.sample
@@ -109,42 +214,48 @@ class MainApplication : Application() {
     override fun onCreate() {
         super.onCreate()
 
-        object  : AppAgent(this) {
-              
-            override   fun   onCreate()  {
-                  // 设定角色人设
-                 setPersona("你叫豹姐姐，是一位聪明、亲切又略带俏皮的虚拟助手。")
-                  // 设定角色目标
-                 setObjective("通过自然的对话和合适的情绪表达，让用户感受到理解、陪伴与情感共鸣，从而提升交流的舒适感和信任感。")
-             }
+        object : AppAgent(this) {
 
-              override   fun   onExecuteAction(
-                 action:  Action,
-                 params:  Bundle?
-             ):  Boolean  {
-                  // 在此处处理静态注册的action，如果你不需要处理，请返回false，如果要自行处理且不需要后续处理，则返回true
-                  // 默认返回false
-                  return   false
-             }
+            override fun onCreate() {
+                // Set the role persona
+                setPersona("Your name is Leopard Sister, a smart, warm, and slightly witty virtual assistant.")
+                // Set the role objective
+                setObjective("Through natural conversation and appropriate emotional expression, make users feel understood, accompanied, and emotionally resonant, thereby enhancing communication comfort and trust.")
+            }
+
+            override fun onExecuteAction(
+                action: Action,
+                params: Bundle?
+            ): Boolean {
+                // Handle statically registered actions here. Return false if you don't need to handle them, or return true if you handle them and don't need further processing.
+                // Default returns false
+                return false
+            }
          }
     }
 }
 ```
 
-5. ### 添加PageAgent
+### 1.2.5 Creating PageAgent
 
-示例：在此页面中添加三个Action分别表示感受到用户**高兴、伤心、生气**三种情绪，并根据不同情境跟用户对话
+> **Important Constraint**: Only one PageAgent instance can exist on each page.
 
-在MainActivity.kt中添加以下代码（代码中只添加了一个显示表情的Action，你可以按示例添加另外两个）
+**Design Philosophy**: Implementing an Emotion-Aware Intelligent Assistant
+
+In daily communication, emotion recognition is often more important than the content of language itself. This section defines emotion perception capabilities for the assistant:
+
+**Emotion Response Action List**
+- 😊 **Positive Emotion Response** - Response when detecting user happiness, satisfaction, and other positive emotions
+- 😢 **Negative Emotion Comfort** - Comfort when detecting user sadness, disappointment, and other negative emotions
+- 😠 **Anger Emotion Guidance** - Guidance when detecting user anger, dissatisfaction, and other intense emotions
+
+Add the following code to `MainActivity.kt`:
 
 ```Kotlin
 package com.ainirobot.agent.sample
 
 import android.os.Bundle
-import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
 import com.ainirobot.agent.AgentCore
 import com.ainirobot.agent.PageAgent
 import com.ainirobot.agent.action.Action
@@ -158,176 +269,374 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
         setContentView(R.layout.activity_main)
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
-            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
-            insets
-        }
 
-          // 添加页面级Agent
-         PageAgent(this)
-             .registerAction(
-                 Action(
-                     name =  "com.agent.demo.SHOW_SMILE_FACE",
-                     displayName =  "笑",
-                     desc =  "响应用户的开心、满意或正面情绪",
-                     parameters =  listOf(
-                         Parameter(
-                              "sentence",
-                             ParameterType.STRING,
-                              "回复给用户的话",
-                              true
-                         )
-                     ),
-                     executor =  object  : ActionExecutor {
+        // Add page-level Agent
+        PageAgent(this)
+            .registerAction(
+                Action(
+                    name = "com.agent.demo.SHOW_SMILE_FACE",
+                    displayName = "Smile",
+                    desc = "Respond to user happiness, satisfaction, or positive emotions",
+                    parameters = listOf(
+                        Parameter(
+                            "sentence",
+                            ParameterType.STRING,
+                            "Response to say to the user",
+                            true
+                        )
+                    ),
+                    executor = object : ActionExecutor {
 
-                          override   fun   onExecute(action:  Action, params:  Bundle?):  Boolean  {
-                             AOCoroutineScope.launch  {
-                                  // 播放给用户说的话
-                                 params?.getString("sentence")?.let  { AgentCore.ttsSync(it) }
-                                  // 播放完成后，及时上报Action的执行状态
-                                 action.notify(isTriggerFollowUp =  false)
-                             }
-                              return   true
-                         }
-                     }
-                 )
-             )
-      }
+                        override fun onExecute(action: Action, params: Bundle?): Boolean {
+                            AOCoroutineScope.launch {
+                                // Display a smiling face
+                                showFaceImage(R.drawable.ic_smile)
+                                // Play the response to the user
+                                params?.getString("sentence")?.let { AgentCore.ttsSync(it) }
+                                // Report Action execution status after playback completes
+                                action.notify(isTriggerFollowUp = false)
+                            }
+                            return true
+                        }
+                    }
+                )
+            )
+    }
 }
 ```
 
-**注意：在任何一个Action执行完成后都需要调用action的notify()方法**
+> **Key Reminder**: After any Action execution completes, you must call the `action.notify()` method to notify the system of the execution status. For detailed information, please refer to [2.3.2 Execution Result Notification](#232-execution-result-notification).
 
-以上就实现了一个当用户高兴时AI会下发一个表示微笑Action，并播放TTS的功能。
+### 1.2.6 Complete Example
 
-6. ### 完整示例
+The Quick Start section above provides the basic integration approach. More complete sample projects include facial expression display functionality for multiple emotional scenarios. You can download and run them directly to experience the features.
 
-上边的QUICK START是为了方便接入，下面的[示例项目](https://cheetah-mobile.feishu.cn/docx/FwCQdP1WboqJm3xv5Yic8SxdnWf?fromScene=spaceOverview#doxcnrKf01IXamqIap0oEQqKgWc)也很简单，但添加了不同场景显示不同表情的功能，可能会更有趣一些，可以直接下载运行。
+**Sample Project Address**: [AgentSDKSample](https://github.com/orionagent/AgentSDKSample)
 
-# Action
+### 1.2.7 Development Summary
 
-## 什么是Action
+**Core Development Process**
+1. **SDK Integration**: Configure Maven repository, add dependencies, create Action registry
+2. **Role Definition**: Define the application's persona and objectives
+3. **Page Development**: Create business pages, set page-level objectives, upload page information
+4. **Action System**: Define and register Actions with AgentOS SDK
+   - Define Action names, descriptions, and parameters
+   - Implement Action handling logic
+   - Test Action execution through voice triggers
 
-> AgentOS的核心是识别用户的意图执行合适的事件，而这个事件即为Action，如：用户问“我明天去深圳需要带伞吗？”，识别用户的意图是查询天气，那对应的Action即为：orion.agent.action.WEATHER
+**🔥 Important Note**: After Action registration is complete, it takes effect automatically. Users can directly interact with the AI through voice. For detailed activation mechanisms, please refer to [2.2 Action Registration Mechanism](#22-action-registration-mechanism).
 
-### 基础属性
 
-Action下基础属性及描述如下：
+
+# 2. Action Details
+
+## 2.1 Action Concept
+
+The core mechanism of AgentOS is to execute corresponding skill modules through user intent recognition. These skill modules are called Actions. For example, when a user asks "Do I need to bring an umbrella to Shenzhen tomorrow?", the system recognizes the weather query intent and calls the corresponding weather query Action (such as: `orion.agent.action.WEATHER`).
+
+### Action Planning Mechanism
+
+The large language model (LLM) understands and selects Actions based on text descriptions, with the following priority:
+
+**1. Action Description (`desc`)**
+- The LLM primarily uses this attribute to determine whether it matches user intent
+- Must clearly, accurately, and specifically describe the Action's functionality and use cases
+- Avoid vague expressions to ensure the large language model understands precisely
+
+```kotlin
+// ✅ Compliant description
+desc = "Query weather conditions for a specified city and date, including temperature, humidity, wind force, and other information"
+
+// ❌ Non-compliant description
+desc = "Weather"  // Too simple, lacks specific functionality explanation
+desc = "Handle user requests"  // Too generalized, unable to distinguish specific functionality
+```
+
+**2. Action Name (`name`)**
+- Serves as auxiliary judgment basis, supplementing LLM understanding
+- Should have clear business meaning, avoiding generic naming
+- Multiple Actions' names should have obvious differentiation
+
+```kotlin
+// ✅ Compliant names
+name = "com.example.weather.QUERY_WEATHER"
+name = "com.example.music.PLAY_SONG"
+
+// ❌ Non-compliant names
+name = "ACTION1"  // No business meaning
+name = "HANDLE"   // Too generic
+name = "com.example.DO_SOMETHING"  // Unclear specific functionality
+```
+
+**3. Parameter Description (`Parameter.desc`)**
+- Affects the LLM's ability to understand and accurately extract parameter values
+- Each parameter's description must precisely reflect its definition and purpose
+- Helps the LLM correctly extract corresponding information from user input
+
+```kotlin
+// ✅ Compliant parameter descriptions
+Parameter("city", ParameterType.STRING, "City name for weather query, such as Beijing, Shanghai", false)
+Parameter("song_name", ParameterType.STRING, "Name of the song to play", true)
+
+// ❌ Non-compliant parameter descriptions
+Parameter("city", ParameterType.STRING, "City", false)  // Too simple
+Parameter("data", ParameterType.STRING, "Data", false)  // Unclear meaning
+Parameter("param1", ParameterType.STRING, "Parameter 1", false)  // No actual meaning
+```
+
+> **Core Principle**: All attributes described through text directly impact the LLM's understanding and planning accuracy. Pay attention to the quality of every description.
+
+### Naming Specification Constraints
+
+**Action Name Specification**
+- **Format Requirement**: `com.company.module.ACTION_NAME` (company domain + module + Action brief name)
+- **Brief Name Capitalization**: The Action brief name portion must use uppercase letters
+- **Business Meaning**: Names should have clear business meaning, avoiding generic naming
+- **Uniqueness**: Ensure uniqueness within the application, avoiding conflicts with Actions from other apps
+
+```kotlin
+// ✅ Compliant
+"com.example.weather.QUERY_WEATHER"
+"com.example.music.PLAY_SONG"
+
+// ❌ Non-compliant
+"com.example.weather.query_weather"  // Brief name not capitalized
+"ACTION1"  // No domain prefix, no business meaning
+```
+
+**Parameter Name Specification**
+- **Language Requirement**: Use English naming
+- **Connection Method**: Connect multiple words with underscores
+- **Avoid Conflicts**: Must not be the same as or similar to Action or Parameter object attribute names
+- **Clear Semantics**: Names should clearly express parameter purpose
+
+```kotlin
+// ✅ Compliant
+"city_name", "start_date", "user_id"
+
+// ❌ Non-compliant
+"cityName"  // Uses camelCase naming
+"name"      // Conflicts with Parameter object attribute names
+"data1"     // No clear semantics
+```
+
+### 2.1.1 Basic Properties
+
+The core properties of the Action class are defined as follows:
 
 ```Kotlin
 package com.ainirobot.agent.action
 
-class Action(
+open class Action(
     /**
-      * action全名，结构最好是公司域名+action简名，避免与其它app中的action冲突
-      * action简名必须大写，示例：com.orion.action.WEATHER
+      * Full action name to avoid conflicts with actions from other apps
       */
       name: String,
     /**
-      * 当前应用的appId
+      * Current application's appId
       */
       appId: String,
     /**
-      * action显示名称，可能被用于显示到UI界面上，可以是中文等
+      * Action display name, may be used on UI interfaces, can be in any language
       */
       displayName: String,
     /**
-      * action描述，用以让大模型理解应该在什么时间调用此action
+      * Action description, used to help the large language model understand when to call this action
       */
       desc: String,
     /**
-      * 期望action在被规划出时携带的参数描述
+      * Description of expected parameters when the action is planned
       */
       parameters: List<Parameter>?,
     /**
-      * action对应的执行器，当action规划完成后会回调此接口
+      * Executor corresponding to the action, invoked after action planning completes
       */
       @Transient
     var executor: ActionExecutor?
-)
+): ActionEntity(...), Parcelable {
+
+    /**
+     * Action ID of the planned action, used to identify action uniqueness.
+     * Each planned action returns a different actionId.
+     */
+    var sid: String = ""
+
+    /**
+     * User question that triggered planning
+     */
+    var userQuery: String = ""
+}
 ```
 
-注：创建Action时需要清晰描述Action的各项属性，方便大模型理解Action的功能，能够更精确的选择合适的Action
+**Best Practice**: When creating an Action, clearly and accurately describe each property so the large language model can accurately understand the Action's functionality and make precise choices.
 
-### Action参数
+**Key Requirements**:
+- **Concrete Descriptions**: The `desc` property must detail the Action's specific functionality and use scenarios
+- **Avoid Ambiguity**: Multiple Actions' descriptions must not be too similar, ensuring the large language model can accurately distinguish between them
 
-Action参数是想让大模型从用户的Query中抽取的核心内容，如：“我想查一下北京今天的天气”，那么可以从中抽取city和date两个字段。
+### 2.1.2 Parameter Definition
 
-参数描述对象的基本属性如下：
+Action parameters are used to extract key information from user queries. For example, from the query "I want to check the weather in Beijing today", we can extract the `city` and `date` parameters.
+
+Parameter object properties are defined as follows:
 
 ```kotlin
 data class Parameter(
     /**
-      * 参数名
+      * Parameter name
       */
     val name: String,
     /**
-      * 参数类型
+      * Parameter type
       */
     val type: ParameterType,
     /**
-      * 参数描述
+      * Parameter description
       */
     val desc: String,
     /**
-      * 是否是必要参数
+      * Whether this is a required parameter
       */
     val required: Boolean,
     /**
-      * 当type为enum时，需要传此参数，作为枚举值选择的列表
+      * When type is enum, pass this parameter as the list of enumeration value options
       */
     var enumValues: List<String>? = null
 )
 ```
 
-注：参数的desc也要能精确反应此参数的定义，让大模型的理解更精准；而对于参数的name最好使用英文单词，多个单词间以下划线\_连接；另外，** name一定不要与Action对象或Parameter对象的属性名相同或类似，避免出现歧义， ** **这非常重要！！！这非常重要！！！这非常重要！！！**
+**Weather Query Example**
 
-## Action注册
+```kotlin
+val weatherAction = Action(
+    "orion.agent.action.WEATHER",
+    "Query Weather",
+    "Query weather conditions for a specified city and date",
+    parameters = listOf(
+        Parameter(
+            "city",
+            ParameterType.STRING,
+            "City name for weather query",
+            false
+        ),
+        Parameter(
+            "date",
+            ParameterType.STRING,
+            "Date to query weather for, such as today, tomorrow, the day after tomorrow",
+            false
+        )
+    ),
+    executor = object : ActionExecutor {
+        override fun onExecute(action: Action, params: Bundle?): Boolean {
+            // Get parameters
+            val city = params?.getString("city") ?: "Current Location"
+            val date = params?.getString("date") ?: "Today"
 
-> Action分为App级和Page级两种，区别在于其活跃的生命周期不同。
+            // Handle weather query logic
+            // ...
 
-### App级Action
+            return true
+        }
+    }
+)
+```
 
-> App级Action即为全局Action，Action在整个应用运行（处于前台）期间都会被响应，如果应用退出或进入后台则不会被响应，App级的Action注册支持**动态注册**和**静态注册**两种。
+**Parameter Parsing Example**
 
-#### 动态注册
+After successful Action registration, when a user says to the robot "What's the weather like in Beijing tomorrow?", the large language model automatically plans the weather Action and invokes the `onExecute` method, passing the parsed parameters:
 
-** 动态注册的App级Action，是为了在应用整个生命周期内响应用户的实时意图， **在应用处于前台期间一直生效，应用退出或进入后台时则不再响应** 。 **需要在AppAgent的onCreate方法中调用注册，如以下示例，注册了一个**退出**的Action：
+```
+Parsed parameter values:
+city: 'Beijing'
+date: 'Tomorrow'
+```
+
+## 2.2 Action Registration Mechanism
+
+> **⚠️ Important Reminder:**
+>
+> **Action Registration Impact**: If no Actions are registered, the large language model cannot plan any Actions to respond to user requests.
+>
+> **Typical Example**: Without registering the `Actions.SAY` system Action, the robot cannot answer user questions or ask clarification questions through TTS.
+>
+> **Development Choice**: Developers can choose to register corresponding Actions based on business needs, or call the large language model directly through `AgentCore.llm()` for complex scenarios where Actions cannot meet the requirements.
+
+Actions are divided into two types based on their lifecycle: App-level and Page-level, with different activation periods.
+
+### Action Activation Mechanism
+
+**Automatic Lifecycle Management**: The SDK automatically monitors application and page lifecycle changes, enabling or disabling Actions at appropriate times:
+
+- **AppAgent Activation Timing**:
+  - Actions automatically take effect when the application comes to the foreground
+  - Actions automatically stop taking effect when the application exits or goes to the background
+
+- **PageAgent Activation Timing**:
+  - Actions automatically take effect when the page becomes visible to the user
+  - Actions automatically stop taking effect when the page is not visible
+
+**Voice Interaction Flow**: After Actions take effect, users can directly interact with the AI through voice without additional operations:
+1. User voice input → 2. Large language model understands intent → 3. Automatically plans Action → 4. Executes corresponding logic
+
+**Action Planning Mechanism**:
+- Once an Action is successfully registered, when the user provides voice input (with microphone open) or calls `AgentCore.query()`, the LLM automatically plans to the highest matching Action
+- The LLM determines the match degree based on the Action's description, name, and parameter descriptions, selecting the Action that best matches user intent for execution
+
+**Important Constraints**:
+- **Planning Scope Limitation**: The LLM can only plan to Actions currently in effect. Expired Actions cannot be planned
+
+### 2.2.1 App-Level Action
+
+App-level Actions are global Actions that respond to user requests throughout the application runtime (when in foreground). When the application exits or goes to the background, these Actions will no longer respond. App-level Actions support both **dynamic registration** and **static registration** methods.
+
+#### Dynamic Registration
+
+Dynamically registered app-level Actions respond to user's real-time intents throughout the application lifecycle. Registration must be called in the AppAgent's `onCreate` method.
+
+**Example: Registering an Exit Action**
 
 ```Kotlin
-// 添加应用级Agent
+import com.ainirobot.agent.AppAgent
+import com.ainirobot.agent.action.Actions
+
+// Add app-level Agent
 object : AppAgent(this) {
 
     /**
-      * AppAgent初始化的回调
-      * 需要动态注册的App级Action，可以此方法中注册
+      * Callback for AppAgent initialization
+      * App-level Actions that need dynamic registration can be registered in this method
       */
       override fun onCreate() {
-        // 动态注册Action
-        // 示例：此处注册了系统Action：EXIT，当用户说“退出”时，会触发BACK事件
+        // Dynamically register Action
+        // Example: Register system Action EXIT here. When user says "exit", it triggers a BACK event
         registerAction(Actions.EXIT)
     }
 }
 ```
 
-**动态注册**支持注册在当前应用中**新创建**的私有Action，也支持注册外部的Action，如：**系统Action**或者其它 **AgentOS App** （集成AgentSDK的应用）中**静态注册的Action。**
+**External Action Registration**
 
-以下示例，注册一个打开**天气App**中的 **打开天气首页Action** ：
+Dynamic registration supports registering both private Actions of the current application and external Actions (such as system Actions or Actions statically registered in other AgentOS applications).
+
+**Example: Registering Weather Application Action**
 
 ```Kotlin
-// 注册一个查天气的Action，前提是你已经安装了包含此Action的AgentOS应用（必须是在注册表中静态注册才可以）
+import android.os.Bundle
+import com.ainirobot.agent.action.Action
+import com.ainirobot.agent.action.ActionExecutor
+
+// Register a weather query Action, provided you have installed an AgentOS application containing this Action
+// (must be statically registered in the registry to be available)
 registerAction(
-    Action("com.agent.tool.WEATHER_HOME").also  {  
+    Action("com.agent.tool.WEATHER_HOME").also  {
          it.executor = object : ActionExecutor {
-            
+
             override fun onExecute(action: Action, params: Bundle?): Boolean {
-                // 如果你不需要处理，请返回false，如果要自行处理且不需要后续处理，则返回true
-                // 此处只打印了一个日志，所以返回false，结果就是会调起天气App查询天气
-                // 如果你想自己查天气，那么就需要以此处调用自己的查天气接口，并返回true即可
-                println("用户刚查了天气")
+                // Return false if you don't need to handle it. Return true if you handle it and don't need further processing.
+                // This only logs a message, so it returns false, meaning it will launch the weather app to query weather
+                // If you want to query weather yourself, you would call your weather query interface here and return true
+                println("User just queried weather")
                 return false
             }
         }
@@ -335,13 +644,16 @@ registerAction(
 )
 ```
 
-#### 静态注册
+#### Static Registration
 
-首先，只有 **App级的Action才可以静态注册** ，静态注册的Action是为了向外部提供调起当前应用的入口，默认并不会在当前App运行期间生效，如果想要在当前App中也生效，需要再次动态注册即可。
+Static registration is specifically for providing external calling interfaces to the current application. Statically registered Actions do not take effect during the current application's runtime by default. To make them effective in the current application, you need to perform dynamic registration again.
 
-**静态注册**必须在**actionRegistry.json**注册表中配置，并添加详细的参数描述等。
+**Configuration Requirements**
+- Only App-level Actions can be statically registered
+- Must be configured in the `actionRegistry.json` registry
+- Requires detailed parameter descriptions
 
-以下示例，是在**天气App**中向外部提供一个可以**打开天气首页查天气**的Action：
+**Example: Static Registration Configuration for Weather Application**
 
 ```JSON
 {
@@ -350,19 +662,19 @@ registerAction(
   "actionList": [
     {
       "name": "com.agent.tool.WEATHER_HOME",
-      "displayName": "打开查询天气的首页",
-      "desc": "当用户想要询问天气时，显示天气情况",
+      "displayName": "Open weather query homepage",
+      "desc": "Display weather information when user wants to inquire about weather",
       "parameters": [
         {
           "name": "city",
           "type": "string",
-          "desc": "要查询哪个城市的天气",
+          "desc": "Which city's weather to query",
           "required": false
         },
         {
           "name": "date",
           "type": "string",
-          "desc": "要查询什么日期的天气",
+          "desc": "What date's weather to query",
           "required": false
         }
       ]
@@ -371,19 +683,22 @@ registerAction(
 }
 ```
 
-注：**required**为false，表示参数可以为空，如果为空时需要执行端自行处理，如：使用当前定位的城市，时间默认为今天等。
+> **Parameter Explanation**: `required` being `false` indicates the parameter is optional. When the parameter is empty, the executor must handle it (such as using the current location city, defaulting to today's date, etc.).
 
-静态注册的Action，最终的执行器是在AppAgent的**onExecuteAction**方法中，如果对外公开了多个Action，则需要通过actionName判断不同的Action并分别处理。
+**Execution Handling for Statically Registered Actions**
 
-以下还是**天气App**为例，我们在上一步中，已经在**天气App**的**注册表**中添加了[com.agent.tool.WEATHER\_HOME](https://cheetah-mobile.feishu.cn/docx/FwCQdP1WboqJm3xv5Yic8SxdnWf?fromScene=spaceOverview#doxcnwGQmqyHAiMPRdoQw7dEf0g)的Action，那天气App中AgentAgent的**onExecuteAction**方法必须处理此Action。
-
-以下示例
+Statically registered Actions must be handled in the AppAgent's `onExecuteAction` method:
 
 ```Kotlin
+import android.os.Bundle
+import com.ainirobot.agent.AppAgent
+import com.ainirobot.agent.action.Action
+
 object : AppAgent(this) {
     /**
-      * actionRegistry.json注册表中静态注册的action需要执行的回调
-      * 注：只有可以被外部调用的action才可以使用静态注册，且此方法只能是被外部（其它app）调用时才会执行
+      * Callback for executing statically registered actions from the actionRegistry.json registry
+      * Note: Only actions that can be called externally can use static registration,
+      * and this method only executes when called externally (by other apps)
       */
       override fun onExecuteAction(
         action: Action,
@@ -391,7 +706,7 @@ object : AppAgent(this) {
     ): Boolean {
         return when (action.name) {
             "com.agent.tool.WEATHER_HOME" -> {
-                // 打开天气首页
+                // Open weather homepage
                 startWeatherHomePage(action, params)
                 true
             }
@@ -401,40 +716,40 @@ object : AppAgent(this) {
 }
 ```
 
-注：简单来说，静态注册的Action为了让外部调用，动态注册的Action为了让当前应用内部调用
+> **Registration Method Summary**:
+> - **Static Registration**: For providing external calling interfaces
+> - **Dynamic Registration**: For internal application calling
 
-### Page级Action
+### 2.2.2 Page-Level Action
 
-> Page级的Action需要在页面（Activity或Fragment）初始化时声名，且只在当前页面对用户可见时生效，当页面退出或者被其它页面覆盖则不再生效
+Page-level Actions must be declared during page (Activity or Fragment) initialization and only take effect when the current page is visible to the user. When the page exits or is covered by another page, these Actions will no longer take effect.
 
-#### 动态注册
+#### Dynamic Registration
 
-因为**Page级Action**只在当前页面生效，所以它 **只能动态注册，不能在注册表中注册** ，即不能向外部提供接口
+Since Page-level Actions only take effect on the current page, they **can only be dynamically registered and cannot be statically registered in the registry**, meaning they cannot provide external interfaces.
 
-以下示例定义了三个Action，根据用户的情绪显示三种不同的表情
-
-在Activity的onCreate方法中创建
+**Example: Emotion Response Action Registration**
 
 ```kotlin
 PageAgent(this)
-    .blockAction("com.xxx.yyy.TTT") // 排除指定Action
-    .blockActions( // 排除指定Action列表
+    .blockAction("com.xxx.yyy.TTT") // Exclude specified Action
+    .blockActions( // Exclude specified Action list
         listOf(
             "com.xxx.yyy.TTT",
             "com.xxx.yyy.RRR",
         )
     )
-    .blockAllActions() // 排除所有Action
+    .blockAllActions() // Exclude all Actions
     .registerAction(
         Action(
             name = "com.agent.demo.SHOW_SMILE_FACE",
-            displayName = "笑",
-            desc = "响应用户的开心、满意或正面情绪",
+            displayName = "Smile",
+            desc = "Respond to user happiness, satisfaction, or positive emotions",
             parameters = listOf(
                 Parameter(
                     "sentence",
                     ParameterType.STRING,
-                    "回复给用户的话",
+                    "Response to say to the user",
                     true
                 )
             ),
@@ -451,13 +766,13 @@ PageAgent(this)
     .registerAction(
         Action(
             name = "com.agent.demo.SHOW_CRY_FACE",
-            displayName = "哭",
-            desc = "响应用户的难过、失落或求助情绪",
+            displayName = "Cry",
+            desc = "Respond to user sadness, disappointment, or help-seeking emotions",
             parameters = listOf(
                 Parameter(
                     "sentence",
                     ParameterType.STRING,
-                    "回复给用户的话，给予安慰",
+                    "Response to say to the user, providing comfort",
                     true
                 )
             ),
@@ -474,13 +789,13 @@ PageAgent(this)
     .registerAction(
         Action(
             name = "com.agent.demo.SHOW_ANGRY_FACE",
-            displayName = "生气",
-            desc = "响应用户的愤怒、不满或投诉情绪",
+            displayName = "Angry",
+            desc = "Respond to user anger, dissatisfaction, or complaint emotions",
             parameters = listOf(
                 Parameter(
                     "sentence",
                     ParameterType.STRING,
-                    "回复给用户的话，尽可能消除用户的负面情绪",
+                    "Response to say to the user, trying to eliminate user's negative emotions",
                     true
                 )
             ),
@@ -496,21 +811,21 @@ PageAgent(this)
     )
 ```
 
-#### Action过滤
+#### Action Filtering Mechanism
 
-如果你在App级注册了N个全局的Action，但在当前页面上不想规划其中一个或多个全局Action，那么可以通过以下方式排除掉指定的全局Action
+When you have registered multiple global Actions at the App-level but don't want certain global Actions to be triggered on specific pages, you can use the following filtering methods:
 
-**过滤指定的一个Action**
+**Filter Single Action**
 
 ```Kotlin
-// 过滤掉指定的全局Action，参数为Action的name
+// Filter out specified global Action, parameter is Action's name
 pageAgent.blockAction("com.xxx.yyy.TTT")
 ```
 
-**过滤指定的多个Action**
+**Filter Multiple Actions**
 
 ```Kotlin
-// 过滤的Action列表
+// List of Actions to filter
 pageAgent.blockActions(
     listOf(
         "com.xxx.yyy.TTT",
@@ -519,47 +834,59 @@ pageAgent.blockActions(
 )
 ```
 
-**过滤所有Action**
+**Filter All Actions**
 
 ```Kotlin
-// 过滤掉所有在AppAgent中注册的全局Action
-// 仅当前页面注册的Action生效
+// Filter out all global Actions registered in AppAgent
+// Only page-level registered Actions take effect
 pageAgent.blockAllActions()
 ```
 
-## Action执行
+## 2.3 Action Execution Flow
 
-> Action执行上面已经说的很详细，此处只是为了再强调一下
+### 2.3.1 Execution Callback
 
-### **执行** **回调**
+> **⚠️ Important Note:**
+> 1. **RobotOS Migration**: If you were previously using the RobotOS system, the original domains and skills need to be migrated to AgentOS's Action callbacks and re-implemented
+> 2. **Functionality Implementation**: AgentOS will not automatically call the Xiaobao application or system components. All functionalities (such as weather queries, patrols, etc.) must be implemented by developers in Actions
 
-动态注册Action的具体执行，需要为Action对象设置一个执行器，在执行器中添加你要执行的代码，如：
+**Execution of Dynamically Registered Actions**
+
+Dynamically registered Actions require setting an executor, where specific business logic is implemented:
 
 ```Kotlin
+import android.os.Bundle
+import com.ainirobot.agent.action.Action
+import com.ainirobot.agent.action.ActionExecutor
+import com.ainirobot.agent.base.Parameter
+import com.ainirobot.agent.base.ParameterType
+
 Action(
     name = "com.agent.demo.SHOW_ANGRY_FACE",
-    displayName = "生气",
-    desc = "响应用户的愤怒、不满或投诉情绪",
+    displayName = "Angry",
+    desc = "Respond to user anger, dissatisfaction, or complaint emotions",
     parameters = listOf(
         Parameter(
             "sentence",
             ParameterType.STRING,
-            "回复给用户的话，尽可能消除用户的负面情绪",
+            "Response to say to the user, trying to eliminate user's negative emotions",
             true
         )
     ),
-    executor =  object  : ActionExecutor {
+    executor = object : ActionExecutor {
 
-          override   fun   onExecute(action:  Action, params:  Bundle?):  Boolean  {
-             showFaceImage(R.drawable.ic_angry)
-             handleAction(action, params)
-              return   true
-         }
-     }
+        override fun onExecute(action: Action, params: Bundle?): Boolean {
+            showFaceImage(R.drawable.ic_angry)
+            handleAction(action, params)
+            return true
+        }
+    }
 )
 ```
 
-静态注册Action的具体执行，需要在AppAgent的onExecuteAction方法中实现，如：
+**Execution of Statically Registered Actions**
+
+Statically registered Actions must be handled in the AppAgent's `onExecuteAction` method:
 
 ```Kotlin
 override fun onExecuteAction(
@@ -570,406 +897,1275 @@ override fun onExecuteAction(
 }
 ```
 
-注：不管是哪种注册方式，执行的回调都带有一个Boolean的返回值，表示你是否已经处理过此Action，如果你不处理，请返回false，如果要自定义处理且不需要后续处理，则返回true
+> **Return Value Explanation**:
+> - `true`: Indicates custom handling of this Action, no further processing needed
+> - `false`: Indicates not handling this Action, system continues processing
 
-### **执行结果**
+### 2.3.2 Action Execution Completion Notification
 
-**这非常重要，必不可少！这非常重要，必不可少！这非常重要，必不可少！这非常重要，必不可少！这非常重要，必不可少！这非常重要，必不可少！这非常重要，必不可少！这非常重要，必不可少！这非常重要，必不可少！！！**
+> **🚨 Critical Warning**
+> **The following rules are critical for normal Action system operation. Developers must strictly follow them, as violations will cause system abnormalities:**
 
-1. 首先，**任何Action的执行** **回调** **方法中都不能执行耗时操作。**
-2. 其次，如果你要处理一个Action，除了**在执行的** **回调** **方法返回值返回true**之外，还需要在** Action执行完成后手动调用action的成员方法notify() **把执行状态或结果同步给系统，具体的时机用户可以自行定义，如：页面加载完成、天气播报完成、到达一个目的地等。
-3. 最后，执行的回调方法默认都是 **子线程** 。
+**Execution Constraints**
+1. **Time-consuming operations cannot be executed in the Action execution callback method**
+2. **When handling an Action, in addition to returning `true`, you must call the `action.notify()` method after the Action execution completes**
+3. **The execution callback method runs on a worker thread by default**
 
-notify是Action类的成员方法，说明如下：
+**Correct Handling of Time-Consuming Operations**
+- The `onExecute` method should return `true` immediately
+- Place time-consuming operations (such as network requests, file operations, TTS playback, etc.) in coroutines or threads
+- After time-consuming operations complete, call the `action.notify()` method to notify the system of the execution result
+
+**notify() Method Explanation**
 
 ```Kotlin
 package com.ainirobot.agent.action
 
 /**
-  * Action执行完成后需要同步执行结果
+  * Notify the system when Action execution completes
+  * Must be called after Action processing finishes to report completion status and result
   *
-  *  @param  result Action的执行结果
-  *  @param  isTriggerFollowUp 在Action执行完成后主动引导用户进行下一步操作，默认开启
+  *  @param  result Action execution result (default: SUCCEEDED)
+  *  @param  isTriggerFollowUp Whether to proactively guide user for next steps after completion (default: false)
   */
 fun notify(
     result: ActionResult = ActionResult(ActionStatus.SUCCEEDED),
-    isTriggerFollowUp: Boolean = true
+    isTriggerFollowUp: Boolean = false
 )
 ```
 
-## 系统内置Action
+**❌ Incorrect Examples**
 
-> 系统Action是系统内置的功能Action，包含部分系统的功能、指令和应用等，系统Action的**namespace**是**orion.agent.action。**
->
-> 系统Action并不是都由系统实现了执行逻辑，有些还是需要用户自行处理逻辑，只是系统内置了这些Action的定义而已，如：orion.agent.action.CLICK（点击事件）
+**Kotlin Version**
 
-1. 系统处理的Action
+```Kotlin
+class MyActionExecutor : ActionExecutor {
+
+    override fun onExecute(action: Action, params: Bundle?): Boolean {
+        // ❌ Incorrect: Executing time-consuming operations directly in onExecute
+        Thread.sleep(3000) // 3-second time-consuming operation
+
+        // Notify completion
+        action.notify()
+        return true
+
+        // This method takes 3 seconds total, but will be forcibly interrupted at 2 seconds!
+    }
+}
+```
+
+**Java Version**
+
+```Java
+@Override
+public boolean onExecute(Action action, Bundle params) {
+    // ❌ Incorrect: Executing time-consuming operations directly in onExecute
+    try {
+        Thread.sleep(5000);
+    } catch (InterruptedException e) {
+        e.printStackTrace();
+    }
+
+    // Notify completion
+    action.notify();
+    return true;
+}
+```
+
+**✅ Correct Examples**
+
+**Kotlin Version**
+
+```Kotlin
+class MyActionExecutor : ActionExecutor {
+
+    override fun onExecute(action: Action, params: Bundle?): Boolean {
+        // ✅ Correct: Immediately launch coroutine for time-consuming operation
+        AOCoroutineScope.launch {
+            try {
+                // Execute time-consuming operation in coroutine
+                delay(3000) // 3-second time-consuming operation
+
+                // Notify execution result after completion
+                action.notify()
+
+            } catch (e: Exception) {
+                action.notify(ActionResult(ActionStatus.FAILED))
+            }
+        }
+
+        // Return true immediately, don't wait for time-consuming operation
+        return true
+    }
+}
+```
+
+**Java Version**
+
+```Java
+@Override
+public boolean onExecute(Action action, Bundle params) {
+    // Launch background task immediately
+    new Thread(() -> {
+        try {
+            Thread.sleep(5000); // Time-consuming operation executes in background
+            action.notify(); // Notify after completion
+        } catch (Exception e) {
+            action.notify(new ActionResult(ActionStatus.FAILED));
+        }
+    }).start();
+
+    return true; // Return immediately without blocking
+}
+```
+
+## 2.4 System Built-in Actions
+
+System built-in Actions are predefined functional modules in AgentOS, including system functions, commands, and applications. The namespace for system Actions is `orion.agent.action`.
+
+> **Note**: Not all system Actions have implementation by the system. Some Actions (such as `orion.agent.action.CLICK` click events) still require users to handle them.
+
+**Actions Automatically Handled by System**
 
 ```Kotlin
 package com.ainirobot.agent.action
 
 object Actions {
     /**
-      * 调整系统音量
+      * Adjust system volume
       */
     const val SET_VOLUME = "orion.agent.action.SET_VOLUME"
     /**
-      * 机器人兜底对话
+      * Robot fallback response
       */
     const val SAY = "orion.agent.action.SAY"
     /**
-      * 取消
+      * Cancel
       */
     const val CANCEL = "orion.agent.action.CANCEL"
     /**
-      * 返回
+      * Back
       */
     const val BACK = "orion.agent.action.BACK"
     /**
-      * 退出
+      * Exit
       */
     const val EXIT = "orion.agent.action.EXIT"
     /**
-      * 知识库问答
+      * Knowledge base question answering
       */
     const val KNOWLEDGE_QA = "orion.agent.action.KNOWLEDGE_QA"
     /**
-      * 对用户说一句欢迎或者欢送语
+      * Generate welcome or farewell message for user
       */
     const val GENERATE_MESSAGE = "orion.agent.action.GENERATE_MESSAGE"
     /**
-      * 调整机器人速度
+      * Adjust robot speed
       */
     const val ADJUST_SPEED = "orion.agent.action.ADJUST_SPEED"
 }
 ```
 
-注： **CANCEL** 、**BACK**和**EXIT**默认处理为模拟点击**Back键**
+> **Default Behavior**: `CANCEL`, `BACK`, and `EXIT` are handled by default as simulating a Back key press.
 
-2. 需用户处理的Action
+### Knowledge Base Question Answering Usage Example
+
+Using `KNOWLEDGE_QA` as an example, explaining how to register a system built-in Action and the trigger mechanism for knowledge base Q&A:
+
+```Kotlin
+registerAction(Actions.KNOWLEDGE_QA)
+```
+
+After developers register this Action, when users query the robot through voice and hit the knowledge base configured in the reception backend, it executes automatically. The system automatically handles knowledge base queries and plays back the configured TTS responses.
+
+**Actions Requiring User Handling**
 
 ```Kotlin
 package com.ainirobot.agent.action
 
 object Actions {
     /**
-      * 确定
+      * Confirm
       */
     const val CONFIRM = "orion.agent.action.CONFIRM"
     /**
-      * 点击
+      * Click
       */
     const val CLICK = "orion.agent.action.CLICK"
 }
 ```
 
-# 核心功能接口
+> **Related Functionality**: For monitoring system Action execution status, please refer to [System Action Status Listening](#414-system-action-status-listening).
 
-1. ## 麦克风开关
+# 3. Agent Role Configuration - Personalize Your AI
 
-默认只要集成了AgentSDK的应用，在应用进入前台时会自动打开麦克风，应用退出或进入后台会自动关闭麦克风，当然你也可以自行开启和关闭，通过以下方式
+## 3.1 Overview
+
+AgentOS SDK provides powerful role configuration features, allowing you to customize unique identity, style, and objectives for your AI assistant. Through three core configuration methods, you can create an intelligent assistant with distinctive personality.
+
+## 3.2 Three Core Configurations
+
+### Persona Configuration (setPersona)
+**Function**: Define the AI assistant's identity characteristics and basic attributes
+**Focus**: Static identity information, answering "who am I"
+**Application Scenarios**: Character identity, personality traits, background settings
+
+### Style Configuration (setStyle)
+**Function**: Set the AI assistant's conversation style and expression method
+**Focus**: Communication method, answering "how to speak"
+**Application Scenarios**: Language style, expression method, emotional tone
+
+### Objective Configuration (setObjective)
+**Function**: Clarify the AI assistant's task objectives and behavioral principles
+**Focus**: Business processes and special requirements, answering "what to do"
+**Application Scenarios**: Business objectives, behavioral norms, special requirements
+
+## 3.3 Configuration Hierarchy and Priority
+
+### Configuration Hierarchy
+```
+PageAgent Configuration > AppAgent Configuration > System Default
+```
+
+**Explanation**: When PageAgent does not set a configuration, it automatically inherits the AppAgent's configuration
+
+## 3.4 API Interface Details
+
+### setPersona()
+```kotlin
+setPersona(persona: String): Agent
+```
+
+**Parameter Explanation:**
+- `persona: String` - Persona description, such as: "Your name is Xiaobao, a chatbot"
+
+### setStyle()
+```kotlin
+setStyle(style: String): Agent
+```
+
+**Parameter Explanation:**
+- `style: String` - Conversation style, such as: "professional, friendly, humorous"
+
+### setObjective()
+```kotlin
+setObjective(objective: String): Agent
+```
+
+**Parameter Explanation:**
+- `objective: String` - Planning objective, must be clear and definite for easy understanding by the large language model
+
+> **Note**: All three methods support method chaining and can be used in both AppAgent and PageAgent. For specific usage examples, please refer to the Quick Start section earlier.
+
+## 3.5 Extended Configuration Capabilities
+
+When basic three-item configurations cannot meet complex requirements, you can combine with **Perception Information Reporting** functionality (see [section 4.10](#410-perception-information-reporting)) for more flexible information transfer:
+
+```kotlin
+// Upload complex page information and business status
+val pageInfo = """
+Current Product: ${product.name}
+User Status: ${user.memberLevel} Member
+Special Tip: This product is on promotion
+"""
+
+AgentCore.uploadInterfaceInfo(pageInfo)
+```
+
+> **Tip**: For detailed usage of the `uploadInterfaceInfo` method, please refer to [4.10 Perception Information Reporting](#410-perception-information-reporting) section.
+
+## 3.6 Configuration Best Practices
+
+### Core Principles
+- **Specific Persona**: Use concrete character definitions, avoid abstract descriptions
+- **Consistent Style**: Maintain style consistency throughout the application
+- **Clear Objectives**: Ensure the AI understands specific business objectives
+
+### Example Comparison
+
+**❌ Not Recommended**
+```kotlin
+setPersona("You are an assistant")
+setObjective("Help users")
+```
+
+**✅ Recommended**
+```kotlin
+setPersona("You are the exclusive shopping consultant for 'Leopard Shopping' with 3 years of e-commerce experience")
+setObjective("Based on user preferences and budget, recommend the most suitable products and provide purchase advice")
+```
+
+## 3.7 Typical Application Scenarios
+
+### E-commerce Application
+```kotlin
+// Global configuration
+setPersona("Senior shopping consultant")
+setObjective("Help users make wise purchasing decisions")
+
+// Page-level configuration
+// Product List Page: Help users quickly filter products
+// Detail Page: Provide detailed product feature introduction
+// Shopping Cart: Assist in completing order confirmation
+```
+
+### Educational Application
+```kotlin
+// Global configuration
+setPersona("Experienced educational assistant")
+setStyle("Patient, encouraging, step-by-step")
+setObjective("Help users master knowledge, inspire learning interest")
+
+// Page-level configuration
+// Course Page: Guide completion of current course learning
+// Practice Page: Provide exercise answer and learning suggestions
+```
+
+---
+
+# 4. Core API Interfaces
+
+## 4.1 Microphone Control
+
+### Feature Introduction
+Microphone control provides precise management of audio input. By default, applications integrating AgentOS SDK automatically open the microphone when entering the foreground and automatically close it when the application exits or goes to the background. Developers can also manually control microphone status based on business needs.
+
+### Application Scenarios
+- Scenarios requiring temporary muting
+- Preventing audio interference when playing audio/video content
+- Audio control requirements in specific business processes
+
+### API Interface
 
 ```Kotlin
 import com.ainirobot.agent.AgentCore
 
-// 设置麦克风静音状态
-AgentCore.isMicrophoneMuted = true // 静音
-AgentCore.isMicrophoneMuted = false // 取消静音
+// Set microphone mute status
+AgentCore.isMicrophoneMuted = true // Mute
+AgentCore.isMicrophoneMuted = false // Unmute
 ```
 
-2. ## 自定义TTS和ASR字幕
+> **🔍 Troubleshooting**: If experiencing voice interaction no response issues, please refer to [FAQ - Voice Interaction No Response](../../FAQ.md#voice-interaction-no-response) for self-checking
 
-如果想自定义字幕显示UI组件，可以通过以下方法注册一个字幕事件的监听器，它是AppAgent和PageAgent的成员方法。
+## 4.2 Wake-Free Functionality
+
+### Feature Introduction
+Wake-free is AgentOS's intelligent microphone control feature, implementing precise voice interaction through **multimodal intelligent recognition** (combining visual and acoustic signals):
+
+**Enabled State** (default):
+- Adopts **vision and acoustic fusion algorithm**, comprehensively analyzing user interaction intent
+- Activates microphone only when user is **facing the robot**; side or back-facing speech will not be picked up
+- Significantly reduces **crosstalk interference** and false triggers in multi-user scenarios
+
+**Disabled State**:
+- Switches to **unconditional listening** mode, continuously monitoring environmental audio
+- ⚠️ **Multi-user scenario risk**: Simultaneous dialogue by different users easily produces speech conflicts and misrecognition
+- Suitable for single-user or scenarios needing broader listening range
+
+### Application Scenarios
+- **Recommended to Enable**: Exhibition halls, lobbies and other multi-person environments, ensuring service accuracy
+- **Caution to Disable**: Private spaces or specific application scenarios requiring long-distance listening
+
+### API Interface
 
 ```Kotlin
-package com.ainirobot.agent
+import com.ainirobot.agent.AgentCore
 
 /**
-  * 语音字幕监听器，包括ASR和TTS
-  */
-fun   setOnTranscribeListener(listener:  OnTranscribeListener): Agent
+ * Whether to enable wake-free functionality, default true, enabled
+ */
+var isEnableWakeFree: Boolean
 ```
 
-以下示例，把字幕条显示到你的UI组件上，**此** **回调**  **是在子线程中** ：
+## 4.3 ASR and TTS Listening
+
+### Feature Introduction
+By setting listeners, developers can obtain real-time content and status of speech recognition (ASR) and speech synthesis (TTS), achieving comprehensive monitoring of the voice interaction process.
+
+### Application Scenarios
+- Need to obtain speech recognition results for business processing
+- Monitor TTS playback content and status
+- Implement custom voice interaction UI
+
+### API Interface
+
+**Set Listener**
 
 ```Kotlin
-PageAgent(this)
-    .setOnTranscribeListener(object : OnTranscribeListener {
+import com.ainirobot.agent.OnTranscribeListener
 
-        override fun onTranscribe(transcription: Transcription): Boolean {
-            // 在此处理把字幕条显示到你的UI组件上，注：当前是子线程
-            // 如果不想把字幕显示在系统的字幕条上，则返回true，如果想保留系统字幕条，则返回false
+/**
+ * Set ASR and TTS listener
+ */
+fun setOnTranscribeListener(listener: OnTranscribeListener): Agent
+```
+
+**Listener Interface Definition**
+
+```Kotlin
+import com.ainirobot.agent.base.Transcription
+
+/**
+ * Listen to ASR and TTS output
+ */
+interface OnTranscribeListener {
+
+    fun onASRResult(transcription: Transcription): Boolean
+
+    fun onTTSResult(transcription: Transcription): Boolean
+
+}
+```
+
+> **Note**: `setOnTranscribeListener` is a member method of AppAgent and PageAgent.
+
+### Usage Explanation
+
+**Get Content**
+- `transcription.text`: Get text content
+
+**Determine Result Type**
+- `transcription.final`: `true` indicates final result, `false` indicates intermediate result
+
+**Return Value Handling**
+- Return `true`: Indicates consuming this result, system will no longer display subtitles to the bottom subtitle bar
+- Return `false`: Indicates listening only without interception, not affecting system subsequent processing (recommended)
+
+> **Thread Reminder**: `onTranscribe` callback executes on a worker thread.
+
+## 4.4 Agent Status Listening
+
+### Feature Introduction
+Agent status listening provides real-time monitoring of Agent's thinking and processing process, helping developers understand Agent's working status and implement corresponding UI feedback.
+
+### API Interface
+
+```Kotlin
+import com.ainirobot.agent.PageAgent
+import com.ainirobot.agent.OnAgentStatusChangedListener
+
+PageAgent(this)
+    .setOnAgentStatusChangedListener(object : OnAgentStatusChangedListener {
+
+        override fun onStatusChanged(status: String, message: String?): Boolean {
+            // Display different UI based on different statuses here. Note: currently on worker thread
+            // Return true if you don't want to display status on default voice bar, false to keep system display
             return true
         }
     })
 ```
 
-3. ## 播放TTS
+**Listener Interface Definition**
 
 ```Kotlin
-import com.ainirobot.agent.AgentCore
-
 /**
-  * TTS接口，同步调用
-  * 注：此接口需在协程中调用
-  *
-  *  @param  text 要播放的文本
-  *  @param  timeoutMillis 超时时间，单位毫秒
-  *
-  *  @return  返回1表示成功，返回0表示失败
-  */
-suspend fun ttsSync(text: String, timeoutMillis: Long = 180000): Int {
-    return this.appAgent?.api?.ttsSync(text, timeoutMillis) ?: 0
+ * Agent status change listener
+ */
+interface OnAgentStatusChangedListener {
+
+    fun onStatusChanged(status: String, message: String?): Boolean
+
 }
 ```
 
+### Status Explanation
+
+**Status Types**
+- `listening`: Listening for user input
+- `thinking`: Thinking, analyzing user intent
+- `processing`: Processing, executing relevant operations
+- `reset_status`: Status reset, returning to initial state
+
+**Message Explanation**
+- When `status` is `processing`, `message` may contain specific processing information, such as: "Selecting tool...", "Getting weather...", "Summarizing answer...", etc.
+- For other statuses, `message` is empty
+
+## 4.5 Voice Bar Control
+
+### Feature Introduction
+Control the display and hiding of system's default voice bar to meet UI needs of different application scenarios.
+
+### API Interface
+
 ```Kotlin
 import com.ainirobot.agent.AgentCore
 
 /**
-  * TTS接口，异步调用，返回状态通过TaskCallback回调
-  *
-  *  @param  text 要播放的文本
-  *  @param  timeoutMillis 超时时间，单位毫秒
-  *  @param  callback 回调，status=1表示播放成功，status=2表示播放失败
-  */
+ * Whether to enable voice bar, enabled by default
+ */
+var isEnableVoiceBar: Boolean
+```
+
+## 4.6 TTS Speech Synthesis
+
+### Feature Introduction
+Actively call the system's speech synthesis interface to convert specified text to audio and automatically play it, supporting both synchronous and asynchronous calling methods.
+
+### Application Scenarios
+- Play welcome message when application launches
+- Voice prompts in business processes
+- Proactive voice interaction with users
+- Real-time dialogue and continuous playback
+- Most voice playback requirements
+
+### API Interface
+
+**Synchronous Calling Interface**
+
+```Kotlin
+import com.ainirobot.agent.AgentCore
+
+/**
+ * TTS interface, synchronous calling
+ * Note: This interface must be called in a coroutine
+ *
+ * @param text Text to play
+ * @param timeoutMillis Timeout duration in milliseconds
+ *
+ * @return TaskResult<String> Task execution result, status=1 indicates success, status=2 indicates failure
+ */
+suspend fun ttsSync(text: String, timeoutMillis: Long = 180000): TaskResult<String>
+```
+
+**Asynchronous Calling Interface**
+
+```Kotlin
+import com.ainirobot.agent.AgentCore
+
+/**
+ * TTS interface, asynchronous calling, execution status returned via TTSCallback
+ *
+ * @param text Text to play
+ * @param timeoutMillis Timeout duration in milliseconds
+ * @param callback Callback, status=1 indicates successful playback, status=2 indicates playback failure
+ */
 fun tts(
     text: String,
     timeoutMillis: Long = 180000,
-    callback: TaskCallback? = null
-) {
-    this.appAgent?.api?.tts(text, timeoutMillis, callback)
-}
+    callback: TTSCallback? = null
+)
 ```
 
-4. ## 停止播放TTS
+### ⚠️ Important Notes
+
+> **Playback Behavior Characteristics**
+> - **Automatic Append Playback**: Multiple calls to `tts()` or `ttsSync()` append audio content to the playback queue without interrupting the previous playback
+> - **Queue-Based Playback**: Suitable for scenarios of continuous playback of multiple segments
+
+> **Playback Interruption and Callback Mechanism**
+> - When TTS playback is terminated or interrupted in any way, it triggers a playback failure callback (`status=2`)
+> - User speaking to the robot during TTS playback triggers speech recognition, **automatically interrupting current TTS playback**
+
+> **Timeout Duration Explanation**
+> - TTS uses **streaming playback** mechanism, generating and playing audio simultaneously, not a pre-generated file mode
+> - `timeoutMillis` parameter is **total playback timeout duration**, from calling start to playback completion
+> - ⚠️ **Setting timeout too short may interrupt long text playback**. Recommend setting timeout reasonably based on text length
+
+
+**Stop Playback**
 
 ```Kotlin
 import com.ainirobot.agent.AgentCore
 
 /**
-  * 强制打断TTS播放
-  */
-fun stopTTS() {
-    this.appAgent?.api?.stopTTS()
-}
+ * Force interrupt TTS playback
+ */
+fun stopTTS()
 ```
 
-5. ## 大模型接口
+## 4.7 TTS Audio File Playback
+
+### Feature Introduction
+TTS audio file playback provides a pre-generated audio file-based speech synthesis solution. Unlike streaming TTS, this function downloads complete audio files from the network first, then plays them. It features that once download completes, playback process is no longer affected by network fluctuations.
+
+### Technical Features
+- **Network Stability**: After audio download completes, playback is unaffected by network fluctuations
+- **Complete Lifecycle**: Provides detailed callback chain from network request to playback completion
+- **Replacement Playback**: Each call interrupts the previous playback
+
+### Application Scenarios
+- Network environment unstable special scenarios
+- Applications needing detailed playback status monitoring
+
+### API Interface
+
+**Asynchronous Playback Interface**
 
 ```Kotlin
 import com.ainirobot.agent.AgentCore
 
 /**
-  * 大模型接口，同步调用
-  * 注：此接口需在协程中调用
+ * TTS audio file playback interface, asynchronous calling
+ * Downloads audio file from network and plays it, supporting complete playback lifecycle callbacks
+ *
+ * @param text Text to play
+ * @param timeoutMillis Timeout duration in milliseconds
+ * @param callback Complete playback lifecycle callback
+ * @param showCaption Whether to display text in subtitle bar, default true
+ */
+fun playTtsAudioFile(
+    text: String,
+    timeoutMillis: Long = 15000,
+    callback: TTSAudioFileCallback? = null,
+    showCaption: Boolean = true
+)
+```
+
+**Stop Playback Interface**
+
+```Kotlin
+import com.ainirobot.agent.AgentCore
+
+/**
+ * Force interrupt TTS audio file playback
+ */
+fun stopTtsAudioFile()
+```
+
+### Callback Interface Definition
+
+> **💡 Interface Feature**: All methods in the `TTSAudioFileCallback` interface have default empty implementations. Developers can selectively override only the methods they care about, without needing to implement all methods.
+
+```Kotlin
+import com.ainirobot.agent.base.ITaskCallback
+
+/**
+ * TTS audio file playback callback interface
+ * Provides complete playback lifecycle callbacks
+ *
+ * Note: All callback methods have default empty implementations. Developers only need to override the methods they care about.
+ */
+interface TTSAudioFileCallback : ITaskCallback<String> {
+
+    /**
+     * Network request started
+     * @param text Text to play
+     */
+    fun onRequestStart(text: String) {}
+
+    /**
+     * Network request successful, audio data download complete
+     * @param text Text being played
+     * @param audioSize Audio data size in bytes
+     */
+    fun onRequestSuccess(text: String, audioSize: Int) {}
+
+    /**
+     * Network request failed
+     * @param text Text to play
+     * @param error Error message
+     */
+    fun onRequestFailed(text: String, error: String) {}
+
+    /**
+     * Audio preparation complete, about to start playback
+     * @param text Text to play
+     */
+    fun onPlaybackPrepared(text: String) {}
+
+    /**
+     * Audio playback started
+     * @param text Text being played
+     */
+    fun onPlaybackStarted(text: String) {}
+
+    /**
+     * Audio playback completed
+     * @param text Text that was played
+     */
+    fun onPlaybackCompleted(text: String) {}
+
+    /**
+     * Audio playback interrupted externally
+     * @param text Text being played
+     */
+    fun onPlaybackInterrupted(text: String) {}
+
+    /**
+     * Audio playback error
+     * @param text Text being played
+     * @param what Error type
+     * @param extra Additional error information
+     */
+    fun onPlaybackError(text: String, what: Int, extra: Int) {}
+
+    /**
+     * ITaskCallback implementation, only to satisfy interface requirements
+     *
+     * Note: In current implementation, this method will never be called because:
+     * - TTSAudioFileCallback is only used for playTtsAudioFile command
+     * - playTtsAudioFile command uses detailed lifecycle callbacks
+     * - Only streaming TTS etc. commands call onTaskEnd
+     *
+     * This method exists only because ITaskCallback<String> is abstract interface requiring implementation
+     */
+    override fun onTaskEnd(status: Int, result: String?) {
+        // Empty implementation - this method never called in current architecture
+    }
+}
+```
+
+### Usage Example
+
+```Kotlin
+import com.ainirobot.agent.AgentCore
+import com.ainirobot.agent.base.TTSAudioFileCallback
+
+// Basic usage
+AgentCore.playTtsAudioFile("Welcome to AgentOS SDK")
+
+// Playback behavior demonstration - subsequent call interrupts previous one
+AgentCore.playTtsAudioFile("First audio segment with longer playback time...")
+Thread.sleep(1000) // Wait 1 second
+AgentCore.playTtsAudioFile("Second audio segment") // Immediately interrupts first segment playback
+
+// Simple callback usage - only care about completion
+AgentCore.playTtsAudioFile(
+    text = "Will have prompt after playback completes",
+    callback = object : TTSAudioFileCallback {
+        override fun onPlaybackCompleted(text: String) {
+            println("Playback complete: $text")
+            // Execute subsequent logic
+        }
+
+        override fun onPlaybackError(text: String, what: Int, extra: Int) {
+            println("Playback error: $text")
+        }
+    }
+)
+
+// Complete callback usage
+AgentCore.playTtsAudioFile(
+    text = "Playing important notification for you",
+    timeoutMillis = 30000,
+    showCaption = true,
+    callback = object : TTSAudioFileCallback {
+
+        override fun onRequestStart(text: String) {
+            println("Starting audio file request: $text")
+        }
+
+        override fun onRequestSuccess(text: String, audioSize: Int) {
+            println("Audio download successful: $text, size: ${audioSize} bytes")
+        }
+
+        override fun onRequestFailed(text: String, error: String) {
+            println("Audio download failed: $text, error: $error")
+        }
+
+        override fun onPlaybackPrepared(text: String) {
+            println("Audio preparation complete: $text")
+        }
+
+        override fun onPlaybackStarted(text: String) {
+            println("Starting playback: $text")
+        }
+
+        override fun onPlaybackCompleted(text: String) {
+            println("Playback complete: $text")
+        }
+
+        override fun onPlaybackInterrupted(text: String) {
+            println("Playback interrupted: $text")
+        }
+
+        override fun onPlaybackError(text: String, what: Int, extra: Int) {
+            println("Playback error: $text, what: $what, extra: $extra")
+        }
+    }
+)
+```
+
+### Difference from Streaming TTS
+
+| Feature | Streaming TTS (section 4.6) | TTS Audio File Playback (section 4.7) |
+|---------|---------------------------|-------------------------------------|
+| **Playback Mode** | Streaming, generate and play simultaneously | Pre-generated file, playback after download |
+| **Playback Behavior** | Automatically append, no previous playback interruption | Each call interrupts previous playback |
+| **Network Dependency** | Continuous network connection | One-time download |
+| **Playback Stability** | Affected by network fluctuations | Stable playback after download completes |
+| **Lifecycle Callback** | Simple success/failure callback | Complete playback lifecycle callback |
+| **Default Timeout** | 180 seconds | 15 seconds |
+| **Use Cases** | Real-time dialogue, continuous playback, daily use | Unstable network environment |
+
+### ⚠️ Important Notes
+
+> **Playback Behavior Characteristics**
+> - **Each call interrupts previous playback**: New `playTtsAudioFile()` calls immediately stop current audio playback
+> - **Non-append playback mode**: Unlike streaming TTS's automatic append, audio file playback uses replacement mode
+
+> **Timeout Duration Setting**
+> - Default timeout is 15 seconds, mainly for network download phase
+> - Playback phase after audio download completes is not limited by this timeout
+> - Recommend setting timeout reasonably based on network environment and text length
+
+> **Playback Interruption Mechanism**
+> - User voice input automatically interrupts current playback, triggering `onPlaybackInterrupted` callback
+> - Calling `stopTtsAudioFile()` forcibly stops playback
+> - New `playTtsAudioFile()` call interrupts current audio playback
+> - When playback is interrupted, `onPlaybackCompleted` callback is not triggered
+
+> **Caption Display Control**
+> - `showCaption` parameter controls whether to display text in system subtitle bar
+> - Setting to `false` enables silent playback, suitable for background sound effects etc.
+
+## 4.8 Large Language Model (LLM) Interface
+
+### Feature Introduction
+Provides direct calling capability for large language models (LLM), supporting complex dialogue scenarios and customized intelligent interaction requirements.
+
+> **💡 Usage Guide**: If you're unsure about LLM interface use cases, it's recommended to first check the FAQ document [What to do when persona and PageAgent cannot meet business requirements](../../FAQ.md#what-to-do-when-persona-and-pageagent-cannot-meet-business-requirements), which includes detailed usage examples and best practices.
+
+### API Interface
+
+**Synchronous Calling Interface**
+
+```Kotlin
+import com.ainirobot.agent.AgentCore
+import com.ainirobot.agent.assit.LLMResponse
+import com.ainirobot.agent.base.llm.LLMConfig
+import com.ainirobot.agent.base.llm.LLMMessage
+
+/**
+  * Large language model (LLM) interface, synchronous calling
+  * Note: This interface must be called in a coroutine
   *
-  *  @param  messages 大模型chat message
-  *  @param  config 大模型配置
-  *  @param  timeoutMillis 超时时间，单位毫秒
+  *  @param  messages LLM chat messages
+  *  @param  config LLM configuration
+  *  @param  timeoutMillis Timeout duration in milliseconds
+  *  @param  isStreaming Whether streaming output, true for streaming output (automatically calls TTS streaming playback), false for non-streaming output (returns execution result)
   *
-  *  @return  返回1表示成功，返回0表示失败
+  *  @return  TaskResult<LLMResponse> Task execution result, status=1 indicates success, status=2 indicates failure
   */
 suspend fun llmSync(
     messages: List<LLMMessage>,
     config: LLMConfig,
-    timeoutMillis: Long = 180000
-): Int {
-    return this.appAgent?.api?.llmSync(messages, config, timeoutMillis) ?: 0
-}
+    timeoutMillis: Long = 180000,
+    isStreaming: Boolean = true
+): TaskResult<LLMResponse>
 ```
+
+**Asynchronous Calling Interface**
 
 ```kotlin
 import com.ainirobot.agent.AgentCore
+import com.ainirobot.agent.base.llm.LLMConfig
+import com.ainirobot.agent.base.llm.LLMMessage
 
 /**
-  * 大模型接口，异步调用，返回状态通过TaskCallback回调
+  * Large language model (LLM) interface, asynchronous calling. Execution status returned via LLMCallback
   *
-  *  @param  messages 大模型chat message
-  *  @param  config 大模型配置
-  *  @param  timeoutMillis 超时时间，单位毫秒
-  *  @param  callback 回调，status=1表示播放成功，status=2表示播放失败
+  *  @param  messages LLM chat messages
+  *  @param  config LLM configuration
+  *  @param  timeoutMillis Timeout duration in milliseconds
+  *  @param  isStreaming Whether streaming output, true for streaming output (automatically calls TTS streaming playback), false for non-streaming output (returns execution result)
+  *  @param  callback Callback, status=1 indicates playback successful, status=2 indicates playback failed
   */
 fun llm(
     messages: List<LLMMessage>,
     config: LLMConfig,
     timeoutMillis: Long = 180000,
-    callback: TaskCallback? = null
-) {
-    this.appAgent?.api?.llm(messages, config, timeoutMillis, callback)
-}
+    isStreaming: Boolean = true,
+    callback: LLMCallback? = null
+)
 ```
 
-6. ## Query By Text
+## 4.9 Text Commands
+
+### Feature Introduction
+Simulate user voice input through text form to trigger large language model planning and Action execution, enabling programmatic intelligent interaction.
+
+### Application Scenarios
+- When user manually clicks a button, equivalent to voice input (such as clicking "confirm" button equivalent to saying "confirm")
+- Proactively initiate interaction when application launches
+- Automated testing and debugging
+
+### API Interface
 
 ```Kotlin
 import com.ainirobot.agent.AgentCore
 
 /**
-  * 通过文本形式的用户问题触发大模型规划Action
+  * Trigger large language model planning of Actions through user question text
   *
-  *  @param  text 用户问题的文本，如：今天天气怎么样？
+  *  @param  text User question text, such as: How's the weather today?
   */
-fun query(text: String) {
-    this.appAgent?.api?.query(text)
-}
+fun query(text: String)
 ```
 
-7. ## 主动follow-up
+## 4.10 Perception Information Reporting
+
+### Feature Introduction
+Upload application scene perception information to help AgentOS better understand current page content and user context, improving the accuracy and relevance of interaction.
+
+### Application Scenarios
+- Report displayed information lists to enable voice references (e.g., "I want to see number 3")
+- Report current task progress and status
+- Report page UI component hierarchy and structure
+
+### API Interface
 
 ```Kotlin
 import com.ainirobot.agent.AgentCore
 
 /**
-  * 让大模型根据当前场景，自动触发后续动作，如一句引导用户的话术
-  *
-  *  @param  prompt 后续动作的提示词，可选，有特殊需求或默认回答不满足需求时添加 
-  */
-fun followUp(prompt: String = "") {
-    this.appAgent?.api?.followUp(prompt)
-}
+ * Upload interface information to help large language model understand current page content and UI state
+ *
+ * @param interfaceInfo Interface information description (page content and UI component hierarchy), preferably with hierarchy structure but not excessively long
+ */
+fun uploadInterfaceInfo(interfaceInfo: String)
 ```
 
-8. ## 页面信息上报
+> **⚠️ Important Tip**: `uploadInterfaceInfo` uses **overwrite update** mechanism
+> - Each call **completely replaces** previously uploaded information
+> - To retain partial information, include the complete page information in the new call
+> - Recommend re-uploading complete page status information when page content changes
+
+## 4.11 Conversation History Management
+
+### Feature Introduction
+Clear large language model conversation context records to prevent historical dialogue from interfering with current interaction, ensuring accuracy and relevance of dialogue.
+
+### Application Scenarios
+- When application resets conversation content
+- When user switches to new topic
+- When needing to start completely new dialogue scenario
+
+### API Interface
 
 ```Kotlin
 import com.ainirobot.agent.AgentCore
 
 /**
-  * 上传页面信息，方便大模型理解当前页面的内容
-  *
-  *  @param  interfaceInfo 页面信息描述，最好带有页面组件的层次结构，但内容不宜过长
-  */
-fun uploadInterfaceInfo(interfaceInfo: String) {
-    this.appAgent?.api?.uploadInterfaceInfo(interfaceInfo)
-}
+ * Clear large language model conversation context records
+ */
+fun clearContext()
 ```
 
-9. ## 清空对话历史
+## 4.12 Disable Large Language Model Planning
+
+### Feature Introduction
+Control whether to disable large language model planning functionality. By default, each user interaction with AgentOS goes through large language model planning. When set to `true`, large language model planning is disabled, and users can handle large language model calls themselves.
+
+### API Interface
 
 ```Kotlin
 import com.ainirobot.agent.AgentCore
 
 /**
-  * 清空大模型对话上下文记录
-  */
-fun   clearContext()  {
-      this.appAgent?.api?.clearContext()
-}
+ * Whether to disable large language model planning. When disabled, no more large language model planning occurs.
+ * true means disabled, default is false.
+ * Users can set to true if they need to handle large language model calls themselves
+ */
+var isDisablePlan: Boolean
 ```
 
-# 进阶功能
+## 4.13 Application Switching
 
-## 注解实现Action动态注册
+### Feature Introduction
+Provides quick switching to Xiaobao application functionality, enabling seamless application switching.
 
-> 如果觉得手动注册麻烦，那么我们还提供了更简单便捷的注册方式，只需要在Application、Activity或Fragment中添加成员方法并添加注解，那么SDK会在运行时自动识别这些Action并注册
+### API Interface
 
-### App级动态注册
+```Kotlin
+import com.ainirobot.agent.AgentCore
+import android.content.Context
 
-在应用内使用注解方式自动注册时，需要使用 **AppAgent** (Application)构造方法，然后在**Application**中创建 **成员方法** ，最后添加注解即可
+/**
+ * Switch to Xiaobao application
+ *
+ * @param context Context for launching Activity
+ */
+fun jumpToXiaobao(context: Context)
+```
+
+> **Note**: Ensure Xiaobao application is installed before calling this method. If not installed, corresponding tips will be output in logs.
+
+## 4.14 System Action Status Listening
+
+### Feature Introduction
+Listen to execution status changes of [system built-in Actions](#24-system-built-in-actions), excluding custom Actions.
+
+### API Interface
+
+```Kotlin
+fun setOnActionStatusChangedListener(listener: OnActionStatusChangedListener): Agent
+```
+
+### Usage Example
+
+```Kotlin
+PageAgent(this)
+    .setOnActionStatusChangedListener { actionName, status, message ->
+        println("System Action: $actionName, Status: $status, Message: $message")
+        false // Return false indicates not consuming event, continue passing to other listeners (AppAgent)
+    }
+```
+
+**Status Types**: `succeeded`(success)、`failed`(failure)、`timeout`(timeout)、`interrupted`(interrupted)、`recalled`(recalled)、`unsupported`(unsupported)
+
+> **Note**: Callback executes on a worker thread.
+
+## 4.15 Wake Word Mode Control
+
+### Feature Introduction
+
+Wake word mode is a new voice interaction control feature in AgentOS SDK v0.2.2, providing more flexible listening trigger mechanisms. Through three core interfaces, developers can precisely control wake word-based voice interaction behavior, adapting to interaction requirements in different scenarios.
+
+### Core Interfaces
+
+#### enableWakeupMode()
+
+Enable or disable wake word mode.
+
+**API Interface**
 
 ```kotlin
+import com.ainirobot.agent.AgentCore
+
+/**
+ * Enable/disable wake word mode
+ *
+ * @param enabled true indicates enabling wake word mode, false indicates disabling (default)
+ */
+AgentCore.enableWakeupMode(enabled: Boolean)
+```
+
+**Behavior Explanation**
+
+- **enabled = true (Enable wake word mode)**
+  - Must wake up through wake word to start voice recognition
+  - Avoids false triggering
+
+- **enabled = false (Disable wake word mode, default)**
+  - Voice recognition starts when VAD detects speech
+  - No wake word required
+
+**Usage Example**
+
+```kotlin
+// Enable wake word mode
+AgentCore.enableWakeupMode(true)
+
+// Disable wake word mode
+AgentCore.enableWakeupMode(false)
+```
+
+#### setWakeupVadTimeout()
+
+Set Voice Activity Detection (VAD) end listening timeout duration.
+
+**API Interface**
+
+```kotlin
+import com.ainirobot.agent.AgentCore
+
+/**
+ * Set Voice Activity Detection (VAD) end listening timeout duration
+ *
+ * @param timeout Timeout duration in milliseconds, range: 1000ms ~ 10000ms, default 3000ms
+ */
+AgentCore.setWakeupVadTimeout(timeout: Long)
+```
+
+**Function Explanation**
+
+Controls continued listening duration after user finishes speaking (when VAD detects speech end). If user continues speaking within the timeout window, no additional wake word is required.
+
+**Usage Example**
+
+```kotlin
+// Set VAD timeout to 5 seconds
+AgentCore.setWakeupVadTimeout(5000L)
+```
+
+#### setWakeupQuestionTimeout()
+
+Set listening window duration after AI asks questions.
+
+**API Interface**
+
+```kotlin
+import com.ainirobot.agent.AgentCore
+
+/**
+ * Set listening window duration after AI asks questions
+ *
+ * @param timeout Timeout duration in milliseconds, range: 3000ms ~ 30000ms, default 10000ms
+ */
+AgentCore.setWakeupQuestionTimeout(timeout: Long)
+```
+
+**Function Explanation**
+
+When AI speech ends with "?", automatically opens listening window, allowing users to respond directly without wake word.
+
+**Trigger Rules**
+
+- AI speech ends with Chinese question mark "?"
+- 1.5-second delay for confirmation to avoid false triggering
+- Examples:
+  - ✅ AI: "What would you like to drink?" → Trigger listening
+  - ❌ AI: "It's very cold today. It's raining outside." → No trigger
+
+**Usage Example**
+
+```kotlin
+// Set question listening window to 15 seconds
+AgentCore.setWakeupQuestionTimeout(15000L)
+```
+
+### Usage Explanation
+
+Three interfaces work together to control wake word mode:
+
+1. **enableWakeupMode()** - Enable/disable wake word mode (main switch)
+2. **setWakeupVadTimeout()** - VAD timeout duration (continued listening duration after user speech)
+3. **setWakeupQuestionTimeout()** - Question listening window duration (automatic listening duration after AI asks questions)
+
+**Sample Code**
+
+```kotlin
+// Enable wake word mode
+AgentCore.enableWakeupMode(true)
+AgentCore.setWakeupVadTimeout(5000L)
+AgentCore.setWakeupQuestionTimeout(15000L)
+
+// Disable wake word mode
+AgentCore.enableWakeupMode(false)
+```
+
+# 5. Advanced Features
+
+## 5.1 Annotation-Driven Action Registration
+
+### Feature Introduction
+For developers wishing to simplify Action registration process, AgentOS SDK provides annotation-based automatic registration mechanism. By adding annotations to methods, the SDK automatically identifies and registers these Actions at runtime, greatly simplifying the development process.
+
+### 5.1.1 App-Level Dynamic Registration
+
+When using annotations in Application for automatic Action registration, you need to use the `AppAgent(Application)` constructor, then create member methods in the Application and add corresponding annotations.
+
+**Sample Code**
+
+```kotlin
+import android.app.Application
+import android.os.Bundle
+import com.ainirobot.agent.AgentCore
+import com.ainirobot.agent.AppAgent
+import com.ainirobot.agent.action.Action
+import com.ainirobot.agent.annotations.ActionParameter
+import com.ainirobot.agent.annotations.AgentAction
+import com.ainirobot.agent.coroutine.AOCoroutineScope
+import kotlinx.coroutines.launch
+
 class MainApplication : Application() {
 
     override fun onCreate() {
         super.onCreate()
 
-        // AppAgent初始化
-        object : AppAgent(this@MainApplication) {
+        // AppAgent initialization
+        object : AppAgent(this) {
 
             override fun onCreate() {
-                // 设定角色人设
-                setPersona("你叫豹姐姐，是一位聪明、亲切又略带俏皮的虚拟助手。")
-                // 设定角色目标
-                setObjective("通过自然的对话和合适的情绪表达，让用户感受到理解、陪伴与情感共鸣，从而提升交流的舒适感和信任感。")
+                // Set role persona
+                setPersona("Your name is Leopard Sister, a smart, warm, and slightly witty virtual assistant.")
+                // Set role objective
+                setObjective("Through natural conversation and appropriate emotional expression, make users feel understood, accompanied, and emotionally resonant, thereby enhancing communication comfort and trust.")
             }
 
             override fun onExecuteAction(
                 action: Action,
                 params: Bundle?
             ): Boolean {
-                // 在此处处理静态注册的action，如果你不需要处理，请返回false，如果要自行处理且不需要后续处理，则返回true
-                // 默认返回false
+                // Handle statically registered actions here. Return false if you don't need to handle them, or return true if you handle them and don't need further processing.
+                // Default returns false
                 return false
             }
         }
     }
 
     @AgentAction(
-         name =  "com.agent.demo.SHOW_SMILE_FACE",
-         displayName =  "笑",
-         desc =  "响应用户的开心、满意或正面情绪"
-     )
-      private   fun   showSmileFace(
-         action:  Action,
-          @ActionParameter(
-             name =  "sentence",
-             desc =  "回复给用户的话"
-         )
-         sentence:  String
-     ):  Boolean  {
-         AOCoroutineScope.launch  {
-              // 播放给用户说的话
-             AgentCore.ttsSync(sentence)
-              // 播放完成后，及时上报Action的执行状态
-             action.notify(isTriggerFollowUp =  false)
-         }
-          return   true
-     }
+        name = "com.agent.demo.SHOW_SMILE_FACE",
+        displayName = "Smile",
+        desc = "Respond to user happiness, satisfaction, or positive emotions"
+    )
+    private fun showSmileFace(
+        action: Action,
+        @ActionParameter(
+            name = "sentence",
+            desc = "Response to say to the user"
+        )
+        sentence: String
+    ): Boolean {
+        AOCoroutineScope.launch {
+            // Play response to user
+            AgentCore.ttsSync(sentence)
+            // Report Action execution status after playback completes
+            action.notify(isTriggerFollowUp = false)
+        }
+        return true
+    }
 }
 ```
 
-### Page级动态注册
+### 5.1.2 Page-Level Dynamic Registration
 
-在页面内部使用注解方式自动注册时，需要使用 **PageAgent** (Activity)或 **PageAgent** (Fragment)构造方法，然后在对应的**Activity**或**Fragment**中创建 **成员方法** ，最后添加注解即可
+When using annotations in a page to automatically register Actions, you need to use the `PageAgent(Activity)` or `PageAgent(Fragment)` constructor, then create member methods in the corresponding Activity or Fragment and add annotations.
+
+**Sample Code**
 
 ```kotlin
+import android.os.Bundle
+import androidx.appcompat.app.AppCompatActivity
+import com.ainirobot.agent.AgentCore
+import com.ainirobot.agent.PageAgent
+import com.ainirobot.agent.action.Action
+import com.ainirobot.agent.annotations.ActionParameter
+import com.ainirobot.agent.annotations.AgentAction
+import com.ainirobot.agent.coroutine.AOCoroutineScope
+import kotlinx.coroutines.launch
+
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
         setContentView(R.layout.activity_main)
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) {  v, insets ->
-              val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
-            insets
-        }
 
-          // PageAgent初始化
+        // PageAgent initialization
         PageAgent(this)
     }
 
     @AgentAction(
-         name =  "com.agent.demo.SHOW_SMILE_FACE",
-         displayName =  "笑",
-         desc =  "响应用户的开心、满意或正面情绪"
-     )
-      private   fun   showSmileFace(
-         action:  Action,
-          @ActionParameter(
-             name =  "sentence",
-             desc =  "回复给用户的话"
-         )
-         sentence:  String
-     ):  Boolean  {
-         AOCoroutineScope.launch  {
-              // 播放给用户说的话
-             AgentCore.ttsSync(sentence)
-              // 播放完成后，及时上报Action的执行状态
-             action.notify(isTriggerFollowUp =  false)
-         }
-          return   true
-     }
+        name = "com.agent.demo.SHOW_SMILE_FACE",
+        displayName = "Smile",
+        desc = "Respond to user happiness, satisfaction, or positive emotions"
+    )
+    private fun showSmileFace(
+        action: Action,
+        @ActionParameter(
+            name = "sentence",
+            desc = "Response to say to the user"
+        )
+        sentence: String
+    ): Boolean {
+        AOCoroutineScope.launch {
+            // Play response to user
+            AgentCore.ttsSync(sentence)
+            // Report Action execution status after playback completes
+            action.notify(isTriggerFollowUp = false)
+        }
+        return true
+    }
 }
 ```
 
-### 注解类说明
+### 5.1.3 Annotation Class Description
 
-> 注解类有两个：**AgentAction**和**ActionParameter**
+AgentOS SDK provides two core annotations: `@AgentAction` and `@ActionParameter`.
 
-#### **AgentAction**
+#### @AgentAction Annotation
 
-AgentAction是作用于**成员方法**上，用来标记该方法是一个Action
+`@AgentAction` is used to mark methods as Action handlers, defining basic information about Actions.
 
 ```kotlin
 package com.ainirobot.agent.annotations
@@ -978,23 +2174,23 @@ package com.ainirobot.agent.annotations
 @Retention(AnnotationRetention.RUNTIME)
 annotation class AgentAction(
     /**
-      * Action的名称
+      * Action name
       */
       val name: String,
     /**
-      * Action的描述
+      * Action description
       */
       val desc: String,
     /**
-      * Action的显示名称
+      * Action display name
       */
       val displayName: String
 )
 ```
 
-#### **ActionParameter**
+#### @ActionParameter Annotation
 
-ActionParameter是作用于**方法参数**上，用来标记Action的参数
+`@ActionParameter` is used to mark method parameters, defining Action parameter information.
 
 ```kotlin
 package com.ainirobot.agent.annotations
@@ -1003,43 +2199,180 @@ package com.ainirobot.agent.annotations
 @Retention(AnnotationRetention.RUNTIME)
 annotation class ActionParameter(
     /**
-      * 参数名
+      * Parameter name
       */
       val name: String,
     /**
-      * 参数描述
+      * Parameter description
       */
       val desc: String,
     /**
-      * 是否是必要参数
+      * Whether this is a required parameter
       */
       val required: Boolean = true,
     /**
-      * 限制参数的value只能从指定的值中选择
+      * Restrict parameter value to only select from specified values
       */
       val enumValues: Array<String> = []
 )
 ```
 
-# 项目源码
+# 6. Action Design Best Practices
 
-#### 空项目
+> **⚠️ Important Reminder**: Action design quality directly affects the large language model's understanding and execution. Poor design may result in features not triggering correctly, parameter parsing errors, poor user experience, etc. Please strictly follow the best practice principles in this section.
 
-https://github.com/orionagent/AgentSDKSampleEmpty
+In actual development, many developers fall into common pitfalls when designing Actions. The following uses comparative examples to illustrate Action design best practices.
 
-#### 示例项目
+## 6.1 Common Design Pitfalls
 
-https://github.com/orionagent/AgentSDKSample
+**❌ Incorrect Example: Action with Overly Complex Functionality**
 
-# 注意事项
+```kotlin
+Action(
+    name = "com.service.robot.HANDLE_TASK",
+    displayName = "Handle Task",
+    desc = "Intelligent service robot assistant that can perform multiple service tasks, including but not limited to information broadcasting, task reminders, item delivery and other various services. Responds flexibly based on user needs.",
+    parameters = listOf(
+        Parameter("task_type", ParameterType.STRING, "Task type", true),
+        Parameter("target_location", ParameterType.STRING, "Target location", false),
+        Parameter("content", ParameterType.STRING, "Task content", false),
+        Parameter("items", ParameterType.STRING, "Related items", false),
+        Parameter("schedule_time", ParameterType.STRING, "Execution time", false)
+    )
+)
+```
 
-1. 一个App中只能有一个AppAgent实例
-2. 每个页面可以有一个PageAgent实例
+**Problem Analysis:**
+- Functionality responsibilities unclear, one Action handles multiple tasks
+- Too many parameters with vague meanings
+- Description too broad, hard for large language model to accurately understand use cases
+- Lack of parameter enumeration restrictions, easily producing uncontrollable inputs
 
-# 版本信息
+## 6.2 Best Practice Principles
 
-当前SDK版本: 0.2.2
+Remember three core points when writing `Actions`:
 
-# 技术支持
+**1. Single Responsibility Principle: One Action does one type of task**
+- Each Action should be responsible for one clear function, avoid mixing multiple functions
+- Avoid differentiating business logic through parameters
+- If you find needing to judge a `type` parameter to decide what to actually do, the design is too generalized and should be split
+- Action names and descriptions should be accurate and detailed, letting the large language model clearly understand functional boundaries and use scenarios
 
-如有任何问题，请联系技术支持团队。
+**2. Precise Parameter Design: Each parameter must have clear type, description, and whether required, plus enumeration restrictions (if applicable)**
+- Moderate parameter count (recommend 1-3)
+- Each parameter has clear business meaning and accurate description
+- Use ParameterType.ENUM and enumValues when needing to restrict value range, avoiding free strings causing confusion
+- Reasonably set required and optional parameters
+
+**3. Clear Slot Semantics: Clear semantics and validation mechanisms for potential slot positions from user input**
+- Analyze and design key information slots user might provide (such as room number, task type, destination, etc.)
+- Define clear semantic scope and value rules for each slot
+- Ensure slot information can be accurately extracted and validated, avoiding ambiguous parsing
+
+## 6.3 Correct Example: Breaking Down Into Multiple Specialized Actions
+
+**✅ Example 1: Leading to Destination Action (1 parameter)**
+
+```kotlin
+Action(
+    name = "com.service.robot.LEADING_TO_DESTINATION",
+    displayName = "Lead to Destination",
+    desc = "Robot leads user to specified destination, providing route guidance and escort service",
+    parameters = listOf(
+        Parameter(
+            name = "destination",
+            type = ParameterType.STRING,
+            desc = "Destination name, such as restroom, elevator, service desk, meeting room, etc.",
+            required = true
+        )
+    )
+)
+```
+
+**✅ Example 2: Play Music Action (2 parameters)**
+
+```kotlin
+Action(
+    name = "com.entertainment.robot.PLAY_MUSIC",
+    displayName = "Play Music",
+    desc = "Play specified song by specified artist",
+    parameters = listOf(
+        Parameter(
+            name = "song_name",
+            type = ParameterType.STRING,
+            desc = "Song name",
+            required = false
+        ),
+        Parameter(
+            name = "artist_name",
+            type = ParameterType.STRING,
+            desc = "Artist name",
+            required = false
+        )
+    )
+)
+```
+
+**✅ Example 3: Adjust Air Conditioner Action (1 parameter, using enumeration type)**
+
+```kotlin
+Action(
+    name = "com.smart.home.ADJUST_AIRCON",
+    displayName = "Adjust Air Conditioner",
+    desc = "Adjust air conditioner operating mode",
+    parameters = listOf(
+        Parameter(
+            name = "mode",
+            type = ParameterType.ENUM,
+            desc = "Air conditioner mode",
+            required = true,
+            enumValues = listOf("Cooling", "Heating", "Dehumidification", "Ventilation", "Auto")
+        )
+    )
+)
+```
+
+## 6.4 Design Checklist
+
+When designing Actions, please check the following points:
+
+- [ ] **Single Function**: Does the Action only handle one clear business function?
+- [ ] **Streamlined Parameters**: Is parameter count reasonable (recommend 1-3)?
+- [ ] **Accurate Description**: Are Action and parameter descriptions concrete and specific?
+- [ ] **Enumeration Restrictions**: Do parameters needing value range restrictions use ParameterType.ENUM?
+- [ ] **Reasonable Required**: Is the required parameter setting consistent with business logic?
+- [ ] **Naming Convention**: Do you follow naming specification constraints?
+
+> **🔥 Core Reminder**: If you find an Action needing to judge different business logic through parameters, this usually means the design is too complex and should be split into multiple specialized Actions. Good Action design is the key foundation for successful AgentOS applications!
+
+# 7. Project Resources
+
+## 7.1 Sample Projects
+
+### Template Project
+Provides basic project structure and configuration, suitable for quick start of AgentOS SDK development.
+
+**Project Address**: [AgentSDKSampleEmpty](https://github.com/orionagent/AgentSDKSampleEmpty)
+
+### Complete Sample Project
+Contains multiple functionality examples and best practices, showcasing complete AgentOS SDK capabilities.
+
+**Project Address**: [AgentSDKSample](https://github.com/orionagent/AgentSDKSample)
+
+## 7.2 Development Resources
+
+### Reception Backend
+Backend system for applying for AppId and managing Agent applications.
+
+[Visit Reception Backend](https://jiedai.ainirobot.com/web/portal/#)
+
+
+# 8. Frequently Asked Questions (FAQ)
+
+When encountering problems during AgentOS SDK development, it's recommended to first check the FAQ document, which contains solutions for common problems including development environment configuration, voice interaction troubleshooting, debugging tool usage, and more.
+
+**📋 [View Complete FAQ Document](../../FAQ.md)**
+
+# 9. Technical Support
+
+For any questions, please contact the technical support team.

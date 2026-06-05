@@ -1,471 +1,471 @@
-# AgentOS SDK v0.3.5 API 参考文档
+# AgentOS SDK v0.3.5 API description
 
-> **版本信息**  
-> 当前SDK版本: 0.3.5  
-> 依赖: `implementation 'com.orionstar.agent:sdk:0.3.5-SNAPSHOT'`
+> **Version Information**  
+> Current SDK Version: 0.3.5
+> Dependency: `implementation 'com.orionstar.agent:sdk:0.3.5-SNAPSHOT'`
 
-## 📋 目录
+## 📋 Table of Contents
 
-### 核心类
-- [AppAgent](#appagent) - 应用级Agent，管理全局Action和应用生命周期
-- [PageAgent](#pageagent) - 页面级Agent，管理页面Action和页面生命周期
-- [AgentCore](#agentcore) - Agent核心功能类，提供静态方法
-- [Action](#action) - Action定义类，封装动作的所有属性
-- [ActionExecutor](#actionexecutor) - Action执行器接口
-- [Actions](#actions) - 系统内置Action常量类
-- [Parameter](#parameter) - Action参数定义类
-- [ParameterType](#parametertype) - 参数类型枚举
+### Core Classes
+- [AppAgent](#appagent) - App-level Agent，descriptionActiondescription
+- [PageAgent](#pageagent) - Page-level Agent，descriptionActiondescription
+- [AgentCore](#agentcore) - Agent core utility class，descriptionMethods
+- [Action](#action) - Action definition class，descriptionProperties
+- [ActionExecutor](#actionexecutor) - Action executor interface
+- [Actions](#actions) - Built-in Action constants
+- [Parameter](#parameter) - Action parameter class
+- [ParameterType](#parametertype) - parameter type enum
 
-### 基础类
-- [Agent](#agent) - Agent基础类，AppAgent和PageAgent的父类
+### Base Classes
+- [Agent](#agent) - Agent base class，AppAgentdescriptionPageAgentdescription
 
-### 监听器接口
-- [OnTranscribeListener](#ontranscribelistener) - ASR和TTS结果监听接口
-- [OnAgentStatusChangedListener](#onagentstatus-changedlistener) - Agent状态变化监听接口
-- [OnActionStatusChangedListener](#onactionstatuschangedlistener) - 系统Action状态变化监听接口
-- [TTSCallback](#ttscallback) - TTS播放回调接口
-- [LLMCallback](#llmcallback) - 大模型调用回调接口
-- [ITaskCallback](#itaskcallback) - 任务执行回调接口
+### Listener Interfaces
+- [OnTranscribeListener](#ontranscribelistener) - ASRdescriptionTTSdescriptionListen to description
+- [OnAgentStatusChangedListener](#onagentstatus-changedlistener) - Agentstatus change listener interface
+- [OnActionStatusChangedListener](#onactionstatuschangedlistener) - descriptionActionstatus change listener interface
+- [TTSCallback](#ttscallback) - TTSdescriptioncallbackdescription
+- [LLMCallback](#llmcallback) - LLMdescriptioncallbackdescription
+- [ITaskCallback](#itaskcallback) - task callback interface
 
-### 数据类
-- [Transcription](#transcription) - 语音转录结果类
-- [LLMMessage](#llmmessage) - 大模型消息类
-- [LLMConfig](#llmconfig) - 大模型配置类
-- [LLMResponse](#llmresponse) - 大模型响应结果类
-- [TokenCost](#tokencost) - Token消耗统计类
-- [ActionResult](#actionresult) - Action执行结果类
-- [TaskResult](#taskresult) - 任务执行结果类
+### Data Classes
+- [Transcription](#transcription) - speech transcription result class
+- [LLMMessage](#llmmessage) - LLM message class
+- [LLMConfig](#llmconfig) - LLM configuration class
+- [LLMResponse](#llmresponse) - LLM response class
+- [TokenCost](#tokencost) - token usage statistics class
+- [ActionResult](#actionresult) - Action execution result class
+- [TaskResult](#taskresult) - task execution result class
 
-### 枚举类
-- [Role](#role) - 消息角色枚举
-- [ActionStatus](#actionstatus) - Action执行状态枚举
+### Enum Classes
+- [Role](#role) - message role enum
+- [ActionStatus](#actionstatus) - Action status enum
 
-### 注解类
-- [AgentAction](#agentaction) - Action注解，用于标记Action方法
-- [ActionParameter](#actionparameter) - 参数注解，用于标记Action参数
+### Annotation Classes
+- [AgentAction](#agentaction) - Action annotation for marking Action methods
+- [ActionParameter](#actionparameter) - parameter annotation for marking Action parameters
 
-### 工具类
-- [AOCoroutineScope](#aocoroutinescope) - Agent协程作用域
+### Utility Classes
+- [AOCoroutineScope](#aocoroutinescope) - Agent coroutine scope
 
 ---
 
-## 核心类
+## Core Classes
 
 ### AppAgent
 
-应用级Agent，管理整个应用的Agent生命周期和全局Action。一个App中只能有一个AppAgent实例。
+App-level Agent，descriptionAgentdescriptionAction。Only one AppAgent instance can exist in an app。
 
-**包路径：** `com.ainirobot.agent.AppAgent`
+**Package：** `com.ainirobot.agent.AppAgent`
 
-**构造函数：**
+**Constructors:**
 ```kotlin
 AppAgent(context: Application)
 ```
 
-**参数说明：**
-- `context: Application` - Android应用程序实例
+**Parameters:**
+- `context: Application` - Androidapplication instance
 
-**核心方法：**
+**Core Methods:**
 
 #### onCreate()
 ```kotlin
 abstract fun onCreate()
 ```
-AppAgent初始化回调，用于配置Agent的基本属性和动态注册Action。
+AppAgentdescriptioncallback，descriptionAgentdescriptionPropertiesdescriptionDynamic registrationAction。
 
 #### onExecuteAction()
 ```kotlin
 abstract fun onExecuteAction(action: Action, params: Bundle?): Boolean
 ```
-处理静态注册的Action执行。只有在actionRegistry.json中静态注册的Action才会触发此方法。
+descriptionStatic registrationdescriptionActionexecute。descriptionactionRegistry.jsondescriptionStatic registrationdescriptionActiondescriptionMethods。
 
-**参数说明：**
-- `action: Action` - 要执行的Action对象
-- `params: Bundle?` - Action执行参数，可为空
+**Parameters:**
+- `action: Action` - Action object to execute
+- `params: Bundle?` - Action execution parameters, nullable
 
-**返回值：**
-- `Boolean` - true表示已处理完成，false表示不需要自行处理
+**Return Value:**
+- `Boolean` - truedescription，falsedescription
 
 #### setPersona()
 ```kotlin
 override fun setPersona(persona: String): AppAgent
 ```
-设置AI助手的角色人设。
+Set AIdescriptionpersona。
 
-**参数说明：**
-- `persona: String` - 角色人设描述
+**Parameters:**
+- `persona: String` - role persona description
 
-**返回值：**
-- `AppAgent` - 返回自身，支持链式调用
+**Return Value:**
+- `AppAgent` - description，description
 
 #### setStyle()
 ```kotlin
 override fun setStyle(style: String): AppAgent
 ```
-设置对话风格。
+Set conversation style。
 
-**参数说明：**
-- `style: String` - 对话风格描述
+**Parameters:**
+- `style: String` - conversation style description
 
-**返回值：**
-- `AppAgent` - 返回自身，支持链式调用
+**Return Value:**
+- `AppAgent` - description，description
 
 #### setObjective()
 ```kotlin
 override fun setObjective(objective: String): AppAgent
 ```
-设置任务目标。
+Set description。
 
-**参数说明：**
-- `objective: String` - 任务目标描述
+**Parameters:**
+- `objective: String` - task objective description
 
-**返回值：**
-- `AppAgent` - 返回自身，支持链式调用
+**Return Value:**
+- `AppAgent` - description，description
 
 #### setOnAgentStatusChangedListener()
 ```kotlin
 override fun setOnAgentStatusChangedListener(listener: OnAgentStatusChangedListener): AppAgent
 ```
-设置Agent状态变化监听器。
+Set Agentstatus change listener。
 
-**参数说明：**
-- `listener: OnAgentStatusChangedListener` - 状态变化监听器
+**Parameters:**
+- `listener: OnAgentStatusChangedListener` - status change listener
 
-**返回值：**
-- `AppAgent` - 返回自身，支持链式调用
+**Return Value:**
+- `AppAgent` - description，description
 
 #### setOnTranscribeListener()
 ```kotlin
 override fun setOnTranscribeListener(listener: OnTranscribeListener): AppAgent
 ```
-设置ASR和TTS监听器。
+Set ASRdescriptionTTSListen to description。
 
-**参数说明：**
-- `listener: OnTranscribeListener` - 转录结果监听器
+**Parameters:**
+- `listener: OnTranscribeListener` - transcription listener
 
-**返回值：**
-- `AppAgent` - 返回自身，支持链式调用
+**Return Value:**
+- `AppAgent` - description，description
 
 #### setOnActionStatusChangedListener()
 ```kotlin
 override fun setOnActionStatusChangedListener(listener: OnActionStatusChangedListener): AppAgent
 ```
-设置系统Action状态变化监听器。
+Set descriptionActionstatus change listener。
 
-**参数说明：**
-- `listener: OnActionStatusChangedListener` - 系统Action状态变化监听器
+**Parameters:**
+- `listener: OnActionStatusChangedListener` - descriptionActionstatus change listener
 
-**返回值：**
-- `AppAgent` - 返回自身，支持链式调用
+**Return Value:**
+- `AppAgent` - description，description
 
 #### registerAction()
 ```kotlin
 override fun registerAction(action: Action): AppAgent
 override fun registerAction(actionName: String): AppAgent
 ```
-动态注册Action。
+Dynamic registrationAction。
 
-**参数说明：**
-- `action: Action` - 要注册的Action对象
-- `actionName: String` - 外部Action的名称（重载方法）
+**Parameters:**
+- `action: Action` - Action object to register
+- `actionName: String` - external Action name（descriptionMethods）
 
-**返回值：**
-- `AppAgent` - 返回自身，支持链式调用
+**Return Value:**
+- `AppAgent` - description，description
 
 #### registerActionNames()
 ```kotlin
 override fun registerActionNames(actionNames: List<String>): AppAgent
 ```
-批量注册外部Action名称。
+descriptionRegister descriptionActiondescription。
 
-**参数说明：**
-- `actionNames: List<String>` - 外部Action的名称列表
+**Parameters:**
+- `actionNames: List<String>` - external Action namedescription
 
-**返回值：**
-- `AppAgent` - 返回自身，支持链式调用
+**Return Value:**
+- `AppAgent` - description，description
 
 #### registerActions()
 ```kotlin
 override fun registerActions(actionList: List<Action>): AppAgent
 ```
-批量注册Action。
+descriptionRegister Action。
 
-**参数说明：**
-- `actionList: List<Action>` - Action列表
+**Parameters:**
+- `actionList: List<Action>` - Actiondescription
 
-**返回值：**
-- `AppAgent` - 返回自身，支持链式调用
+**Return Value:**
+- `AppAgent` - description，description
 
 ---
 
 ### PageAgent
 
-页面级Agent，管理单个页面的Agent功能和页面级Action。每个页面只能有一个PageAgent实例。
+Page-level Agent，descriptionAgentdescriptionAction。Each page can only have one PageAgent instance。
 
-**包路径：** `com.ainirobot.agent.PageAgent`
+**Package：** `com.ainirobot.agent.PageAgent`
 
-**构造函数：**
+**Constructors:**
 ```kotlin
 PageAgent(pageId: String)
 PageAgent(activity: Activity)
 PageAgent(fragment: Fragment)
 ```
 
-**参数说明：**
-- `pageId: String` - 页面唯一标识符（主构造函数）
-- `activity: Activity` - Android Activity实例
-- `fragment: Fragment` - Android Fragment实例
+**Parameters:**
+- `pageId: String` - description（descriptionConstructor）
+- `activity: Activity` - Android Activitydescription
+- `fragment: Fragment` - Android Fragmentdescription
 
-**核心方法：**
+**Core Methods:**
 
 #### setPersona()
 ```kotlin
 override fun setPersona(persona: String): PageAgent
 ```
-设置此Agent的角色人设。
+Set descriptionAgentdescriptionpersona。
 
-**参数说明：**
-- `persona: String` - 人设描述
+**Parameters:**
+- `persona: String` - personadescription
 
-**返回值：**
-- `PageAgent` - 返回自身，支持链式调用
+**Return Value:**
+- `PageAgent` - description，description
 
 #### setStyle()
 ```kotlin
 override fun setStyle(style: String): PageAgent
 ```
-设置此Agent的对话风格。
+Set descriptionAgentdescriptionconversation style。
 
-**参数说明：**
-- `style: String` - 对话风格
+**Parameters:**
+- `style: String` - conversation style
 
-**返回值：**
-- `PageAgent` - 返回自身，支持链式调用
+**Return Value:**
+- `PageAgent` - description，description
 
 #### setObjective()
 ```kotlin
 override fun setObjective(objective: String): PageAgent
 ```
-设置此Agent的规划目标。
+Set descriptionAgentdescriptionplanning objective。
 
-**参数说明：**
-- `objective: String` - 规划目标
+**Parameters:**
+- `objective: String` - planning objective
 
-**返回值：**
-- `PageAgent` - 返回自身，支持链式调用
+**Return Value:**
+- `PageAgent` - description，description
 
 #### setOnAgentStatusChangedListener()
 ```kotlin
 override fun setOnAgentStatusChangedListener(listener: OnAgentStatusChangedListener): PageAgent
 ```
-设置Agent状态变化监听器。
+Set Agentstatus change listener。
 
-**参数说明：**
-- `listener: OnAgentStatusChangedListener` - 状态变化监听器
+**Parameters:**
+- `listener: OnAgentStatusChangedListener` - status change listener
 
-**返回值：**
-- `PageAgent` - 返回自身，支持链式调用
+**Return Value:**
+- `PageAgent` - description，description
 
 #### setOnTranscribeListener()
 ```kotlin
 override fun setOnTranscribeListener(listener: OnTranscribeListener): PageAgent
 ```
-设置ASR和TTS监听器。
+Set ASRdescriptionTTSListen to description。
 
-**参数说明：**
-- `listener: OnTranscribeListener` - 转录结果监听器
+**Parameters:**
+- `listener: OnTranscribeListener` - transcription listener
 
-**返回值：**
-- `PageAgent` - 返回自身，支持链式调用
+**Return Value:**
+- `PageAgent` - description，description
 
 #### registerAction()
 ```kotlin
 override fun registerAction(action: Action): PageAgent
 override fun registerAction(actionName: String): PageAgent
 ```
-注册页面级Action。
+Register descriptionAction。
 
-**参数说明：**
-- `action: Action` - 要注册的Action对象
-- `actionName: String` - 外部Action的名称（重载方法）
+**Parameters:**
+- `action: Action` - Action object to register
+- `actionName: String` - external Action name（descriptionMethods）
 
-**返回值：**
-- `PageAgent` - 返回自身，支持链式调用
+**Return Value:**
+- `PageAgent` - description，description
 
 #### registerActionNames()
 ```kotlin
 override fun registerActionNames(actionNames: List<String>): PageAgent
 ```
-批量注册外部Action名称。
+descriptionRegister descriptionActiondescription。
 
-**参数说明：**
-- `actionNames: List<String>` - 外部Action的名称列表
+**Parameters:**
+- `actionNames: List<String>` - external Action namedescription
 
-**返回值：**
-- `PageAgent` - 返回自身，支持链式调用
+**Return Value:**
+- `PageAgent` - description，description
 
 #### registerActions()
 ```kotlin
 override fun registerActions(actionList: List<Action>): PageAgent
 ```
-批量注册Action。
+descriptionRegister Action。
 
-**参数说明：**
-- `actionList: List<Action>` - Action列表
+**Parameters:**
+- `actionList: List<Action>` - Actiondescription
 
-**返回值：**
-- `PageAgent` - 返回自身，支持链式调用
+**Return Value:**
+- `PageAgent` - description，description
 
 #### blockAction()
 ```kotlin
 fun blockAction(actionName: String): PageAgent
 ```
-排除指定的全局Action。
+descriptionAction。
 
-**参数说明：**
-- `actionName: String` - 要排除的Action名称
+**Parameters:**
+- `actionName: String` - descriptionActiondescription
 
-**返回值：**
-- `PageAgent` - 返回自身，支持链式调用
+**Return Value:**
+- `PageAgent` - description，description
 
 #### blockActions()
 ```kotlin
 fun blockActions(actionNames: List<String>): PageAgent
 ```
-排除多个全局Action。
+descriptionAction。
 
-**参数说明：**
-- `actionNames: List<String>` - 要排除的Action名称列表
+**Parameters:**
+- `actionNames: List<String>` - descriptionActionname list
 
-**返回值：**
-- `PageAgent` - 返回自身，支持链式调用
+**Return Value:**
+- `PageAgent` - description，description
 
 #### blockAllActions()
 ```kotlin
 fun blockAllActions(): PageAgent
 ```
-排除所有全局Action，仅当前页面注册的Action生效。
+descriptionAction，descriptionRegister descriptionActiondescription。
 
-**返回值：**
-- `PageAgent` - 返回自身，支持链式调用
+**Return Value:**
+- `PageAgent` - description，description
 
 #### setOnTranscribeListener()
 ```kotlin
 fun setOnTranscribeListener(listener: OnTranscribeListener): PageAgent
 ```
-设置ASR和TTS监听器。
+Set ASRdescriptionTTSListen to description。
 
-**参数说明：**
-- `listener: OnTranscribeListener` - 转录结果监听器
+**Parameters:**
+- `listener: OnTranscribeListener` - transcription listener
 
-**返回值：**
-- `PageAgent` - 返回自身，支持链式调用
+**Return Value:**
+- `PageAgent` - description，description
 
 #### setOnAgentStatusChangedListener()
 ```kotlin
 fun setOnAgentStatusChangedListener(listener: OnAgentStatusChangedListener): PageAgent
 ```
-设置Agent状态变化监听器。
+Set Agentstatus change listener。
 
-**参数说明：**
-- `listener: OnAgentStatusChangedListener` - 状态变化监听器
+**Parameters:**
+- `listener: OnAgentStatusChangedListener` - status change listener
 
-**返回值：**
-- `PageAgent` - 返回自身，支持链式调用
+**Return Value:**
+- `PageAgent` - description，description
 
 #### setOnActionStatusChangedListener()
 ```kotlin
 fun setOnActionStatusChangedListener(listener: OnActionStatusChangedListener): PageAgent
 ```
-设置系统Action状态变化监听器。
+Set descriptionActionstatus change listener。
 
-**参数说明：**
-- `listener: OnActionStatusChangedListener` - 系统Action状态变化监听器
+**Parameters:**
+- `listener: OnActionStatusChangedListener` - descriptionActionstatus change listener
 
-**返回值：**
-- `PageAgent` - 返回自身，支持链式调用
+**Return Value:**
+- `PageAgent` - description，description
 
 ---
 
 ### AgentCore
 
-Agent核心功能类，提供TTS播放、麦克风控制、大模型调用等静态方法。
+Agent core utility class，descriptionTTSdescription、description、LLMdescriptionMethods。
 
-**包路径：** `com.ainirobot.agent.AgentCore`
+**Package：** `com.ainirobot.agent.AgentCore`
 
-**属性：**
+**Properties:**
 
 #### appId
 ```kotlin
 val appId: String
 ```
-当前应用的appId，只读属性。
+descriptionappId，descriptionProperties。
 
 #### debugMode
 ```kotlin
 var debugMode: Boolean
 ```
-是否开启调试模式，默认开启。
+description，description。
 
 #### isMicrophoneMuted
 ```kotlin
 var isMicrophoneMuted: Boolean
 ```
-麦克风静音状态控制。
+description。
 
-**说明：**
-- `true` - 静音
-- `false` - 取消静音
+**Description：**
+- `true` - description
+- `false` - description
 
 #### isEnableVoiceBar
 ```kotlin
 var isEnableVoiceBar: Boolean
 ```
-是否开启语音条，默认开启。
+description，description。
 
 #### isEnableWakeFree
 ```kotlin
 var isEnableWakeFree: Boolean
 ```
-是否开启免唤醒功能，默认true。
+description，descriptiontrue。
 
 #### isDisablePlan
 ```kotlin
 var isDisablePlan: Boolean
 ```
-是否禁用大模型规划，禁用后不会再进行大模型规划，默认为false。
+descriptionLLMdescription，descriptionLLMdescription，descriptionfalse。
 
-**方法：**
+**Methods:**
 
 #### ttsSync()
 ```kotlin
 suspend fun ttsSync(text: String, timeoutMillis: Long = 180000): TaskResult<String>
 ```
-TTS同步播放接口，需在协程中调用。
+TTSdescription，description。
 
-**参数说明：**
-- `text: String` - 要播放的文本
-- `timeoutMillis: Long` - 超时时间，单位毫秒，默认180秒
+**Parameters:**
+- `text: String` - description
+- `timeoutMillis: Long` - timeout in milliseconds，description180description
 
-**返回值：**
-- `TaskResult<String>` - 任务执行结果，status=1表示成功，status=2表示失败
+**Return Value:**
+- `TaskResult<String>` - descriptionexecutedescription，status=1descriptionsuccess，status=2descriptionfailure
 
 #### tts()
 ```kotlin
 fun tts(text: String, timeoutMillis: Long = 180000, callback: TTSCallback? = null)
 ```
-TTS异步播放接口。
+TTSdescription。
 
-**参数说明：**
-- `text: String` - 要播放的文本
-- `timeoutMillis: Long` - 超时时间，单位毫秒，默认180秒
-- `callback: TTSCallback?` - 回调，可为空
+**Parameters:**
+- `text: String` - description
+- `timeoutMillis: Long` - timeout in milliseconds，description180description
+- `callback: TTSCallback?` - callback, nullable
 
 #### stopTTS()
 ```kotlin
 fun stopTTS()
 ```
-强制打断TTS播放。
+descriptionTTSdescription。
 
 #### llmSync()
 ```kotlin
@@ -476,16 +476,16 @@ suspend fun llmSync(
     isStreaming: Boolean = true
 ): TaskResult<LLMResponse>
 ```
-大模型同步调用接口，需在协程中调用。
+LLMdescription，description。
 
-**参数说明：**
-- `messages: List<LLMMessage>` - 大模型chat message列表
-- `config: LLMConfig` - 大模型配置
-- `timeoutMillis: Long` - 超时时间，单位毫秒，默认180秒
-- `isStreaming: Boolean` - 是否流式输出，默认true
+**Parameters:**
+- `messages: List<LLMMessage>` - LLMchat messagedescription
+- `config: LLMConfig` - LLMdescription
+- `timeoutMillis: Long` - timeout in milliseconds，description180description
+- `isStreaming: Boolean` - whether to stream output, default true
 
-**返回值：**
-- `TaskResult<LLMResponse>` - 任务执行结果，status=1表示成功，status=2表示失败
+**Return Value:**
+- `TaskResult<LLMResponse>` - descriptionexecutedescription，status=1descriptionsuccess，status=2descriptionfailure
 
 #### llm()
 ```kotlin
@@ -497,59 +497,59 @@ fun llm(
     callback: LLMCallback? = null
 )
 ```
-大模型异步调用接口。
+LLMdescription。
 
-**参数说明：**
-- `messages: List<LLMMessage>` - 大模型chat message列表
-- `config: LLMConfig` - 大模型配置
-- `timeoutMillis: Long` - 超时时间，单位毫秒，默认180秒
-- `isStreaming: Boolean` - 是否流式输出，默认true
-- `callback: LLMCallback?` - 回调，可为空
+**Parameters:**
+- `messages: List<LLMMessage>` - LLMchat messagedescription
+- `config: LLMConfig` - LLMdescription
+- `timeoutMillis: Long` - timeout in milliseconds，description180description
+- `isStreaming: Boolean` - whether to stream output, default true
+- `callback: LLMCallback?` - callback, nullable
 
 #### query()
 ```kotlin
 fun query(text: String)
 ```
-通过文本形式的用户问题触发大模型规划Action。
+descriptionLLMdescriptionAction。
 
-**参数说明：**
-- `text: String` - 用户问题的文本，如："今天天气怎么样？"
+**Parameters:**
+- `text: String` - description，description："description？"
 
 #### uploadInterfaceInfo()
 ```kotlin
 fun uploadInterfaceInfo(interfaceInfo: String)
 ```
-上传页面信息，方便大模型理解当前页面的内容。
+description，descriptionLLMdescription。
 
-**参数说明：**
-- `interfaceInfo: String` - 页面信息描述，最好带有页面组件的层次结构，但内容不宜过长
+**Parameters:**
+- `interfaceInfo: String` - description，description，description
 
 #### clearContext()
 ```kotlin
 fun clearContext()
 ```
-清空大模型对话上下文记录。
+descriptionLLMdescriptioncontextdescription。
 
 #### jumpToXiaobao()
 ```kotlin
 fun jumpToXiaobao(context: Context)
 ```
-跳转到小豹应用。
+description。
 
-**参数说明：**
-- `context: Context` - 上下文，用于启动Activity
+**Parameters:**
+- `context: Context` - context，descriptionActivity
 
 ---
 
 ### Action
 
-Action定义类，封装Action的名称、描述、参数和执行器。
+Action definition class，descriptionActiondescription、description、descriptionexecutedescription。
 
-**包路径：** `com.ainirobot.agent.action.Action`
+**Package：** `com.ainirobot.agent.action.Action`
 
-**构造函数：**
+**Constructors:**
 
-**完整构造函数：**
+**descriptionConstructor：**
 ```kotlin
 Action(
     name: String,
@@ -561,7 +561,7 @@ Action(
 )
 ```
 
-**内部Action构造函数：**
+**descriptionActionConstructor：**
 ```kotlin
 Action(
     name: String,
@@ -572,38 +572,38 @@ Action(
 )
 ```
 
-**外部Action构造函数（仅name）：**
+**descriptionActionConstructor（descriptionname）：**
 ```kotlin
 Action(name: String)
 ```
 
-**参数说明：**
-- `name: String` - action全名，建议格式：com.company.action.ACTION_NAME
-- `appId: String` - 当前应用的appId（完整构造函数）
-- `displayName: String` - 显示名称，可能被用于显示到UI界面上
-- `desc: String` - action描述，用以让大模型理解应该在什么时间调用此action
-- `parameters: List<Parameter>?` - 期望action在被规划出时携带的参数描述，可为空
-- `executor: ActionExecutor?` - action对应的执行器，可为空
+**Parameters:**
+- `name: String` - actiondescription，description：com.company.action.ACTION_NAME
+- `appId: String` - descriptionappId（descriptionConstructor）
+- `displayName: String` - description，descriptionUIdescription
+- `desc: String` - actiondescription，descriptionLLMdescriptionaction
+- `parameters: List<Parameter>?` - descriptionactiondescription，description
+- `executor: ActionExecutor?` - actiondescriptionexecutedescription，description
 
-**说明：**
-- 内部Action构造函数会自动使用当前应用的appId
-- 外部Action构造函数主要用于注册外部已存在的Action，如系统Action或其他应用的静态注册Action
+**Description：**
+- descriptionActionConstructordescriptionappId
+- descriptionActionConstructordescriptionRegister descriptionAction，descriptionActiondescriptionStatic registrationAction
 
-**属性：**
+**Properties:**
 
 #### sid
 ```kotlin
 var sid: String
 ```
-规划的action的Id，用于标识action的唯一性，同一个action每次规划都会返回不同的actionId。
+descriptionactiondescriptionId，descriptionactiondescription，descriptionactiondescriptionactionId。
 
 #### userQuery
 ```kotlin
 var userQuery: String
 ```
-触发规划的用户问题。
+description。
 
-**方法：**
+**Methods:**
 
 #### notify()
 ```kotlin
@@ -612,121 +612,121 @@ fun notify(
     isTriggerFollowUp: Boolean = false
 )
 ```
-Action执行完成后需要同步执行结果。
+Actionexecutedescriptionexecutedescription。
 
-**参数说明：**
-- `result: ActionResult` - Action的执行结果，默认为成功
-- `isTriggerFollowUp: Boolean` - 在Action执行完成后主动引导用户进行下一步操作，默认关闭
+**Parameters:**
+- `result: ActionResult` - Actiondescriptionexecutedescription，descriptionsuccess
+- `isTriggerFollowUp: Boolean` - descriptionActionexecutedescription，description
 
 ---
 
 ### ActionExecutor
 
-Action执行器接口，定义Action的执行逻辑回调方法。
+Action executor interface，descriptionActiondescriptionexecutedescriptioncallbackMethods。
 
-**包路径：** `com.ainirobot.agent.action.ActionExecutor`
+**Package：** `com.ainirobot.agent.action.ActionExecutor`
 
-**方法：**
+**Methods:**
 
 #### onExecute()
 ```kotlin
 fun onExecute(action: Action, params: Bundle?): Boolean
 ```
-Action执行回调方法。
+ActionexecutecallbackMethods。
 
-**参数说明：**
-- `action: Action` - 要执行的Action对象
-- `params: Bundle?` - Action执行参数，可为空
+**Parameters:**
+- `action: Action` - Action object to execute
+- `params: Bundle?` - Action execution parameters, nullable
 
-**返回值：**
-- `Boolean` - true表示已处理完成，false表示不需要自行处理
+**Return Value:**
+- `Boolean` - truedescription，falsedescription
 
-**重要提示：**
-- 此方法不能执行耗时操作
-- 耗时操作应放到协程或线程中执行
-- 执行完成后必须调用action.notify()方法
+**Important Notes：**
+- descriptionMethodsdescriptionexecutedescription
+- descriptionexecute
+- executedescriptionaction.notify()Methods
 
 ---
 
 ### Actions
 
-系统内置Action常量类，提供系统预定义的Action名称常量。
+Built-in Action constants，descriptionActiondescription。
 
-**包路径：** `com.ainirobot.agent.action.Actions`
+**Package：** `com.ainirobot.agent.action.Actions`
 
-**系统处理的Action：**
+**Actions handled by the system：**
 
 #### SET_VOLUME
 ```kotlin
 const val SET_VOLUME = "orion.agent.action.SET_VOLUME"
 ```
-调整系统音量。
+description。
 
 #### SAY
 ```kotlin
 const val SAY = "orion.agent.action.SAY"
 ```
-机器人兜底对话。
+description。
 
 #### CANCEL
 ```kotlin
 const val CANCEL = "orion.agent.action.CANCEL"
 ```
-取消，默认处理为模拟点击Back键。
+description，descriptionBackdescription。
 
 #### BACK
 ```kotlin
 const val BACK = "orion.agent.action.BACK"
 ```
-返回，默认处理为模拟点击Back键。
+description，descriptionBackdescription。
 
 #### EXIT
 ```kotlin
 const val EXIT = "orion.agent.action.EXIT"
 ```
-退出，默认处理为模拟点击Back键。
+description，descriptionBackdescription。
 
 #### KNOWLEDGE_QA
 ```kotlin
 const val KNOWLEDGE_QA = "orion.agent.action.KNOWLEDGE_QA"
 ```
-知识库问答。
+description。
 
 #### GENERATE_MESSAGE
 ```kotlin
 const val GENERATE_MESSAGE = "orion.agent.action.GENERATE_MESSAGE"
 ```
-对用户说一句欢迎或者欢送语。
+description。
 
 #### ADJUST_SPEED
 ```kotlin
 const val ADJUST_SPEED = "orion.agent.action.ADJUST_SPEED"
 ```
-调整机器人速度。
+description。
 
-**需用户处理的Action：**
+**Actions that must be handled by the user：**
 
 #### CONFIRM
 ```kotlin
 const val CONFIRM = "orion.agent.action.CONFIRM"
 ```
-确定，需要用户自行处理。
+description，description。
 
 #### CLICK
 ```kotlin
 const val CLICK = "orion.agent.action.CLICK"
 ```
-点击，需要用户自行处理。
+description，description。
 
 ---
 
 ### Parameter
 
-Action参数定义类，描述Action所需的参数信息。
+Action parameter class，descriptionActiondescription。
 
-**包路径：** `com.ainirobot.agent.base.Parameter`
+**Package：** `com.ainirobot.agent.base.Parameter`
 
-**构造函数：**
+**Constructors:**
 ```kotlin
 Parameter(
     name: String,
@@ -737,342 +737,342 @@ Parameter(
 )
 ```
 
-**参数说明：**
-- `name: String` - 参数名，建议使用英文，多个单词用下划线连接
-- `type: ParameterType` - 参数类型
-- `desc: String` - 参数描述，要能精确反应此参数的定义
-- `required: Boolean` - 是否是必要参数
-- `enumValues: List<String>?` - 当type为ENUM时，需要传此参数，作为枚举值选择的列表
+**Parameters:**
+- `name: String` - description，description，description
+- `type: ParameterType` - description
+- `desc: String` - description，description
+- `required: Boolean` - description
+- `enumValues: List<String>?` - descriptiontypedescriptionENUMdescription，description，descriptionEnum Valuesdescription
 
 ---
 
 ### ParameterType
 
-参数类型枚举，定义Action参数支持的数据类型。
+parameter type enum，descriptionActiondescriptionData Classesdescription。
 
-**包路径：** `com.ainirobot.agent.base.ParameterType`
+**Package：** `com.ainirobot.agent.base.ParameterType`
 
-**枚举值：**
+**Enum Values:**
 
 #### STRING
-字符串类型。
+description。
 
 #### INT
-整数类型。
+description。
 
 #### FLOAT
-浮点数类型。
+description。
 
 #### BOOLEAN
-布尔值类型。
+description。
 
 #### ENUM
-枚举类型，需要配合Parameter的enumValues使用。
+Enum Classesdescription，descriptionParameterdescriptionenumValuesdescription。
 
 #### NUMBER_ARRAY
-数字数组类型。
+description。
 
 #### STRING_ARRAY
-字符串数组类型。
+description。
 
 ---
 
-## 基础类
+## Base Classes
 
 ### Agent
 
-Agent基础类，AppAgent和PageAgent的父类，定义了Agent的通用方法和属性。
+Agent base class，AppAgentdescriptionPageAgentdescription，descriptionAgentdescriptionMethodsdescriptionProperties。
 
-**包路径：** `com.ainirobot.agent.Agent`
+**Package：** `com.ainirobot.agent.Agent`
 
-**通用方法：**
+**descriptionMethods：**
 
 #### setPersona()
 ```kotlin
 open fun setPersona(persona: String): Agent
 ```
-设置此Agent的角色人设。
+Set descriptionAgentdescriptionpersona。
 
-**参数说明：**
-- `persona: String` - 人设描述，如："你叫小豹，是一个聊天机器人"
+**Parameters:**
+- `persona: String` - personadescription，description："description，description"
 
-**返回值：**
-- `Agent` - 返回自身，支持链式调用
+**Return Value:**
+- `Agent` - description，description
 
 #### setStyle()
 ```kotlin
 open fun setStyle(style: String): Agent
 ```
-设置此Agent的对话风格。
+Set descriptionAgentdescriptionconversation style。
 
-**参数说明：**
-- `style: String` - 对话风格，如：professional, friendly, humorous
+**Parameters:**
+- `style: String` - conversation style，description：professional, friendly, humorous
 
-**返回值：**
-- `Agent` - 返回自身，支持链式调用
+**Return Value:**
+- `Agent` - description，description
 
 #### setObjective()
 ```kotlin
 open fun setObjective(objective: String): Agent
 ```
-设置此Agent的规划目标。
+Set descriptionAgentdescriptionplanning objective。
 
-**参数说明：**
-- `objective: String` - 规划目标，要清晰明确，以便于大模型理解
+**Parameters:**
+- `objective: String` - planning objective，description，descriptionLLMdescription
 
-**返回值：**
-- `Agent` - 返回自身，支持链式调用
+**Return Value:**
+- `Agent` - description，description
 
 #### setOnAgentStatusChangedListener()
 ```kotlin
 open fun setOnAgentStatusChangedListener(listener: OnAgentStatusChangedListener): Agent
 ```
-设置Agent状态变化监听器。
+Set Agentstatus change listener。
 
-**参数说明：**
-- `listener: OnAgentStatusChangedListener` - 状态变化监听器
+**Parameters:**
+- `listener: OnAgentStatusChangedListener` - status change listener
 
-**返回值：**
-- `Agent` - 返回自身，支持链式调用
+**Return Value:**
+- `Agent` - description，description
 
 #### setOnTranscribeListener()
 ```kotlin
 open fun setOnTranscribeListener(listener: OnTranscribeListener): Agent
 ```
-设置TTS和ASR识别结果监听器。
+Set TTSdescriptionASRdescriptionListen to description。
 
-**参数说明：**
-- `listener: OnTranscribeListener` - 转录结果监听器
+**Parameters:**
+- `listener: OnTranscribeListener` - transcription listener
 
-**返回值：**
-- `Agent` - 返回自身，支持链式调用
+**Return Value:**
+- `Agent` - description，description
 
 #### setOnActionStatusChangedListener()
 ```kotlin
 open fun setOnActionStatusChangedListener(listener: OnActionStatusChangedListener): Agent
 ```
-设置系统Action状态变化监听器。
+Set descriptionActionstatus change listener。
 
-**参数说明：**
-- `listener: OnActionStatusChangedListener` - 系统Action状态变化监听器
+**Parameters:**
+- `listener: OnActionStatusChangedListener` - descriptionActionstatus change listener
 
-**返回值：**
-- `Agent` - 返回自身，支持链式调用
+**Return Value:**
+- `Agent` - description，description
 
 #### removeAction()
 ```kotlin
 fun removeAction(name: String): Action?
 ```
-删除Action。
+descriptionAction。
 
-**参数说明：**
-- `name: String` - Action名称
+**Parameters:**
+- `name: String` - Actiondescription
 
-**返回值：**
-- `Action?` - 被删除的Action，如果不存在则返回null
+**Return Value:**
+- `Action?` - descriptionAction，descriptionnull
 
-**注意：** 如果是在应用或页面初始化后删除Action，可能需要重新初始化Agent。
+**Note：** descriptionAction，descriptionAgent。
 
 #### getAction()
 ```kotlin
 fun getAction(name: String): Action?
 ```
-获取Action。
+Get Action。
 
-**参数说明：**
-- `name: String` - Action全名
+**Parameters:**
+- `name: String` - Actiondescription
 
-**返回值：**
-- `Action?` - 对应的Action，如果不存在则返回null
+**Return Value:**
+- `Action?` - descriptionAction，descriptionnull
 
 #### registerActionNames()
 ```kotlin
 open fun registerActionNames(actionNames: List<String>): Agent
 ```
-批量注册外部Action名称。
+descriptionRegister descriptionActiondescription。
 
-**参数说明：**
-- `actionNames: List<String>` - 外部Action的名称列表
+**Parameters:**
+- `actionNames: List<String>` - external Action namedescription
 
-**返回值：**
-- `Agent` - 返回自身，支持链式调用
+**Return Value:**
+- `Agent` - description，description
 
 #### registerAction()
 ```kotlin
 open fun registerAction(action: Action): Agent
 open fun registerAction(actionName: String): Agent
 ```
-注册Action。
+Register Action。
 
-**参数说明：**
-- `action: Action` - 要注册的Action对象
-- `actionName: String` - 外部Action的名称（重载方法）
+**Parameters:**
+- `action: Action` - Action object to register
+- `actionName: String` - external Action name（descriptionMethods）
 
-**返回值：**
-- `Agent` - 返回自身，支持链式调用
+**Return Value:**
+- `Agent` - description，description
 
 #### registerActions()
 ```kotlin
 open fun registerActions(actionList: List<Action>): Agent
 ```
-批量注册Action。
+descriptionRegister Action。
 
-**参数说明：**
-- `actionList: List<Action>` - Action列表
+**Parameters:**
+- `actionList: List<Action>` - Actiondescription
 
-**返回值：**
-- `Agent` - 返回自身，支持链式调用
+**Return Value:**
+- `Agent` - description，description
 
 ---
 
-## 监听器接口
+## Listener Interfaces
 
 ### OnTranscribeListener
 
-ASR和TTS结果监听接口，用于获取语音识别和语音合成的结果。
+ASRdescriptionTTSdescriptionListen to description，descriptionGet speech recognitiondescriptiontext-to-speechdescription。
 
-**包路径：** `com.ainirobot.agent.OnTranscribeListener`
+**Package：** `com.ainirobot.agent.OnTranscribeListener`
 
-**方法：**
+**Methods:**
 
 #### onASRResult()
 ```kotlin
 fun onASRResult(transcription: Transcription): Boolean
 ```
-ASR识别结果回调。
+ASRdescriptioncallback。
 
-**参数说明：**
-- `transcription: Transcription` - 转录结果对象
+**Parameters:**
+- `transcription: Transcription` - transcription result object
 
-**返回值：**
-- `Boolean` - true表示消费了此次结果，系统将不再显示字幕；false表示不影响后续处理
+**Return Value:**
+- `Boolean` - truedescription，description；falsedescription
 
 #### onTTSResult()
 ```kotlin
 fun onTTSResult(transcription: Transcription): Boolean
 ```
-TTS播放结果回调。
+TTSdescriptioncallback。
 
-**参数说明：**
-- `transcription: Transcription` - 转录结果对象
+**Parameters:**
+- `transcription: Transcription` - transcription result object
 
-**返回值：**
-- `Boolean` - true表示消费了此次结果，系统将不再显示字幕；false表示不影响后续处理
+**Return Value:**
+- `Boolean` - truedescription，description；falsedescription
 
 ---
 
 ### OnAgentStatusChangedListener
 
-Agent状态变化监听接口，用于监听Agent的运行状态。
+Agentstatus change listener interface，descriptionListen to Agentdescription。
 
-**包路径：** `com.ainirobot.agent.OnAgentStatusChangedListener`
+**Package：** `com.ainirobot.agent.OnAgentStatusChangedListener`
 
-**方法：**
+**Methods:**
 
 #### onStatusChanged()
 ```kotlin
 fun onStatusChanged(status: String, message: String?): Boolean
 ```
-Agent状态变化回调。
+Agentdescriptioncallback。
 
-**参数说明：**
-- `status: String` - 状态值，包含：listening（正在听）、thinking（思考中）、processing（处理中）、reset_status（状态复位）
-- `message: String?` - 状态消息，当status是processing时可能有值，如："正在选择工具..."、"正在获取天气..."等
+**Parameters:**
+- `status: String` - status value，description：listening（listening）、thinking（thinking）、processing（processing）、reset_status（reset status）
+- `message: String?` - description，descriptionstatusdescriptionprocessingdescription，description："selecting tools..."、"descriptionGet description..."description
 
-**返回值：**
-- `Boolean` - true表示不想把状态显示到默认语音条上；false表示保留系统显示状态UI
+**Return Value:**
+- `Boolean` - truedescription；falsedescriptionUI
 
 ---
 
 ### OnActionStatusChangedListener
 
-系统Action状态变化监听接口，用于监听系统内置Action的执行状态变化。
+descriptionActionstatus change listener interface，descriptionListen to descriptionActiondescriptionexecutedescription。
 
-**包路径：** `com.ainirobot.agent.OnActionStatusChangedListener`
+**Package：** `com.ainirobot.agent.OnActionStatusChangedListener`
 
-**方法：**
+**Methods:**
 
 #### onStatusChanged()
 ```kotlin
 fun onStatusChanged(actionName: String?, status: String?, message: String?): Boolean
 ```
-系统Action状态变化回调。
+descriptionActiondescriptioncallback。
 
-**参数说明：**
-- `actionName: String?` - 系统Action名称，可为空
-- `status: String?` - Action执行状态，包含：succeeded(成功)、failed(失败)、timeout(超时)、interrupted(中断)、recalled(撤回)、unsupported(不支持)
-- `message: String?` - 状态相关的消息信息，可为空
+**Parameters:**
+- `actionName: String?` - descriptionActiondescription，description
+- `status: String?` - Actionexecutedescription，description：succeeded(success)、failed(failure)、timeout(timeout)、interrupted(interrupted)、recalled(recalled)、unsupported(unsupported)
+- `message: String?` - description，description
 
-**返回值：**
-- `Boolean` - true表示消费此次状态变化事件；false表示不消费，继续传递给其他监听器
+**Return Value:**
+- `Boolean` - truedescription；falsedescription，descriptionListen to description
 
-**重要说明：**
-- 仅监听系统内置Action的状态变化
-- 不包括二次开发者自定义的Action
-- 回调在子线程中执行
-- 依赖SDK v0.3.5以后版本
-- 事件传递：PageAgent返回false时AppAgent也能收到回调
+**descriptionDescription：**
+- descriptionListen to descriptionActiondescription
+- descriptionAction
+- callbackdescriptionexecute
+- DependencySDK v0.3.5description
+- description：PageAgentdescriptionfalsedescriptionAppAgentdescriptioncallback
 
 ---
 
 ### TTSCallback
 
-TTS播放回调接口，继承自ITaskCallback<String>。
+TTSdescriptioncallbackdescription，descriptionITaskCallback<String>。
 
-**包路径：** `com.ainirobot.agent.TTSCallback`
+**Package：** `com.ainirobot.agent.TTSCallback`
 
-**接口定义：**
+**Interface Definition:**
 ```kotlin
 interface TTSCallback : ITaskCallback<String>
 ```
 
 ### LLMCallback
 
-大模型调用回调接口，继承自ITaskCallback<LLMResponse>。
+LLMdescriptioncallbackdescription，descriptionITaskCallback<LLMResponse>。
 
-**包路径：** `com.ainirobot.agent.LLMCallback`
+**Package：** `com.ainirobot.agent.LLMCallback`
 
-**接口定义：**
+**Interface Definition:**
 ```kotlin
 interface LLMCallback : ITaskCallback<LLMResponse>
 ```
 
 ### ITaskCallback
 
-任务执行回调接口，是一个泛型密封接口。
+task callback interface，description。
 
-**包路径：** `com.ainirobot.agent.ITaskCallback`
+**Package：** `com.ainirobot.agent.ITaskCallback`
 
-**接口定义：**
+**Interface Definition:**
 ```kotlin
 sealed interface ITaskCallback<T> {
     fun onTaskEnd(status: Int, result: T?)
 }
 ```
 
-**方法说明：**
+**Method Description:**
 
 #### onTaskEnd()
 ```kotlin
 fun onTaskEnd(status: Int, result: T?)
 ```
-任务执行完成回调。
+descriptionexecutedescriptioncallback。
 
-**参数说明：**
-- `status: Int` - 执行状态，1表示成功，2表示失败
-- `result: T?` - 执行结果，可为空
+**Parameters:**
+- `status: Int` - execution status, 1 = success, 2 = failure
+- `result: T?` - execution result, nullable
 
 ---
 
-## 数据类
+## Data Classes
 
 ### Transcription
 
-语音转录结果类，包含ASR识别和TTS播放的结果信息。
+speech transcription result class，descriptionASRdescriptionTTSdescription。
 
-**包路径：** `com.ainirobot.agent.base.Transcription`
+**Package：** `com.ainirobot.agent.base.Transcription`
 
-**构造函数：**
+**Constructors:**
 ```kotlin
 Transcription(
     sid: String,
@@ -1084,90 +1084,90 @@ Transcription(
 )
 ```
 
-**属性：**
+**Properties:**
 
 #### sid
 ```kotlin
 val sid: String
 ```
-会话ID。
+session ID。
 
 #### text
 ```kotlin
 val text: String
 ```
-文本内容。
+description。
 
 #### speaker
 ```kotlin
 val speaker: String
 ```
-说话者标识。
+description。
 
 #### final
 ```kotlin
 val final: Boolean
 ```
-判断是流式结果还是最终结果，true为最终结果，false为中间结果。
+description，truedescription，falsedescription。
 
 #### error
 ```kotlin
 val error: String
 ```
-错误信息。
+description。
 
 #### extra
 ```kotlin
 val extra: Bundle?
 ```
-额外信息，可为空。
+description，description。
 
 #### isUserSpeaking
 ```kotlin
 val isUserSpeaking: Boolean
 ```
-判断是ASR还是TTS内容，true为ASR结果（speaker == "human_user"），false为TTS结果。
+descriptionASRdescriptionTTSdescription，truedescriptionASRdescription（speaker == "human_user"），falsedescriptionTTSdescription。
 
 ---
 
 ### LLMMessage
 
-大模型消息类，封装与大模型交互的消息内容。
+LLM message class，descriptionLLMdescriptionmessage content。
 
-**包路径：** `com.ainirobot.agent.base.llm.LLMMessage`
+**Package：** `com.ainirobot.agent.base.llm.LLMMessage`
 
-**构造函数：**
+**Constructors:**
 ```kotlin
 LLMMessage(role: Role, content: String)
 ```
 
-**参数说明：**
-- `role: Role` - 消息角色
-- `content: String` - 消息内容
+**Parameters:**
+- `role: Role` - message role
+- `content: String` - message content
 
-**属性：**
+**Properties:**
 
 #### role
 ```kotlin
 val role: Role
 ```
-消息角色。
+message role。
 
 #### content
 ```kotlin
 val content: String
 ```
-消息内容。
+message content。
 
 ---
 
 ### LLMConfig
 
-大模型配置类，用于配置大模型的参数和设置。
+LLM configuration class，descriptionLLMdescriptionSet 。
 
-**包路径：** `com.ainirobot.agent.base.llm.LLMConfig`
+**Package：** `com.ainirobot.agent.base.llm.LLMConfig`
 
-**构造函数：**
+**Constructors:**
 ```kotlin
 LLMConfig(
     temperature: Float = 1.0f,
@@ -1178,87 +1178,87 @@ LLMConfig(
 )
 ```
 
-**属性：**
+**Properties:**
 
 #### temperature
 ```kotlin
 val temperature: Float
 ```
-温度参数，控制生成文本的随机性，默认1.0f。
+description，description，description1.0f。
 
 #### maxTokens
 ```kotlin
 val maxTokens: Int?
 ```
-最大token数量，可为空。
+descriptiontokendescription，description。
 
 #### timeout
 ```kotlin
 val timeout: Int
 ```
-超时时间（秒），默认6秒。
+timeoutdescription（description），description6description。
 
 #### fileSearch
 ```kotlin
 val fileSearch: Boolean
 ```
-是否启用文件搜索，默认false。
+description，descriptionfalse。
 
 #### businessInfo
 ```kotlin
 val businessInfo: String?
 ```
-业务信息，可为空。
+description，description。
 
 ---
 
 ### LLMResponse
 
-大模型响应结果类，包含大模型调用的完整响应信息。
+LLM response class，descriptionLLMdescription。
 
-**包路径：** `com.ainirobot.agent.assit.LLMResponse`
+**Package：** `com.ainirobot.agent.assit.LLMResponse`
 
-**属性：**
+**Properties:**
 
 #### tokenCost
 ```kotlin
 val tokenCost: TokenCost
 ```
-Token消耗统计。
+Tokendescription。
 
 #### elapsedTime
 ```kotlin
 val elapsedTime: Float
 ```
-请求耗时（秒）。
+description（description）。
 
 #### message
 ```kotlin
 val message: LLMMessage
 ```
-返回的消息内容。
+descriptionmessage content。
 
 #### status
 ```kotlin
 val status: String
 ```
-执行状态，"succeeded"表示成功，"failed"表示失败。
+executedescription，"succeeded"descriptionsuccess，"failed"descriptionfailure。
 
 #### error
 ```kotlin
 val error: String
 ```
-错误信息，当status为"failed"时包含具体错误描述。
+description，descriptionstatusdescription"failed"description。
 
 ---
 
 ### TokenCost
 
-Token消耗统计类，用于记录大模型调用的Token使用情况。
+token usage statistics class，descriptionLLMdescriptionTokendescription。
 
-**包路径：** `com.ainirobot.agent.assit.TokenCost`
+**Package：** `com.ainirobot.agent.assit.TokenCost`
 
-**构造函数：**
+**Constructors:**
 ```kotlin
 TokenCost(
     promptTokens: Int,
@@ -1267,35 +1267,35 @@ TokenCost(
 )
 ```
 
-**属性：**
+**Properties:**
 
 #### promptTokens
 ```kotlin
 val promptTokens: Int
 ```
-输入提示的Token数量。
+descriptionTokendescription。
 
 #### completionTokens
 ```kotlin
 val completionTokens: Int
 ```
-完成回复的Token数量。
+descriptionTokendescription。
 
 #### totalTokens
 ```kotlin
 val totalTokens: Int
 ```
-总Token数量。
+descriptionTokendescription。
 
 ---
 
 ### ActionResult
 
-Action执行结果类，封装Action执行的状态和结果信息。
+Action execution result class，descriptionActionexecutedescription。
 
-**包路径：** `com.ainirobot.agent.base.ActionResult`
+**Package：** `com.ainirobot.agent.base.ActionResult`
 
-**构造函数：**
+**Constructors:**
 ```kotlin
 ActionResult(
     status: ActionStatus,
@@ -1306,158 +1306,158 @@ ActionResult(
 )
 ```
 
-**参数说明：**
-- `status: ActionStatus` - Action执行状态
-- `result: Bundle?` - 执行结果数据，可为空
-- `extra: Bundle?` - 额外信息，可为空
-- `sid: String` - 会话ID，默认为空字符串
-- `appId: String` - 应用ID，默认为空字符串
+**Parameters:**
+- `status: ActionStatus` - Actionexecutedescription
+- `result: Bundle?` - executedescription，description
+- `extra: Bundle?` - description，description
+- `sid: String` - session ID，description
+- `appId: String` - descriptionID，description
 
-**属性：**
+**Properties:**
 
 #### status
 ```kotlin
 val status: ActionStatus
 ```
-Action执行状态。
+Actionexecutedescription。
 
 #### result
 ```kotlin
 val result: Bundle?
 ```
-执行结果数据。
+executedescription。
 
 #### extra
 ```kotlin
 val extra: Bundle?
 ```
-额外信息。
+description。
 
 #### sid
 ```kotlin
 var sid: String
 ```
-会话ID。
+session ID。
 
 #### appId
 ```kotlin
 var appId: String
 ```
-应用ID。
+descriptionID。
 
 ---
 
 ### TaskResult
 
-任务执行结果类，泛型类。
+task execution result class，description。
 
-**包路径：** `com.ainirobot.agent.TaskResult`
+**Package：** `com.ainirobot.agent.TaskResult`
 
-**构造函数：**
+**Constructors:**
 ```kotlin
 TaskResult(status: Int, result: T? = null)
 ```
 
-**参数说明：**
-- `status: Int` - 执行状态，1表示成功，2表示失败
-- `result: T?` - 执行结果，可为空
+**Parameters:**
+- `status: Int` - execution status, 1 = success, 2 = failure
+- `result: T?` - execution result, nullable
 
-**属性：**
+**Properties:**
 
 #### status
 ```kotlin
 val status: Int
 ```
-执行状态。
+executedescription。
 
 #### result
 ```kotlin
 val result: T?
 ```
-执行结果。
+executedescription。
 
 #### isSuccess
 ```kotlin
 val isSuccess: Boolean
 ```
-是否执行成功，当status=1时返回true。
+descriptionexecutesuccess，descriptionstatus=1descriptiontrue。
 
 ---
 
-## 枚举类
+## Enum Classes
 
 ### Role
 
-消息角色枚举，用于大模型消息的角色标识。
+message role enum，descriptionLLMdescription。
 
-**包路径：** `com.ainirobot.agent.base.llm.Role`
+**Package：** `com.ainirobot.agent.base.llm.Role`
 
-**枚举值：**
+**Enum Values:**
 
 #### USER
-用户角色。
+description。
 
 #### ASSISTANT
-助手角色。
+description。
 
 #### SYSTEM
-系统角色。
+description。
 
 ---
 
 ### ActionStatus
 
-Action执行状态枚举。
+Action status enum。
 
-**包路径：** `com.ainirobot.agent.base.ActionStatus`
+**Package：** `com.ainirobot.agent.base.ActionStatus`
 
-**枚举值：**
+**Enum Values:**
 
 #### SUCCEEDED
-执行成功。
+executesuccess。
 
 #### FAILED
-执行失败。
+executefailure。
 
 #### INTERRUPTED
-执行被打断。
+executedescription。
 
 #### RECALLED
-重复规划导致当前action被打断。
+descriptionactiondescription。
 
 ---
 
-## 注解类
+## Annotation Classes
 
 ### AgentAction
 
-Action注解，用于标记成员方法是一个Action。
+Actiondescription，descriptionMethodsdescriptionAction。
 
-**包路径：** `com.ainirobot.agent.annotations.AgentAction`
+**Package：** `com.ainirobot.agent.annotations.AgentAction`
 
-**目标：** `AnnotationTarget.FUNCTION`
+**description：** `AnnotationTarget.FUNCTION`
 
-**属性：**
+**Properties:**
 
 #### name
 ```kotlin
 val name: String
 ```
-Action的名称。
+Actiondescription。
 
 #### desc
 ```kotlin
 val desc: String
 ```
-Action的描述。
+Actiondescription。
 
 #### displayName
 ```kotlin
 val displayName: String
 ```
-Action的显示名称。
+Actiondescription。
 
-**使用示例：**
+**Usage Example:**
 ```kotlin
 @AgentAction(
     name = "com.agent.demo.SHOW_SMILE_FACE",
@@ -1474,39 +1474,39 @@ private fun showSmileFace(action: Action, @ActionParameter(...) sentence: String
 
 ### ActionParameter
 
-参数注解，用于标记Action方法的参数。
+description，descriptionActionMethodsdescription。
 
-**包路径：** `com.ainirobot.agent.annotations.ActionParameter`
+**Package：** `com.ainirobot.agent.annotations.ActionParameter`
 
-**目标：** `AnnotationTarget.VALUE_PARAMETER`
+**description：** `AnnotationTarget.VALUE_PARAMETER`
 
-**属性：**
+**Properties:**
 
 #### name
 ```kotlin
 val name: String
 ```
-参数名。
+description。
 
 #### desc
 ```kotlin
 val desc: String
 ```
-参数描述。
+description。
 
 #### required
 ```kotlin
 val required: Boolean = true
 ```
-是否是必要参数，默认为true。
+description，descriptiontrue。
 
 #### enumValues
 ```kotlin
 val enumValues: Array<String> = []
 ```
-限制参数的value只能从指定的值中选择。
+descriptionvaluedescription。
 
-**使用示例：**
+**Usage Example:**
 ```kotlin
 @ActionParameter(
     name = "sentence",
@@ -1518,35 +1518,35 @@ sentence: String
 
 ---
 
-## 工具类
+## Utility Classes
 
 ### AOCoroutineScope
 
-Agent协程作用域，用于在Agent中执行协程操作。
+Agent coroutine scope，descriptionAgentdescriptionexecutedescription。
 
-**包路径：** `com.ainirobot.agent.coroutine.AOCoroutineScope`
+**Package：** `com.ainirobot.agent.coroutine.AOCoroutineScope`
 
-**方法：**
+**Methods:**
 
 #### launch()
 ```kotlin
 fun launch(block: suspend CoroutineScope.() -> Unit): Job
 ```
-启动协程。
+description。
 
-**参数说明：**
-- `block: suspend CoroutineScope.() -> Unit` - 协程代码块
+**Parameters:**
+- `block: suspend CoroutineScope.() -> Unit` - description
 
-**返回值：**
-- `Job` - 协程任务对象
+**Return Value:**
+- `Job` - description
 
 #### cancelAll()
 ```kotlin
 fun cancelAll()
 ```
-取消所有协程任务并关闭线程池。
+description。
 
-**使用示例：**
+**Usage Example:**
 ```kotlin
 AOCoroutineScope.launch {
     // 在协程中执行耗时操作
@@ -1558,29 +1558,29 @@ AOCoroutineScope.launch {
 
 ---
 
-## 重要提示
+## Important Notes
 
-### Action执行注意事项
+### Action Execution Notes
 
-1. **onExecute方法不能执行耗时操作**
-2. **耗时操作必须放到协程或线程中执行**
-3. **执行完成后必须调用action.notify()方法**
-4. **onExecute方法默认在子线程中执行**
+1. **onExecuteMethodsdescriptionexecutedescription**
+2. **Time-consuming operations must run in coroutines or background threads**
+3. **executedescriptionaction.notify()Methods**
+4. **onExecuteMethodsdescriptionexecute**
 
-### 生命周期管理
+### Lifecycle Management
 
-1. **一个App中只能有一个AppAgent实例**
-2. **每个页面只能有一个PageAgent实例**
-3. **App级Action在应用前台期间生效**
-4. **Page级Action在页面可见期间生效**
+1. **Only one AppAgent instance can exist in an app**
+2. **Each page can only have one PageAgent instance**
+3. **AppdescriptionActiondescription**
+4. **PagedescriptionActiondescription**
 
-### 注册方式
+### Registration Methods
 
-1. **动态注册**：在代码中注册，仅当前应用内部使用
-2. **静态注册**：在actionRegistry.json中配置，可被外部调用
+1. **Dynamic registration**：descriptionRegister ，description
+2. **Static registration**：descriptionactionRegistry.jsondescription，description
 
-### 参数命名规范
+### Parameter Naming Rules
 
-1. **参数名使用英文，多个单词用下划线连接**
-2. **避免与Action或Parameter对象的属性名相同**
-3. **提供清晰的参数描述，帮助AI理解** 
+1. **Use English parameter names and join multiple words with underscores**
+2. **descriptionActiondescriptionParameterdescriptionPropertiesdescription**
+3. **description，descriptionAIdescription** 

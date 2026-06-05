@@ -1,73 +1,73 @@
-# 机器人原生接口使用参考
+# Robot Native Interface Usage Reference
 
-## RobotOS 简介
+## RobotOS Introduction
 
-RobotOS是猎户星空基于安卓平台开发的面向多形态硬件机器人和多种业务场景组合的开放式开发平台。
+RobotOS is an open development platform by Orion Star, developed on the Android platform for multi-morphology hardware robots and diverse business scenario combinations.
 
-RobotOS提供了丰富的机器人业务API、机器人能力组件，使开发者可以方便的开发机器人应用。
+RobotOS provides rich robot business APIs and robot capability components, enabling developers to conveniently develop robot applications.
 
-RobotOS基于安卓平台开发，同时提供了一套针对android apk的sdk，用户可以应用RobotService.jar在机器人上开发android应用，运行RobotOS的机型均支持该sdk。
+Based on the Android platform, RobotOS provides an SDK for Android APK development. Users can apply RobotService.jar to develop Android applications on robots. All robot models running RobotOS support this SDK.
 
-## 🚨 重要：语音功能迁移说明
+## 🚨 Important: Speech Functionality Migration Notice
 
-**在AgentOS系统上，所有语音和NLP相关功能已迁移至AgentOS SDK，RobotAPI原有语音和NLP功能已停用：**
+**On the AgentOS system, all speech and NLP-related functionalities have been migrated to AgentOS SDK. The original speech and NLP functionalities in RobotAPI have been deprecated:**
 
-### 已停用的RobotAPI语音和NLP功能
-- **ASR（语音识别）**：原RobotAPI的语音转文字功能
-- **TTS（语音合成）**：原RobotAPI的文字转语音功能  
-- **NLP（自然语言处理）**：原RobotAPI的自然语言理解和处理功能
+### Deprecated RobotAPI Speech and NLP Functionalities
+- **ASR (Automatic Speech Recognition)**: Original RobotAPI speech-to-text functionality
+- **TTS (Text-to-Speech)**: Original RobotAPI text-to-speech functionality
+- **NLP (Natural Language Processing)**: Original RobotAPI natural language understanding and processing functionality
 
-### 新的语音和大模型解决方案
-**所有语音和NLP功能现已统一使用AgentOS SDK提供：**
-- ✅ **免唤醒交互**：AgentOS SDK提供更智能的免唤醒语音交互
-- ✅ **ASR/TTS**：通过AgentOS SDK的`AgentCore.tts()`等接口实现
-- ✅ **智能对话**：集成大模型的自然语言理解和生成，替代原有NLP功能
-- ✅ **Action规划**：基于用户语音意图自动规划和执行动作
-- ✅ **大模型能力**：通过大模型实现更强大的自然语言理解，替代传统NLP
+### New Speech and Large Language Model Solutions
+**All speech and NLP functionalities are now provided through AgentOS SDK:**
+- ✅ **Wake-free interaction**: AgentOS SDK provides more intelligent wake-free speech interaction
+- ✅ **ASR/TTS**: Implemented through AgentOS SDK interfaces such as `AgentCore.tts()`
+- ✅ **Intelligent conversation**: Integration of large language models for natural language understanding and generation, replacing original NLP functionality
+- ✅ **Action planning**: Automatic action planning and execution based on user speech intent
+- ✅ **Large language model capabilities**: Powerful natural language understanding through large language models, replacing traditional NLP
 
-### 迁移指引
-如果您的项目中使用了RobotAPI的语音或NLP功能，请：
-1. **移除RobotAPI相关代码**：删除原有的ASR、TTS、NLP、唤醒等RobotAPI调用
-2. **集成AgentOS SDK**：参考[AgentOS SDK文档](../../Agent/v0.3.5/AgentOS_SDK_Doc_v0.3.5.md)进行集成
-3. **功能对照迁移**：
-   - RobotAPI唤醒 → AgentOS SDK免唤醒交互
-   - RobotAPI ASR → AgentOS SDK语音识别监听
-   - RobotAPI TTS → AgentOS SDK `AgentCore.tts()`接口
-   - RobotAPI NLP → AgentOS SDK大模型接口和Action规划
+### Migration Guide
+If your project uses RobotAPI speech or NLP functionalities, please:
+1. **Remove RobotAPI-related code**: Delete original ASR, TTS, NLP, and wake-up RobotAPI calls
+2. **Integrate AgentOS SDK**: Refer to [AgentOS SDK Documentation](../../Agent/v0.3.5/AgentOS_SDK_Doc_v0.3.5.md) for integration
+3. **Functionality Mapping Migration**:
+   - RobotAPI wake-up → AgentOS SDK wake-free interaction
+   - RobotAPI ASR → AgentOS SDK speech recognition listening
+   - RobotAPI TTS → AgentOS SDK `AgentCore.tts()` interface
+   - RobotAPI NLP → AgentOS SDK large language model interface and action planning
 
-### 协作使用
-**RobotAPI与AgentOS SDK协作关系：**
-- **AgentOS SDK**：负责所有AI智能交互（语音交互、智能对话、大模型能力、Action规划执行）
-- **RobotAPI**：负责机器人硬件控制（运动、导航、传感器、视觉等）
+### Collaborative Use
+**Collaborative Relationship between RobotAPI and AgentOS SDK:**
+- **AgentOS SDK**: Responsible for all AI intelligent interactions (speech interaction, intelligent conversation, large language model capabilities, action planning execution)
+- **RobotAPI**: Responsible for robot hardware control (motion, navigation, sensors, vision, etc)
 
-**RobotAPI旧语音功能参考文档**：
-以下文档帮助开发者了解RobotAPI原有的语音功能，便于识别和删除项目中的旧代码：
-- [语音](https://orionbase.orionstar.com/doc?m=21&h=6065a29&lang=cn#text%E8%BD%ACmp3)
+**RobotAPI Legacy Speech Functionality Reference Documentation:**
+The following documentation helps developers understand the original RobotAPI speech functionality, facilitating the identification and removal of legacy code in projects:
+- [Speech](https://orionbase.orionstar.com/doc?m=21&h=6065a29&lang=cn#text%E8%BD%ACmp3)
 
-## 版本
+## Version
 
-**V11.3 版本 API Latest**
+**V11.3 Version API Latest**
 
 
-## SDK接入
+## SDK Integration
 
-### 1. 导入SDK依赖
+### 1. Import SDK Dependencies
 
-#### 添加JAR包依赖
-1. 获取SDK文件：在Robot版本目录中查找 `robotservice_xx.jar` 文件（如 `Robot/v11.3C/robotservice_11.3.jar`）。SDK文件遵循 `robotservice_<version>.jar` 命名规范，请根据实际版本选择对应目录
-2. 将JAR包文件复制到Android项目的 `app/libs/` 目录下
-3. 在 `app/build.gradle` 文件中添加依赖配置：
+#### Add JAR Package Dependencies
+1. Obtain SDK file: Find the `robotservice_xx.jar` file in the Robot version directory (such as `Robot/v11.3C/robotservice_11.3.jar`). SDK file follows the `robotservice_<version>.jar` naming convention. Please select the corresponding directory according to the actual version
+2. Copy the JAR package file to the `app/libs/` directory of the Android project
+3. Add dependency configuration in the `app/build.gradle` file:
 
 ```gradle
 dependencies {
     implementation files('libs/robotservice_11.3.jar')
-    // 其他依赖...
+    // Other dependencies...
 }
 ```
 
-### 2. 配置Manifest文件
+### 2. Configure Manifest File
 
-在 `AndroidManifest.xml` 文件中添加以下配置：
+Add the following configuration in the `AndroidManifest.xml` file:
 
 ```xml
 <activity android:name=".MainActivity">
@@ -82,12 +82,12 @@ dependencies {
 </activity>
 ```
 
-### 3. 开机启动配置（可选）
+### 3. Startup Configuration (Optional)
 
-如果需要应用在机器人开机后自动启动，请按以下步骤配置：
+If you need the application to automatically start after the robot boots up, please configure according to the following steps:
 
-#### 步骤1：Manifest配置
-在Activity中添加以下intent-filter：
+#### Step 1: Manifest Configuration
+Add the following intent-filter in Activity:
 
 ```xml
 <intent-filter>
@@ -96,278 +96,278 @@ dependencies {
 </intent-filter>
 ```
 
-#### 步骤2：系统设置
-在机器人系统中进行设置：
-1. 三指下拉进入系统设置
-2. 选择"开发者设置"
-3. 在"开机启动程序"中配置您的应用
+#### Step 2: System Settings
+Configure in the robot system:
+1. Swipe down with three fingers to enter system settings
+2. Select "Developer Settings"
+3. Configure your application in "Startup Programs"
 
-> **重要提示**：开机启动程序设置功能需要OTA3及以上版本支持
+> **Important Note**: Startup program setting function requires OTA3 or later version support
 
-### 4. 权限配置
+### 4. Permission Configuration
 
-为了确保SDK功能正常运行，需要在 `AndroidManifest.xml` 中声明以下权限：
+To ensure the SDK functions properly, declare the following permissions in `AndroidManifest.xml`:
 
 ```xml
-<!-- 网络访问权限 -->
+<!-- Internet access permission -->
 <uses-permission android:name="android.permission.INTERNET"/>
-<!-- 机器人设置提供者权限 -->
+<!-- Robot settings provider permission -->
 <uses-permission android:name="com.ainirobot.coreservice.robotSettingProvider" />
-<!-- 外部存储读写权限 -->
+<!-- External storage read/write permission -->
 <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
 <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
 ```
 
-## SDK接入步骤
+## SDK Integration Steps
 
-### 1. 创建回调接口
+### 1. Create Callback Interface
 
-创建接收语音请求及系统事件的回调：
+Create a callback to receive speech requests and system events:
 
 ```java
 public class ModuleCallback extends ModuleCallbackApi {
     @Override
     public boolean onSendRequest(int reqId, String reqType, String reqText, String reqParam)
             throws RemoteException {
-                //这个回调废弃
+                // This callback is deprecated
         return true;
     }
-    
-    @Override 
+
+    @Override
     public void onRecovery() throws RemoteException {
-        // 控制权恢复，收到该事件后，重新恢复对机器人的控制
+        // Control right restored. After receiving this event, regain control of the robot
     }
-    
-    @Override 
+
+    @Override
     public void onSuspend() throws RemoteException {
-        // 控制权被系统剥夺，收到该事件后，所有Api调用无效
+        // Control right removed by system. After receiving this event, all API calls are invalid
     }
 }
 ```
 
-### 2. 连接服务器
+### 2. Connect to Server
 
 ```java
 RobotApi.getInstance().connectServer(this, new ApiListener() {
     @Override
     public void handleApiDisabled() {
-        // API已禁用
+        // API Disabled
     }
-    
+
     @Override
     public void handleApiConnected() {
-        // Server已连接，设置接收请求的回调，包含语音指令、系统事件等
+        // Server connected, set callbacks to receive requests, including speech instructions, system events, etc
 
     }
-    
+
     @Override
     public void handleApiDisconnected() {
-        // 连接已断开
+        // Connection Disconnected
     }
 });
 ```
 
-**重要说明：**
-机器人SDK的初始化，标志着机器人把底盘能力权限移交给了当前正在运行的APP。机器人会在系统接管、发生故障、启动了其它带机器人SDK程序的时候发生连接已断开的回调。其中只有系统接管结束时，会重新connect上。
+**Important Note:**
+Initialization of the robot SDK marks the robot transferring chassis capability permissions to the currently running APP. The robot will trigger the disconnection callback when the system takes over, a fault occurs, or another robot SDK program is started. Only when system takeover ends will it reconnect.
 
-> **注意1**：所有Api必须在连接server成功之后才能够调用
-> 
-> **注意2**：只有前台进程，在前台运行时能正确的连接并获取机器人底盘控制权限，服务进程不工作。
+> **Note 1**: All APIs must be called after successfully connecting to the server
+>
+> **Note 2**: Only foreground processes running in the foreground can correctly connect and obtain robot chassis control permissions. Background services do not work.
 
 
 
-### 5. 注册状态监听
+### 5. Register Status Listener
 
 ```java
 StatusListener statusListener = new StatusListener(){
     @Override
     public void onStatusUpdate(String type, String data) throws RemoteException {
-        // 处理状态更新
+        // Handle status update
     }
 };
 
-// 注册状态监听
+// Register status listener
 RobotApi.getInstance().registerStatusListener(type, statusListener);
 
-// 解除状态监听
+// Unregister status listener
 RobotApi.getInstance().unregisterStatusListener(statusListener);
 ```
 
-**支持的状态类型：**
+**Supported Status Types:**
 
-- `Definition.STATUS_POSE`：机器人当前的坐标，持续上报
-- `Definition.STATUS_POSE_ESTIMATE`：当前定位状态，定位状态发生改变时上报
-- `Definition.STATUS_BATTERY`：当前电池状态信息，包括是否在充电、电量多少、是否低电量报警等
+- `Definition.STATUS_POSE`: Robot current coordinates, continuously reported
+- `Definition.STATUS_POSE_ESTIMATE`: Current localization status, reported when localization status changes
+- `Definition.STATUS_BATTERY`: Current battery status information, including charging status, battery level, low battery alarm, etc
 
-### 6. 设置reqId
+### 6. Set reqId
 
-很多SDK的方法需要传入参数 `reqId`，这是一个用于调试、跟踪日志的id。传入任何数字都能让函数正常工作，但为了日志追踪、调试的方便，建议把 `reqId` 做成一个自增长的static变量，或者根据业务需求，传入不同的 `reqId` 来做调用函数的区分。
+Many SDK methods require passing the `reqId` parameter, which is an ID for debugging and log tracking.Passing any number allows the function to work normally, but for convenience in log tracking and debugging, it is recommended to make `reqId` a self-incrementing static variable, or pass different `reqId` values based on business needs to distinguish function calls.
 
-## 视觉能力
+## Vision Capability
 
-### 简介
+### Introduction
 
-视觉能力目前主要指人员检测和识别两个模块，Api提供主要集中在PersonApi和RobotApi。
+Vision capability currently mainly refers to person detection and recognition modules. APIs are mainly provided through PersonApi and RobotApi.
 
-人员信息检测是本地能力，人站在机器人前方（排除光线较差的情况），机器人可以检测到前方人员，人站的较远时人脸和人体均可检测到，人站的比较近的时候只能检测到人脸信息。当人员id大于等于0时，代表着该人员的人脸信息完整，可以获取到该人人脸照片进行识别。
+Person detection is a local capability. When a person stands in front of the robot (excluding poor lighting conditions), the robot can detect the person. When the person is far away, both face and body can be detected. When the person is close, only face information can be detected. When the person ID is greater than or equal to 0, it indicates that the person face information is complete and can be used to obtain face photos for recognition.
 
-人员识别需要使用人脸照片进行识别，该能力需要使用网络，请注意获取人员照片时，保证人员符合采取照片条件。
+Person recognition requires using face photos for recognition. This capability requires network usage. Please ensure that persons meet the conditions for taking photos when acquiring person photos.
 
-> **注意**：使用机器人视觉能力的时候，不可以同时使用机器人摄像头。这将会导致视觉能力报错失效
+> **Note**: When using robot vision capability, do not use the robot camera simultaneously. This will cause vision capability errors and failures
 
-具体使用流程详见Demo，下面为API介绍：
+See the Demo for specific usage flow. The following is the API introduction:
 
-### Person主要信息
+### Main Person Information
 
 ```java
-private int id; //人脸本地识别id，此id可用于焦点跟随等。
-private double distance; //距离
-private double faceAngleX; //人脸x轴角度
-private double faceAngleY; //人脸y轴角度
-private int headSpeed; //当前机器人头部转动速度
-private long latency; //数据延迟
-private int facewidth; //人脸宽度
-private int faceheight; //人脸高度
-private int faceX; //人脸x坐标
-private int faceY; //人脸y坐标
-private int bodyX; //身体x坐标
-private int bodyY; //身体y坐标
-private int bodywidth; //身体宽度
-private int bodyheight; //身体高度
-private double angleInView; //人相对于机器人头部的角度
-private String quality; //检查质量参数
-private int age; //年龄（云端注册后会返回估算值）
-private String gender; //性别（按照国家规定，此项必须授权注册后才会返回结果）
-private int glasses; //是否戴眼睛
-private String remoteFaceId; //如果已注册，注册的人脸远端id
-private String faceRegisterTime; //注册时间
-//更多Person信息，可参见SDK中com.ainirobot.coreservice.client.listener.Person类定义
+private int id; // Person face local recognition ID, this ID can be used for focus following, etc
+private double distance; // Distance
+private double faceAngleX; // Person face X-axis angle
+private double faceAngleY; // Person face Y-axis angle
+private int headSpeed; // Current robot head rotation speed
+private long latency; // Data latency
+private int facewidth; // Face width
+private int faceheight; // Face height
+private int faceX; // Face X coordinate
+private int faceY; // Face Y coordinate
+private int bodyX; // Body X coordinate
+private int bodyY; // Body Y coordinate
+private int bodywidth; // Body width
+private int bodyheight; // Body height
+private double angleInView; // Person angle relative to robot head
+private String quality; // Quality check parameter
+private int age; // Age (estimated value returned after cloud registration)
+private String gender; // Gender (according to national regulations, this item will only return results after authorization and registration)
+private int glasses; // Wearing glasses
+private String remoteFaceId; // If registered, the registered person face remote ID
+private String faceRegisterTime; // Registration time
+// For more Person information, see the Person class definition in com.ainirobot.coreservice.client.listener in the SDK
 ```
-### 注册人员变化监听
+### Register Person Change Listener
 
-**方法名称：** `registerPersonListener` / `unregisterPersonListener`
+**Method Name:** `registerPersonListener` / `unregisterPersonListener`
 
-**调用方式：**
+**Invocation Method:**
 
 ```java
 PersonListener listener = new PersonListener() {
     @Override
     public void personChanged() {
         super.personChanged();
-        //人员变化时，可以调用获取当前人员列表接口获取机器人视野内所有人员
+        // When persons change, you can call the get current person list interface to get all persons in the robot vision
     }
 };
 
-//注册人员监听
+// Register person listener
 PersonApi.getInstance().registerPersonListener(listener);
 
-//取消注册人员监听
+// Unregister person listener
 PersonApi.getInstance().unregisterPersonListener(listener);
 ```
 
-**参数说明：**
+**Parameter Description:**
 
-- `listener`：人员信息变化监听
-### 获取全部人员信息
+- `listener`: Person information change listener
+### Get All Persons Information
 
-**方法名称：** `getAllPersons`
+**Method Name:** `getAllPersons`
 
-**调用方式：**
+**Invocation Method:**
 
 ```java
-//获取机器人视野内全部人员信息
+// Get all persons information in robot vision
 List<Person> personList = PersonApi.getInstance().getAllPersons();
-//获取机器人视野内1m范围内所有的人员信息
+// Get all persons information within 1m range in robot vision
 List personList = PersonApi.getInstance().getAllPersons(1);
 ```
 
-**参数说明：**
+**Parameter Description:**
 
-- `maxDistance`：机器人多大视野范围内，单位为米，机器人能识别最准确的人员距离是1-3米。
+- `maxDistance`: Within what vision range of the robot, unit in meters. The robot can recognize persons most accurately at a distance of 1-3 meters.
 
-**返回：**
+**Return Value:**
 
-- `personList`：人员信息列表
-### 获取检测到人体的人员列表
+- `personList`: Person information list
+### Get Person List with Body Detected
 
-**方法名称：** `getAllBodyList`
+**Method Name:** `getAllBodyList`
 
-**调用方式：**
+**Invocation Method:**
 
 ```java
-//获取机器人视野内所有人体信息的人员列表
+// Get person list with all body information in robot vision
 List<Person> personList = PersonApi.getInstance().getAllBodyList();
-//获取机器人视野内1m范围内所有的人体信息的人员列表
+// Get person list with all body information within 1m range in robot vision
 List personList = PersonApi.getInstance().getAllBodyList(1);
 ```
 
-**参数说明：**
+**Parameter Description:**
 
-- `maxDistance`：机器人多大视野范围内，单位为米，机器人能识别最准确的人员距离是1-3米。
+- `maxDistance`: Within what vision range of the robot, unit in meters. The robot can recognize persons most accurately at a distance of 1-3 meters.
 
-**返回：**
+**Return Value:**
 
-- `personList`：人员信息列表
+- `personList`: Person information list
 
-### 获取检测到人脸的人员列表
+### Get Person List with Face Detected
 
-**方法名称：** `getAllFaceList`
+**Method Name:** `getAllFaceList`
 
-**调用方式：**
+**Invocation Method:**
 
 ```java
-//获取机器人视野内所有有人脸信息的人员列表
+// Get person list with all face information in robot vision
 List<Person> personList = PersonApi.getInstance().getAllFaceList();
-//获取机器人视野内1m范围内所有有人脸信息的人员列表
+// Get person list with all face information within 1m range in robot vision
 List personList = PersonApi.getInstance().getAllFaceList(1);
 ```
 
-**参数说明：**
+**Parameter Description:**
 
-- `maxDistance`：机器人多大视野范围内，单位为米，机器人能识别最准确的人员距离是1-3米。
+- `maxDistance`: Within what vision range of the robot, unit in meters. The robot can recognize persons most accurately at a distance of 1-3 meters.
 
-**返回：**
+**Return Value:**
 
-- `personList`：人员信息列表
+- `personList`: Person information list
 
-### 获取检测到完整人脸的人员列表
+### Get Person List with Complete Face Detected
 
-**方法名称：** `getCompleteFaceList`
+**Method Name:** `getCompleteFaceList`
 
-**调用方式：**
+**Invocation Method:**
 
 ```java
-//获取机器人视野内所有有完整人脸信息的人员列表
+// Get person list with all complete face information in robot vision
 List<Person> personList = PersonApi.getInstance().getCompleteFaceList();
 ```
 
-**返回：**
+**Return Value:**
 
-- `personList`：人员信息列表
+- `personList`: Person information list
 
-### 获取正在焦点跟随的人员
+### Get Person in Focus Following
 
-此方法仅在焦点跟随进行中有效
+This method is only effective when focus following is in progress
 
-**方法名称：** `getFocusPerson`
+**Method Name:** `getFocusPerson`
 
-**调用方式：**
+**Invocation Method:**
 
 ```java
 Person person = PersonApi.getInstance().getFocusPerson();
 ```
 
-**返回：**
+**Return Value:**
 
-- `person`：人员信息
+- `person`: Person information
 
-焦点跟随相关API，点击这里查看。
+For focus following related APIs, click here to view.
 
-### 获取人脸照片
+### Get Face Photo
 
-**方法名称：** `getPictureById`
+**Method Name:** `getPictureById`
 
-**调用方式：**
+**Invocation Method:**
 
 ```java
 RobotApi.getInstance().getPictureById(reqId, faceId, count, new CommandListener() {
@@ -376,11 +376,11 @@ RobotApi.getInstance().getPictureById(reqId, faceId, count, new CommandListener(
         try {
             JSONObject json = new JSONObject(message);
             String status = json.optString("status");
-            //获取照片成功
+            // Photo retrieved successfully
             if (Definition.RESPONSE_OK.equals(status)) {
                 JSONArray pictures = json.optJSONArray("pictures");
                 if (!TextUtils.isEmpty(pictures.optString(0))) {
-                    //照片本地存储全路径
+                    // Full local storage path of photo
                     String picturePath = pictures.optString(0);
                 }
             }
@@ -391,27 +391,27 @@ RobotApi.getInstance().getPictureById(reqId, faceId, count, new CommandListener(
 });
 ```
 
-**参数说明：**
+**Parameter Description:**
 
-- `faceID`：人脸id，可通过本地人脸识别获得（Person的id）
-- `count`：需要获取的照片数量，此参数目前无效，默认只有一张
+- `faceID`: Face ID, obtainable through local face recognition (Person ID)
+- `count`: Number of photos to retrieve, this parameter is currently ineffective, default is one
 
-> **注意**：该接口保存的图片在使用完后需要手动删除
+> **Note**: Images saved by this interface need to be manually deleted after use
 
-### 自动注册
+### Auto Registration
 
-**方法名称：** `startRegister`
+**Method Name:** `startRegister`
 
-传入姓名，该方法会实时从摄像头中获取人脸，将该人脸注册为该姓名。日常使用该方式注册人脸
+Pass in the name. This method will capture faces from the camera in real-time and register the face with the given name. Use this method for daily person registration
 
-**调用方式：**
+**Invocation Method:**
 
 ```java
 RobotApi.getInstance().startRegister(reqId, personName, timeout, tryCount, secondDelay, new ActionListener() {
     @Override
     public void onResult(int status, String response) throws RemoteException {
         if (Definition.RESULT_OK != status) {
-            //注册失败
+            // Registration failed
             return;
         }
         try {
@@ -419,9 +419,9 @@ RobotApi.getInstance().startRegister(reqId, personName, timeout, tryCount, secon
             String remoteType = json.optString(Definition.REGISTER_REMOTE_TYPE);
             String remoteName = json.optString(Definition.REGISTER_REMOTE_NAME);
             if (Definition.REGISTER_REMOTE_SERVER_EXIST.equals(remoteType)) {
-                //当前用户已存在
+                // Current user already exists
             } else if (Definition.REGISTER_REMOTE_SERVER_NEW.equals(remoteType)) {
-                //新注册用户成功
+                // New user registration successful
             }
         } catch (JSONException e) {
             e.printStackTrace();
@@ -430,20 +430,20 @@ RobotApi.getInstance().startRegister(reqId, personName, timeout, tryCount, secon
 });
 ```
 
-**参数说明：**
+**Parameter Description:**
 
-- `personName`：注册名称
-- `timeout`：注册超时时间，注册失败时会尝试重新注册，直到超时
-- `tryCount`：失败重试次数，重试的时间大于timeout后，会放弃重试
-- `secondDelay`：重试时间间隔
+- `personName`: Registration name
+- `timeout`: Timeout duration, attempts to re-register on failure until timeout
+- `tryCount`: Number of retry attempts on failure, will give up retrying after retry time exceeds timeout
+- `secondDelay`: Retry interval
 
-> **注意**：不要重复注册同一个人脸
+> **Note**: Do not repeatedly register the same face
 
-### 远程注册
+### Remote Registration
 
-**方法名称：** `remoteRegister`
+**Method Name:** `remoteRegister`
 
-**调用方式：**
+**Invocation Method:**
 
 ```java
 RobotApi.getInstance().remoteRegister(reqId, name, path, new CommandListener() {
@@ -453,11 +453,11 @@ RobotApi.getInstance().remoteRegister(reqId, name, path, new CommandListener() {
             JSONObject jsonObject = new JSONObject(message);
             int code = jsonObject.optInt("code", -1);
             switch (code) {
-                case 0://成功
+                case 0:// Success
                     break;
-                case Definition.REMOTE_CODE_FACE_INVALID://图片无效
+                case Definition.REMOTE_CODE_FACE_INVALID:// Invalid image
                     break;
-                default://其他
+                default:// Others
                     break;
             }
         } catch (JSONException e) {
@@ -467,18 +467,18 @@ RobotApi.getInstance().remoteRegister(reqId, name, path, new CommandListener() {
 });
 ```
 
-**参数说明：**
+**Parameter Description:**
 
-- `name`：注册名称
-- `path`：图片路径，可以通过getPictureById获取
+- `name`: Registration name
+- `path`: Image path, obtainable through getPictureById
 
-> **注意**：不要重复注册同一个人脸
+> **Note**: Do not repeatedly register the same face
 
-### 远程识别
+### Remote Recognition
 
-**方法名称：** `getPersonInfoFromNet`
+**Method Name:** `getPersonInfoFromNet`
 
-**调用方式：**
+**Invocation Method:**
 
 ```java
 RobotApi.getInstance().getPersonInfoFromNet(reqId, faceId, pictures, new CommandListener() {
@@ -487,9 +487,9 @@ RobotApi.getInstance().getPersonInfoFromNet(reqId, faceId, pictures, new Command
         try {
             JSONObject json = new JSONObject(message);
             JSONObject info = json.getJSONObject("people");
-            info.getString("name"); //名称
-            info.getString("gender"); //性别
-            info.getString("age"); //年龄
+            info.getString("name"); // Name
+            info.getString("gender"); // Gender
+            info.getString("age"); // Age
         } catch (JSONException | NullPointerException e) {
             e.printStackTrace();
         }
@@ -497,16 +497,16 @@ RobotApi.getInstance().getPersonInfoFromNet(reqId, faceId, pictures, new Command
 });
 ```
 
-**参数说明：**
+**Parameter Description:**
 
-- `faceID`：人脸id，可通过本地人脸识别获得（Person的id）
-- `pictures`：人脸照片，可通过getPictureById接口获得
+- `faceID`: Face ID, obtainable through local face recognition (Person ID)
+- `pictures`: Face photo, obtainable through getPictureById interface
 
-### 切换摄像头
+### Switch Camera
 
-**方法名称：** `switchCamera`
+**Method Name:** `switchCamera`
 
-**调用方式：**
+**Invocation Method:**
 
 ```java
 RobotApi.getInstance().switchCamera(reqId, camera, new CommandListener() {
@@ -515,7 +515,7 @@ RobotApi.getInstance().switchCamera(reqId, camera, new CommandListener() {
         try {
             JSONObject json = new JSONObject(message);
             if (Definition.RESPONSE_OK.equals(json.getString("status"))) {
-                //切换成功
+                // Switch successful
             }
         } catch (JSONException | NullPointerException e) {
             e.printStackTrace();
@@ -525,43 +525,43 @@ RobotApi.getInstance().switchCamera(reqId, camera, new CommandListener() {
 ```
 
 
-**参数说明：**
+**Parameter Description:**
 
-- `camera`：摄像头，String 类型
-  - `Definition.JSON_HEAD_FORWARD` 前置摄像头
-  - `Definition.JSON_HEAD_BACKWARD` 后置摄像头
+- `camera`: Camera, String type
+  - `Definition.JSON_HEAD_FORWARD` Front camera
+  - `Definition.JSON_HEAD_BACKWARD` Rear camera
 
-## 摄像头
+## Camera
 
-机器人的摄像头有的是单摄，有的是双摄；不同产品线摄像头使用不同，详见下面文档。
-
-
-#### 豹小秘2和豹小秘mini
-
-双摄，前置摄像头可以使用 Android 标准 API 打开，也可以使用共享流获取相机预览数据（通过 Android 标准 API 打开前置摄像头，会造成机器人视觉算法暂时无法使用，释放后，一定时间后会恢复视觉算法能力）。后置摄像头只能使用Android 标准 API 打开。
+The robot cameras are either single or dual. Different product lines use different cameras. See the documentation below for details.
 
 
-#### 注意
+#### Leopard Secretary 2 and Leopard Secretary Mini
 
-使用Android的API打开相机，第一次授权APP使用摄像头时，APP可能会崩溃，但之后使用就没有限制了。如果遇到授权摄像头崩溃，重新开启即可，之后可正常使用摄像头。
+Dual cameras. The front camera can be opened using Android standard API or shared stream to get camera preview data. (Opening the front camera using Android standard API will temporarily disable robot vision algorithms. After release, vision algorithm capability will be restored after some time). Rear camera can only be opened using Android standard API.
 
-横屏机器人注意：通过Android标准方式启动之后方向是选择90°的，这是因为机器人没有陀螺仪，程序中默认是竖屏摄像头，但机器人实际是横屏设备。解决方案很简单，通过Android API（或其它各家视频sdk的API）设置摄像头旋转-90°或摄像头旋转270°即可纠正。
 
-以下Demo为Android相机API使用，仅供参考，如不满足，请自行根据需求上网查询
+#### Note
 
-Camera1的Demo
+When using Android API to open camera, the APP may crash the first time you authorize it to use the camera, but there are no restrictions after that. If you encounter a crash when authorizing the camera, just restart it. After that, you can use the camera normally.
 
-Camera2的Demo
+Landscape Robot Note: After starting through Android standard method, the orientation is 90°, because the robot has no gyroscope, the program defaults to portrait camera, but the robot is actually a landscape device. The solution is simple: set camera rotation to -90° or 270° through Android API (or other video SDK APIs) to correct it
 
-### 摄像头数据流共享
-因为机器人视觉能力VisionSDK需要使用摄像头，如果摄像头被二次开发的程序占用，会导致机器人人脸检测、人脸识别不可用。如果想既使用摄像头，又不影响机器人视觉功能，需要使用共享数据流的方式获取VisionSDK中的摄像头数据。摄像头数据通过SurfaceShareApi获取。它主要有三个关键方法：
+The following Demos are for Android camera API usage, for reference only. If not satisfied, please search online according to your needs
 
-startRequest() : 开启共享数据流
-onImageAvailable(ImageReader reader) ：这是一个回调，所有共享流里的图像数据从这里出来
-stopPushStream() ：关闭共享数据流
-共享流方式获取图像数据内存和CPU开销都比较大，在不使用的时候一定记得关闭，避免引起OOM。共享数据流取到的图片是YUV格式的，要渲染到surfaceview需要转换为bitmap。
+Camera1 Demo
 
-具体参加下面代码：
+Camera2 Demo
+
+### Camera Data Stream Sharing
+Because the robot vision capability VisionSDK needs to use the camera, if the camera is occupied by secondary development programs, it will make robot face detection and face recognition unavailable. If you want to use the camera without affecting robot vision functionality, you need to use shared data stream to get camera data from VisionSDK. Camera data is obtained through SurfaceShareApi.It has three main methods:
+
+startRequest() : Start shared data stream
+onImageAvailable(ImageReader reader) :This is a callback where all image data from shared streams comes out
+stopPushStream() :Close shared data stream
+Obtaining image data via shared streams has large memory and CPU overhead. Be sure to close it when not in use to avoid OOM.Images obtained from shared data streams are in YUV format. To render to surfaceview, they need to be converted to bitmap.
+
+See the code below for details:
 
 ```java
 package com.ainirobot.videocall.control.sufaceshareengine;
@@ -586,7 +586,7 @@ import java.nio.ByteBuffer;
 import java.util.HashMap;
 import java.util.Map;
 /**
- * 通过Vision SDK获取视频数据
+ * Get Video Data through Vision SDK
  */
 public class SurfaceShareDataEngine {
     private static final String TAG = "SurfaceShareDataEngine";
@@ -594,7 +594,7 @@ public class SurfaceShareDataEngine {
     public static final int IMAGE_DATA_FOR_LOCAL_PREVIEW = 1;
     public static final int VISION_IMAGE_WIDTH = 640;
     public static final int VISION_IMAGE_HEIGHT = 480;
-    private static final int MAX_CACHE_IMAGES = 4; //maxImages 保持和VisionSdk一致
+    private static final int MAX_CACHE_IMAGES = 4; // maxImages keep consistent with VisionSdk
     private MessageCallBack mCallBack;
     private ImageReader mImageReader;
     private Handler mHandler;
@@ -690,7 +690,7 @@ public class SurfaceShareDataEngine {
                     Log.d(TAG, "onImageAvailable mBackgroundThread is null");
                     return;
                 }
- //以下是猎豹的业务逻辑，此处可以改为其它业务逻辑。注意处理完成后一定要释放图片，否则极容易引起OOM崩溃
+ // The following is Leopard business logic, which can be changed to other business logic. Be sure to release images after processing, otherwise it may easily cause OOM crash
                 //pushYuv(image);
             } catch (Exception e) {
                 e.printStackTrace();
@@ -781,7 +781,7 @@ public class SurfaceShareDataEngine {
 }
 ```
 
-在猎户的机器人代码中的逻辑代码是这样处理YUV图像的：
+In Orion robot code, the logic code handles YUV images like this:
 
 ```java
     pushYuv(image);
@@ -908,22 +908,22 @@ public class SurfaceShareDataEngine {
 
 SurfaceShareDataEngine.java
 
-## 基础运动
+## Basic Motion
 
-### 直线运动
+### Linear Motion
 
-**方法名称：** `goForward` / `goBackward`
+**Method Name:** `goForward` / `goBackward`
 
-**调用方式：**
+**Invocation Method:**
 
 ```java
 CommandListener motionListener = new CommandListener() {
     @Override
     public void onResult(int result, String message) {
         if ("succeed".equals(message)) {
-            //调用成功
+            // Call successful
         } else {
-            //调用失败
+            // Call failed
         }
     }
 };
@@ -934,25 +934,25 @@ RobotApi.getInstance().goBackward(reqId, speed, motionListener);
 RobotApi.getInstance().goBackward(reqId, speed, distance, motionListener);
 ```
 
-**参数说明：**
+**Parameter Description:**
 
-- `speed`：运动速度，单位m/s，范围为 0 ~ 1.0, 大于1.0的速度按1.0运动
-- `distance`：运动距离，单位m，值需大于0。
-- `avoid`：是否行走的时候进行避停，只有前进可以避停。
-### 旋转运动
+- `speed`: Motion speed, unit: m/s, range 0 ~ 1.0. Speeds greater than 1.0 will be capped at 1.0
+- `distance`: Motion distance, unit: m. Value must be greater than 0.
+- `avoid`: Whether to perform obstacle avoidance while walking. Only forward motion supports obstacle avoidance.
+### Rotational Motion
 
-**方法名称：** `turnLeft` / `turnRight`
+**Method Name:** `turnLeft` / `turnRight`
 
-**调用方式：**
+**Invocation Method:**
 
 ```java
 CommandListener rotateListener = new CommandListener() {
     @Override
     public void onResult(int result, String message) {
         if ("succeed".equals(message)) {
-            //调用成功
+            // Call successful
         } else {
-            //调用失败
+            // Call failed
         }
     }
 };
@@ -962,15 +962,15 @@ RobotApi.getInstance().turnRight(reqId, speed, rotateListener);
 RobotApi.getInstance().turnRight(reqId, speed, angle, rotateListener);
 ```
 
-**参数说明：**
+**Parameter Description:**
 
-- `speed`：旋转速度，单位：度/s，范围为 0 ~ 50 度/s
-- `angle`：旋转角度，单位：度，值需大于0
-### 通过设定角速度、线速度的方式控制机器人
+- `speed`: Rotation speed, unit: degree/s, range 0 ~ 50 degrees/s
+- `angle`: Rotation angle, unit: degree. Value must be greater than 0
+### Control Robot through Angular/Linear Velocity
 
-**方法名称：** `motionArcWithObstacles`
+**Method Name:** `motionArcWithObstacles`
 
-**调用方式：**
+**Invocation Method:**
 
 ```java
 RobotApi.getInstance().motionArcWithObstacles(reqID,0.5,0.5,new CommandListener(){
@@ -983,36 +983,36 @@ RobotApi.getInstance().motionArcWithObstacles(reqID,0.5,0.5,new CommandListener(
 });
 ```
 
-**参数说明：**
+**Parameter Description:**
 
-- `lineSpeed`：线速度，范围 -1.2 ~ 1.2
-- `angularSpeed`：角速度，范围 -2 ~ 2
-### 停止
+- `lineSpeed`: Linear speed, range -1.2 ~ 1.2
+- `angularSpeed`: Angular speed, range -2 ~ 2
+### Stop
 
-**方法名称：** `stopMove`
+**Method Name:** `stopMove`
 
-**调用方式：**
+**Invocation Method:**
 
 ```java
 RobotApi.getInstance().stopMove(reqId, new CommandListener() {
     @Override
     public void onResult(int result, String message) {
         if ("succeed".equals(message)) {
-            //调用成功
+            // Call successful
         } else {
-            //调用失败
+            // Call failed
         }
     }
 });
 ```
 
-> **注意：** 该接口只可用于停止前进、后退及旋转，不可用于停止导航及头部运动
+> **Note:** This interface can only be used to stop forward, backward and rotation motions. It cannot be used to stop navigation or head motion.
 
-### 头部云台运动
+### Head Gimbal Motion
 
-**方法名称：** `moveHead`
+**Method Name:** `moveHead`
 
-**调用方式：**
+**Invocation Method:**
 
 ```java
 RobotApi.getInstance().moveHead(reqId, hMode, vMode, hAngle, vAngle, new CommandListener() {
@@ -1022,7 +1022,7 @@ RobotApi.getInstance().moveHead(reqId, hMode, vMode, hAngle, vAngle, new Command
             JSONObject json = new JSONObject(message);
             String status = json.getString("status");
             if (Definition.CMD_STATUS_OK.equals(status)) {
-                //操作成功
+                // Operation successful
             }
         } catch (JSONException | NullPointerException e) {
             e.printStackTrace();
@@ -1031,20 +1031,20 @@ RobotApi.getInstance().moveHead(reqId, hMode, vMode, hAngle, vAngle, new Command
 });
 ```
 
-**参数说明：**
+**Parameter Description:**
 
-- `hMode`：左右转动的模式，绝对运动：absolute，相对运动：relative
-- `vMode`：上下运动的模式，绝对运动：absolute，相对运动：relative
-- `hAngle`：左右转动角度，范围：-120 ~ 120
-- `vAngle`：上下运动的角度，范围：0 ~ 90
+- `hMode`: Mode for horizontal rotation. Absolute motion: `absolute`. Relative motion: `relative`
+- `vMode`: Mode for vertical motion. Absolute motion: `absolute`. Relative motion: `relative`
+- `hAngle`: Horizontal rotation angle, range: -120 ~ 120 degrees
+- `vAngle`: Vertical motion angle, range: 0 ~ 90 degrees
 
-> **注意：** 请注意机器类型的物理型限制，mini、豹小秘2机型左右转动模式无效
+> **Note:** Please note the physical limitations of different machine types. For mini and Xiaobao Express 2 models, horizontal rotation mode has no effect.
 
-### 恢复云台初始角度
+### Reset Gimbal to Initial Angle
 
-**方法名称：** `resetHead`
+**Method Name:** `resetHead`
 
-**调用方式：**
+**Invocation Method:**
 
 ```java
 RobotApi.getInstance().resetHead(reqId, new CommandListener() {
@@ -1054,7 +1054,7 @@ RobotApi.getInstance().resetHead(reqId, new CommandListener() {
             JSONObject json = new JSONObject(message);
             String status = json.getString("status");
             if (Definition.CMD_STATUS_OK.equals(status)) {
-                //操作成功
+                // Operation successful
             }
         } catch (JSONException | NullPointerException e) {
             e.printStackTrace();
@@ -1063,40 +1063,40 @@ RobotApi.getInstance().resetHead(reqId, new CommandListener() {
 });
 ```
 
-## 地图及位置
+## Map and Localization
 
-### 简介
+### Introduction
 
-地图和定位是机器人导航的先决条件，新建地图相当于告知机器人可行走的范围，定位相当于告知机器人目前所处的位置。机器人自带"地图工具"可以完成所有地图和点位的操作，当然你也可以自己使用api完成功能
+Map and localization are prerequisites for robot navigation. Creating a new map tells the robot the walkable range, and localization tells the robot its current position. The robot comes with a "Map Tool" that can complete all map and location operations, or you can use the API yourself
 
-**设点：** 指告知机器人当前点位的名称，之后可使用接口导航到这个点位
+**Set Location:** Inform the robot of the current location's name, which can then be used with navigation interface to navigate to this location
 
-### 建图及定位
+### Map Creation and Localization
 
-建图及定位可使用系统集成的地图工具进行操作.
+Map creation and localization can be performed using the system-integrated map tools.
 
-> 地图坐标中，xy是机器人在地图中的位置，theta是机器人的面朝方向（单位为弧度）
+> In map coordinates, x and y represent the robot's position in the map, and theta represents the robot's facing direction (unit: radians)
 
-### 定位（设置机器人初始坐标点）
+### Localization (Set Robot Initial Position)
 
-**方法名称：** `setPoseEstimate`
+**Method Name:** `setPoseEstimate`
 
-**调用方式：**
+**Invocation Method:**
 
 ```java
 try {
     JSONObject params = new JSONObject();
-    //x坐标
+    // X coordinate
     params.put(Definition.JSON_NAVI_POSITION_X, x);
-    //y坐标
+    // Y coordinate
     params.put(Definition.JSON_NAVI_POSITION_Y, y);
-    //z坐标
+    // Z coordinate
     params.put(Definition.JSON_NAVI_POSITION_THETA, theta);
     RobotApi.getInstance().setPoseEstimate(reqId, params.toString(), new CommandListener() {
         @Override
         public void onResult(int result, String message) {
             if ("succeed".equals(message)) {
-                //定位成功
+                // Localization successful
             }
         }
     });
@@ -1104,54 +1104,54 @@ try {
     e.printStackTrace();
 }
 ```
-### 判断当前是否已定位
+### Check if Currently Localized
 
-**方法名称：** `isRobotEstimate`
+**Method Name:** `isRobotEstimate`
 
-**调用方式：**
+**Invocation Method:**
 
 ```java
 RobotApi.getInstance().isRobotEstimate(reqId, new CommandListener() {
     @Override
     public void onResult(int result, String message) {
         if (!"true".equals(message)) {
-            //当前未定位
+            // Currently not localized
         } else {
-            //当前已定位
+            // Currently localized
         }
     }
 });
 ```
-### 设置当前位置名称
+### Set Current Location Name
 
-**方法名称：** `setLocation`
+**Method Name:** `setLocation`
 
-**调用方式：**
+**Invocation Method:**
 
 ```java
 RobotApi.getInstance().setLocation(reqId, placeName, new CommandListener() {
     @Override
     public void onResult(int result, String message) {
         if ("succeed".equals(message)) {
-            //保存位置点成功
+            // Location point saved successfully
         } else {
-            //保存位置点失败
+            // Location point save failed
         }
     }
 });
 ```
 
-**参数说明：**
+**Parameter Description:**
 
-- `placeName`：位置名称
+- `placeName`: Location name
 
-> **注意：** 调用该接口前需要确保已定位
+> **Note:** Before calling this interface, ensure localization is complete
 
-### 根据位置名称获取坐标点
+### Get Position Coordinates by Location Name
 
-**方法名称：** `getLocation`
+**Method Name:** `getLocation`
 
-**调用方式：**
+**Invocation Method:**
 
 ```java
 RobotApi.getInstance().getLocation(reqId, placeName, new CommandListener() {
@@ -1159,14 +1159,14 @@ RobotApi.getInstance().getLocation(reqId, placeName, new CommandListener() {
     public void onResult(int result, String message) {
         try {
             JSONObject json = new JSONObject(message);
-            //当前位置是否存在
+            // Whether current location exists
             boolean isExist = json.getBoolean(Definition.JSON_NAVI_SITE_EXIST);
             if (isExist) {
-                //x坐标
+                // X coordinate
                 double x = json.getDouble(Definition.JSON_NAVI_POSITION_X);
-                //y坐标
+                // Y coordinate
                 double y = json.getDouble(Definition.JSON_NAVI_POSITION_Y);
-                //面朝方向
+                // Facing direction
                 double z = json.getDouble(Definition.JSON_NAVI_POSITION_THETA);
             }
         } catch (JSONException | NullPointerException e) {
@@ -1176,17 +1176,17 @@ RobotApi.getInstance().getLocation(reqId, placeName, new CommandListener() {
 });
 ```
 
-**参数说明：**
+**Parameter Description:**
 
-- `placeName`：位置名称
+- `placeName`: Location name
 
-> **注意：** setLocation保存的位置会与地图关联，通过getLocation获取的时候也应该保持相同的地图，否则getLocation获取失败
+> **Note:** Locations saved by setLocation are associated with the map. When retrieving locations via getLocation, you should use the same map, otherwise getLocation will fail
 
-### 获取当前地图所有位置点
+### Get All Position Points on Current Map
 
-**方法名称：** `getPlaceList`
+**Method Name:** `getPlaceList`
 
-**调用方式：**
+**Invocation Method:**
 
 ```java
 RobotApi.getInstance().getPlaceList(reqId, new CommandListener() {
@@ -1197,15 +1197,15 @@ RobotApi.getInstance().getPlaceList(reqId, new CommandListener() {
             int length = jsonArray.length();
             for (int i = 0; i < length; i++) {
                 JSONObject json = jsonArray.getJSONObject(i);
-                //常用
-                json.getString("name"); //位置名称
-                json.getDouble("x"); //x坐标
-                json.getDouble("y"); //y坐标
-                //不常用
-                json.getDouble("theta"); //面朝方向
-                json.getString("id"); //位置id
-                json.getLong("time");//更新时间
-                json.getInt("status"); //0:正常区域，可以到 1:禁行区，不可以到 2:地图外，不可以到
+                // Commonly used
+                json.getString("name"); // Location name
+                json.getDouble("x"); // X coordinate
+                json.getDouble("y"); // Y coordinate
+                // Rarely used
+                json.getDouble("theta"); // Facing direction
+                json.getString("id"); // Location ID
+                json.getLong("time"); // Update time
+                json.getInt("status"); // 0: Normal area, can reach 1: Forbidden area, cannot reach 2: Outside map, cannot reach
             }
         } catch (JSONException | NullPointerException e) {
             e.printStackTrace();
@@ -1213,11 +1213,11 @@ RobotApi.getInstance().getPlaceList(reqId, new CommandListener() {
     }
 });
 ```
-### 获取机器人当前坐标点
+### Get Robot Current Position
 
-**方法名称：** `getPosition`
+**Method Name:** `getPosition`
 
-**调用方式：**
+**Invocation Method:**
 
 ```java
 RobotApi.getInstance().getPosition(reqId, new CommandListener() {
@@ -1225,11 +1225,11 @@ RobotApi.getInstance().getPosition(reqId, new CommandListener() {
     public void onResult(int result, String message) {
         try {
             JSONObject json = new JSONObject(message);
-            //x坐标
+            // X coordinate
             double x = json.getDouble(Definition.JSON_NAVI_POSITION_X);
-            //y坐标
+            // Y coordinate
             double y = json.getDouble(Definition.JSON_NAVI_POSITION_Y);
-            //面朝方向
+            // Facing direction
             double z = json.getDouble(Definition.JSON_NAVI_POSITION_THETA);
         } catch (JSONException | NullPointerException e) {
             e.printStackTrace();
@@ -1238,26 +1238,26 @@ RobotApi.getInstance().getPosition(reqId, new CommandListener() {
 });
 ```
 
-> **注意：** 调用该接口前需要确保已定位
+> **Note:** Before calling this interface, ensure localization is complete
 
-### 判断机器人是否在位置点
+### Check if Robot is at Position Point
 
-**方法名称：** `isRobotInLocations`
+**Method Name:** `isRobotInLocations`
 
-**调用方式：**
+**Invocation Method:**
 
 ```java
 try {
     JSONObject params = new JSONObject();
-    params.put(Definition.JSON_NAVI_TARGET_PLACE_NAME, placeName); //位置名称
-    params.put(Definition.JSON_NAVI_COORDINATE_DEVIATION, range); //位置范围
+    params.put(Definition.JSON_NAVI_TARGET_PLACE_NAME, placeName); // Location name
+    params.put(Definition.JSON_NAVI_COORDINATE_DEVIATION, range); // Location range
     RobotApi.getInstance().isRobotInlocations(reqId,
             params.toString(), new CommandListener() {
                 @Override
                 public void onResult(int result, String message) {
                     try {
                         JSONObject json = new JSONObject(message);
-                        //是否在目标点
+                        // Whether at target location
                         json.getBoolean(Definition.JSON_NAVI_IS_IN_LOCATION);
                     } catch (JSONException e) {
                         e.printStackTrace();
@@ -1269,30 +1269,30 @@ try {
 }
 ```
 
-**参数说明：**
+**Parameter Description:**
 
-- `placeName`：位置名称
-- `range`：位置范围，单位m
-### 获取当前地图名称
+- `placeName`: Location name
+- `range`: Location range, unit: m
+### Get Current Map Name
 
-**方法名称：** `getMapName`
+**Method Name:** `getMapName`
 
-**调用方式：**
+**Invocation Method:**
 
 ```java
 RobotApi.getInstance().getMapName(reqId, new CommandListener() {
     @Override
     public void onResult(int result, String message) {
         if (!TextUtils.isEmpty(message)) {
-            //message为地图名称
+            // message is the map name
             String mapName = message;
         }
     }
 });
 ```
-### 位置状态改变监听
+### Listen for Position State Changes
 
-启动一个监听回调，在位置和位置状态发生改变时触发回调。
+Start a listener callback that triggers when location and location state change.
 
 ```java
 public class Pose {
@@ -1300,9 +1300,9 @@ public class Pose {
     public final long time;
     public String name;
     /**
-     * FREE = 0;      // 正常区域，可以到
-     * OBSTACLE = 1;  // 禁行区，不可以到
-     * OUTSIDE = 2;   // 地图外，不可以到
+     * FREE = 0;      // Normal area, can reach
+     * OBSTACLE = 1;  // Forbidden area, cannot reach
+     * OUTSIDE = 2;   // Outside map, cannot reach
      */
     public int status;
     public float distance;
@@ -1315,84 +1315,84 @@ RobotApi.getInstance().registerStatusListener(Definition.STATUS_POSE,
         }
     });
 ```
-### 切换地图
+### Switch Map
 
-**方法名称：** `switchMap`
+**Method Name:** `switchMap`
 
-**调用方式：**
+**Invocation Method:**
 
 ```java
 RobotApi.getInstance().switchMap(reqId, mapName, new CommandListener(){
     @Override
     public void onResult(int result, String message) {
         if ("succeed".equals(message)) {
-            //切换地图成功
+            // Map switched successfully
         }
     }
 });
 ```
 
-**参数说明：**
+**Parameter Description:**
 
-- `mapName`：地图名称
+- `mapName`: Map name
 
-> **注意：** 切换地图后需要重新定位
+> **Note:** After switching maps, re-localization is required
 
-### 读取地图PGM文件并进展示（包含点位坐标转换）
+### Read and Display Map PGM File (including point coordinate conversion)
 
-读取地图和坐标转换是一整套地图工具在支撑，示例代码如下：
+Map reading and coordinate conversion are supported by a complete set of map tools. Example code is as follows:
 
 ```java
 /*
  * getMap
- * 获得当前地图
- * 地图具有当前机器人位置信息，方向坐标与可点击导航的位置点位
+ * Get current map
+ * The map has current robot location information, direction coordinates and clickable navigation location points
  * Get the current map
  * The map has current robot position information, direction coordinates and clickable navigation positions
- * 共享内存获取 map.pgm 文件
+ * Get map.pgm file from shared memory
  * */
 private void getMap(final String name) {
     Log.d(TAG, "getMapPgmPFD: mapName=" + name);
-    //获取 map.pgm 文件描述符
+    // Get map.pgm file descriptor
     ParcelFileDescriptor mapPgmPFD = ShareMemoryApi.getInstance().getMapPgmPFD(name);
     FileDescriptor fd = mapPgmPFD.getFileDescriptor();
     FileInputStream fileInputStream = new FileInputStream(fd);
-    //从文件描述符读取数据流，解析为 RoverMap（此逻辑和之前一致）
+    // Read data stream from file descriptor, parse as RoverMap (this logic is consistent with before)
     mRoverMap = MapppUtils.loadPFD2RoverMap(fileInputStream);
-    
-    //TODO 自定义操作
-    
-    //释放 service 层资源
+
+    // TODO Custom operation
+
+    // Release service layer resources
     ShareMemoryApi.getInstance().releaseGetMapPgmPFD();
 }
 
 /**
- * 共享内存修改 map.pgm 文件，测试代码
+ * Modify map.pgm file in shared memory, test code
  */
-private void setMapPgmPFD(String mapName，RoverMap roverMap) {
+private void setMapPgmPFD(String mapName, RoverMap roverMap) {
     byte[] bytes = MapUtils.saveRoverMapToPFDData(roverMap);
     boolean result = ShareMemoryApi.getInstance().setMapPgmPFD(mapName, bytesT);
     Log.d(TAG, "setMapPgmPFD: result=" + result);
 }
 ```
 
-如果有相关需求，请拷贝或参考示例代码中NavFragment部分代码，最终可把机器人中的地图、点位信息读出并展示成如下形式。下载代码
+If you have related requirements, please copy or refer to the NavFragment part of the sample code. Finally, you can read out the map and position information from the robot and display it as follows. Download code
 
-### 打开/关闭 雷达数据上报
+### Enable/Disable Radar Data Reporting
 
-**方法名称：** `setNavigationLineData`
+**Method Name:** `setNavigationLineData`
 
-**调用方式：**
+**Invocation Method:**
 
 ```java
 RobotApi.getInstance().setNavigationLineData(reqId, enabled);
 ```
 
-**参数说明：**
+**Parameter Description:**
 
-- `enabled`：true则启用雷达数据上报；false则关闭雷达数据上报
+- `enabled`: `true` to enable radar data reporting; `false` to disable radar data reporting
 
-### 雷达数据监听
+### Radar Data Listener
 
 ```java
 RobotApi.getInstance().registerStatusListener(Definition.STATUS_LINE_DATA,
@@ -1405,173 +1405,173 @@ RobotApi.getInstance().registerStatusListener(Definition.STATUS_LINE_DATA,
     });
 ```
 
-> **注意：** 需要setNavigationLineData开启雷达数据上报，才会有数据；使用完毕后，关闭雷达数据上报，且unregisterStatusListener，释放资源
+> **Note:** You need to call setNavigationLineData to enable radar data reporting before data becomes available. After use, disable radar data reporting and unregisterStatusListener to release resources
 
-## 导航
+## Navigation
 
-### 介绍
+### Introduction
 
-导航指机器人的行走能力，机器人可以从A点行动至B点，行走过程中可以自动规划路线，可以有效避开障碍物。
+Navigation refers to the robot's walking ability. The robot can move from point A to point B, automatically planning routes during movement and effectively avoiding obstacles.
 
-机器人导航所使用的传感器比较多，包括底部激光雷达，RGBD，头部IR传感器（部分机型）等，所以在导航中请不要遮挡这些传感器，以免出现机器人不走，路径规划失败等问题。
+Robot navigation uses many sensors, including bottom LIDAR, RGBD, head IR sensors (on some models), etc. Please do not block these sensors during navigation to avoid robot immobility or path planning failure.
 
-> **重要提示：** 机器人能执行导航动作的前提是：机器人已新建地图，并且在该地图上已经定位成功，雷达处于开启状态，请一定要注意这一点！
+> **Important Note:** The prerequisite for robot to execute navigation is: the robot has created a new map, is successfully localized on this map, and the LIDAR is in the enabled state. Please pay special attention to this!
 
-### 导航状态和错误码定义
+### Navigation Status and Error Code Definition
 
-导航系列API中可能出现的状态和错误码对照表
+Status and error code reference table that may appear in navigation series APIs
 
-#### 导航状态定义（对应导航navigationListener的onStatusUpdate）
-
-```java
-STATUS_START_NAVIGATION = 1014; //开始导航
-STATUS_START_CRUISE = 1015; //开始巡航
-STATUS_NAVI_AVOID = 1018; //开始避障
-STATUS_NAVI_AVOID_END = 1019; //避障结束
-STATUS_NAVI_OUT_MAP = 1020; //走出地图，建议调用stopNavigation停止导航
-STATUS_NAVI_MULTI_ROBOT_WAITING = 1034; //多机调度等待
-STATUS_NAVI_MULTI_ROBOT_WAITING_END = 1035; //多机调度等待结束
-STATUS_NAVI_GO_STRAIGHT = 1036; //开始直行
-STATUS_NAVI_TURN_LEFT = 1037; //开始左转弯
-STATUS_NAVI_TURN_RIGHT = 1038; //开始右转弯
-STATUS_NAVI_GLOBAL_PATH_FAILED = 1025; //路径规划失败，导航失败，需要处理报错，建议调用stopNavigation停止导航
-```
-
-#### 导航错误码定义（对应导航navigationListener的onError）
+#### Navigation Status Definition (corresponding to NavigationListener's onStatusUpdate method)
 
 ```java
-ERROR_DESTINATION_NOT_EXIST = -108; //目的地不存在
-ERROR_DESTINATION_CAN_NOT_ARRAIVE = -109; //避障超时，目的地不可达
-ERROR_IN_DESTINATION = -113; //当前已在目的地周围
-ERROR_NOT_ESTIMATE = -116; //当前未定位
-ERROR_MULTI_ROBOT_WAITING_TIMEOUT = -125; //多机调度等待超时
-ERROR_NAVIGATION_FAILED = -120; //导航因其它原因失败，兜底失败
-ACTION_RESPONSE_ALREADY_RUN = -1; //当前接口已经调用，请先停止，才能再次调用
-ACTION_RESPONSE_REQUEST_RES_ERROR = -6; //已经有需要控制底盘的接口调用，请先停止，才能继续调用
+STATUS_START_NAVIGATION = 1014; // Start navigation
+STATUS_START_CRUISE = 1015; // Start patrol
+STATUS_NAVI_AVOID = 1018; // Start obstacle avoidance
+STATUS_NAVI_AVOID_END = 1019; // Obstacle avoidance finished
+STATUS_NAVI_OUT_MAP = 1020; // Out of map. It is recommended to call stopNavigation to stop navigation
+STATUS_NAVI_MULTI_ROBOT_WAITING = 1034; // Multi-robot scheduling waiting
+STATUS_NAVI_MULTI_ROBOT_WAITING_END = 1035; // Multi-robot scheduling wait finished
+STATUS_NAVI_GO_STRAIGHT = 1036; // Start moving straight
+STATUS_NAVI_TURN_LEFT = 1037; // Start turning left
+STATUS_NAVI_TURN_RIGHT = 1038; // Start turning right
+STATUS_NAVI_GLOBAL_PATH_FAILED = 1025; // Path planning failed, navigation failed, need to handle error, It is recommendedmended to call stopNavigation to stop navigation
 ```
 
-### 导航到指定位置
+#### Navigation Error Code Definition (corresponding to NavigationListener's onError method)
 
-**方法名称：** `startNavigation`
+```java
+ERROR_DESTINATION_NOT_EXIST = -108; // Destination does not exist
+ERROR_DESTINATION_CAN_NOT_ARRAIVE = -109; // Obstacle avoidance timeout, destination unreachable
+ERROR_IN_DESTINATION = -113; // Currently near destination
+ERROR_NOT_ESTIMATE = -116; // Currently not localized
+ERROR_MULTI_ROBOT_WAITING_TIMEOUT = -125; // Multi-robot scheduling wait timeout
+ERROR_NAVIGATION_FAILED = -120; // Navigation failed for other reasons, fallback failed
+ACTION_RESPONSE_ALREADY_RUN = -1; // This interface has been called, please stop first before calling again
+ACTION_RESPONSE_REQUEST_RES_ERROR = -6; // Already have interface call that needs to control chassis, please stop first before continuing
+```
 
-**结果回调：**
+### Navigate to Specified Location
 
-ActionListener navigationListener = new ActionListener() {    
+**Method Name:** `startNavigation`
+
+**Result Callback:**
+
+ActionListener navigationListener = new ActionListener() {
         @Override
         public void onResult(int status, String response) throws RemoteException {
             switch (status) {
                 case Definition.RESULT_OK:
                     if ("true".equals(response)) {
-                        //导航成功
+                        // Navigation successful
                     } else {
-                        //导航失败
+                        // Navigation failed
                     }
                     break;
-               case Definition.ACTION_RESPONSE_STOP_SUCCESS://取消导航任务成功
+               case Definition.ACTION_RESPONSE_STOP_SUCCESS:// Cancel navigation task successfully
                     break;
             }
-        }    
-        @Override public void onError(int errorCode, String errorString) throws RemoteException     {         
-            switch (errorCode) {             
-                case Definition.ERROR_NOT_ESTIMATE:              //当前未定位              
-                    break;              
-                case Definition.ERROR_IN_DESTINATION:              //当前机器人已经在目的地范围内              
-                    break;              
-                case Definition.ERROR_DESTINATION_NOT_EXIST:              //导航目的地不存在              
-                    break;              
-                case Definition.ERROR_DESTINATION_CAN_NOT_ARRAIVE://避障超时，目的地不能到达，超时时间通过参数设置              
-                    break;              
-                case Definition.ACTION_RESPONSE_ALREADY_RUN:           //当前接口已经调用，请先停止，才能再次调用                                                                          
-                    break;              
-                case Definition.ACTION_RESPONSE_REQUEST_RES_ERROR://已经有需要控制底盘的接口调用，请先停止，才能继续调用              
-                    break;          
-            }      
         }
-        @Override      
-        public void onStatusUpdate(int status, String data, String extraData) {                                 
-            switch (status) {               
-                case Definition.STATUS_NAVI_AVOID:               //当前路线已经被障碍物堵死               
-                    break;                           
-                case Definition.STATUS_NAVI_AVOID_END:               //障碍物已移除               
-                    break;         
-            }      
+        @Override public void onError(int errorCode, String errorString) throws RemoteException     {
+            switch (errorCode) {
+                case Definition.ERROR_NOT_ESTIMATE:              // Currently not localized
+                    break;
+                case Definition.ERROR_IN_DESTINATION:              // Current robot is already within destination range
+                    break;
+                case Definition.ERROR_DESTINATION_NOT_EXIST:              // Navigation destination does not exist
+                    break;
+                case Definition.ERROR_DESTINATION_CAN_NOT_ARRAIVE:// Obstacle avoidance timeout, destination unreachable. Timeout duration is set via parameter
+                    break;
+                case Definition.ACTION_RESPONSE_ALREADY_RUN:           // This interface has been called, please stop first before calling again
+                    break;
+                case Definition.ACTION_RESPONSE_REQUEST_RES_ERROR:// Already have interface call that needs to control chassis, please stop first before continuing
+                    break;
+            }
+        }
+        @Override
+        public void onStatusUpdate(int status, String data, String extraData) {
+            switch (status) {
+                case Definition.STATUS_NAVI_AVOID:               // Current route is blocked by obstacles
+                    break;
+                case Definition.STATUS_NAVI_AVOID_END:               // Obstacle has been removed
+                    break;
+            }
         }
 }
-**调用方式：**
+**Invocation Method:**
 
-1. **默认导航速度**
+1. **Default Navigation Speed**
 ```java
 RobotApi.getInstance().startNavigation(reqId, destName, coordinateDeviation, time, navigationListener);
 ```
 
-2. **默认导航速度，指定避障距离**（如果此值设置为 0，机器人默认会使用默认值 0.75）*该调用方式在V10版本开始支持*
+2. **Default Navigation Speed with Specified Obstacle Avoidance Distance** (If this value is set to 0, robot will use default value 0.75) * This calling method is supported from version V10 *
 ```java
 RobotApi.getInstance().startNavigation(reqId, destName, coordinateDeviation, obsDistance, time, navigationListener);
 ```
 
-3. **指定导航速度** *该调用方式在V4.12版本开始支持*
+3. **Specified Navigation Speed** * This calling method is supported from version V4.12 *
 ```java
 RobotApi.getInstance().startNavigation(reqId, destName, coordinateDeviation, time, linearSpeed, angularSpeed, navigationListener);
 ```
 
-4. **指定导航速度，指定避障距离**（如果此值设置为 0，机器人默认会使用默认值 0.75）*该调用方式在V10版本开始支持*
+4. **Specified Navigation Speed with Specified Obstacle Avoidance Distance** (If this value is set to 0, robot will use default value 0.75) * This calling method is supported from version V10 *
 ```java
 RobotApi.getInstance().startNavigation(reqId, destName, coordinateDeviation, obsDistance, time, linearSpeed, angularSpeed, navigationListener);
 ```
 
-5. **指定坐标点** *该调用方式在V4.12版本开始支持*
+5. **Specified Coordinates** * This calling method is supported from version V4.12 *
 ```java
 RobotApi.getInstance().startNavigation(reqId, pose, coordinateDeviation, time, navigationListener);
 ```
 
-6. **指定坐标点，指定避障距离**（如果此值设置为 0，机器人默认会使用默认值 0.75）*该调用方式在V10版本开始支持*
+6. **Specified Coordinates with Specified Obstacle Avoidance Distance** (If this value is set to 0, robot will use default value 0.75) * This calling method is supported from version V10 *
 ```java
 RobotApi.getInstance().startNavigation(reqId, pose, coordinateDeviation, obsDistance, time, navigationListener);
 ```
 
-7. **指定导航加速度** *该调用方式在V4.12版本开始支持*（此接口暂时仅支持招财豹）
+7. **Specified Navigation Acceleration** (This calling method is supported from version V4.12. This interface currently only supports Caizhao Leopard)
 ```java
 RobotApi.getInstance().startNavigation(reqId, destName, coordinateDeviation, time, linearSpeed, angularSpeed, isAdjustAngle, destinationRange, wheelOverCurrentRetryCount, multipleWaitTime, priority, linearAcceleration, angularAcceleration, navigationListener);
 ```
 
-**参数说明：**
+**Parameter Description:**
 
-- `destName`：导航目的地名称（必须先通过setLocation设置）
-- `pose`：导航目的地坐标点
-- `obsDistance`：最大避障距离，距离目标的障碍物小于该值时，机器人停止，取值大于 0，默认 0.75，单位米。
-- `coordinateDeviation`：目的地范围，如果距离目的地在该范围内，则认为已到达，建议设置为0.2，单位为米。
-- `time`：避障超时时间，如果该时间内机器人的移动距离不超过0.1m，则导航失败，单位毫秒，建议30*1000。
-- `linearSpeed`：导航线速度，范围：0.1 ~ 0.85 m/s 默认值：0.7 m/s。
-- `angularSpeed`：导航角速度，范围：0.4 ~ 1.4 m/s 默认值：1.2 m/s 最终导航速度是结合线速度和角速度换算后得到，不同的线速度和角速度对导航运动方式有影响，建议线速度和角速度保持一定规律：angularSpeed = 0.4 + (linearSpeed – 0.1) / 3 * 4
-- `isAdjustAngle`：是否适应导航结束时朝向的角度。如传false，则归正到点位设置时的角度
-- `destinationRange`：目标点无法到达时，距离目标点多少距离即认为导航成功
-- `wheelOverCurrentRetryCount`：导航过程中轮子堵转尝试次数
-- `multipleWaitTime`：导航过程中如遇多机等待
-- `priority`：默认取 0 即可，取值范围0~30，值越大优先级越高；一般用于多个机器人在导航时候避让使用
-- `linearAcceleration`：导航线加速度，范围：0.4 ~ 0.8 m/s2 默认值：0.7 m/s2。
-- `angularAcceleration`：导航角加速度，范围：0.4 ~ 0.9 m/s2 默认值：0.8 m/s2 最终导航角加速度速度是通过线速度换算后得到，不同的线加速度和角加速度对导航运动方式有影响，建议线加速度和角加速度保持一定规律：angularAcceleration= (linearSpeed / 0.8)
+- `destName`: Navigation destination name (must be set first via setLocation)
+- `pose`: Navigation destination coordinates
+- `obsDistance`: Maximum obstacle avoidance distance. Robot stops when obstacles are closer than this distance. Value must be greater than 0, default 0.75, unit: meters
+- `coordinateDeviation`: Destination range. If the distance to the destination is within this range, it is considered reached. Recommended value is 0.2, unit: meters
+- `time`: Obstacle avoidance timeout duration. If robot movement is less than 0.1m within this time, navigation fails. Unit: milliseconds, recommended 30*1000
+- `linearSpeed`: Navigation linear speed, range: 0.1 ~ 0.85 m/s, default: 0.7 m/s
+- `angularSpeed`: Navigation angular speed, range: 0.4 ~ 1.4 rad/s, default: 1.2 rad/s. The final navigation speed is calculated based on the combination of linear and angular speeds. Different combinations of linear and angular speeds affect navigation motion patterns. It is recommended to maintain a certain relationship: angularSpeed = 0.4 + (linearSpeed – 0.1) / 3 * 4
+- `isAdjustAngle`: Whether to adjust the facing angle when navigation finishes. If `false`, it will return to the angle set at the location point
+- `destinationRange`: When target point is unreachable, the distance at which navigation is considered successful
+- `wheelOverCurrentRetryCount`: Retry count for wheel blockage during navigation
+- `multipleWaitTime`: Wait time for multi-robot encountered during navigation
+- `priority`: Default is 0, range 0~30. Higher value means higher priority. Generally used for multi-robot avoidance during navigation
+- `linearAcceleration`: Navigation linear acceleration, range: 0.4 ~ 0.8 m/s², default: 0.7 m/s²
+- `angularAcceleration`: Navigation angular acceleration, range: 0.4 ~ 0.9 rad/s², default: 0.8 rad/s². The final navigation angular acceleration speed is obtained through linear speed conversion. It is recommended to maintain a certain relationship between linear acceleration and angular acceleration
 
-> **注意：** 调用该接口前需要确保已定位
+> **Note:** Before calling this interface, ensure localization is complete
 
-### 停止导航到指定位置
+### Stop Navigation to Specified Location
 
-**方法名称：** `stopNavigation`
+**Method Name:** `stopNavigation`
 
-**调用方式：**
+**Invocation Method:**
 
 ```java
 RobotApi.getInstance().stopNavigation(reqId);
 ```
 
-> **注意：** 该接口只能用于停止startNavigation启动的导航
+> **Note:** This interface can only be used to stop navigation started by startNavigation
 
-### 导航到指定坐标点
+### Navigate to Specified Coordinates
 
-> **注意：** 该方法已经废弃，建议使用startNavigation，goPosition接口不再做维护
+> **Note:** This method is deprecated. It is recommended to use startNavigation. The goPosition interface is no longer maintained
 
-**方法名称：** `goPosition`
+**Method Name:** `goPosition`
 
-**结果回调：**
+**Result Callback:**
 
 ```java
 CommandListener goPositionListener = new CommandListener() {
@@ -1580,9 +1580,9 @@ CommandListener goPositionListener = new CommandListener() {
         switch (status) {
             case Definition.RESULT_OK:
                 if ("true".equals(response)) {
-                    //导航成功
+                    // Navigation successful
                 } else {
-                    //导航失败
+                    // Navigation failed
                 }
                 break;
         }
@@ -1591,39 +1591,39 @@ CommandListener goPositionListener = new CommandListener() {
     public void onError(int errorCode, String errorString) throws RemoteException {
         switch (errorCode) {
             case Definition.ACTION_RESPONSE_ALREADY_RUN:
-                //当前接口已经调用，请先停止，才能再次调用
+                // This interface has been called, please stop first before calling again
                 break;
             case Definition.ACTION_RESPONSE_REQUEST_RES_ERROR:
-                //已经有需要控制底盘的接口调用，请先停止，才能继续调用
+                // Already have interface call that needs to control chassis, please stop first before continuing
                 break;
         }
     }
-    @Override 
+    @Override
     public void onStatusUpdate(int status, String data) {
         switch (status) {
             case Definition.STATUS_NAVI_AVOID:
-                //当前路线已经被障碍物堵死
+                // Current route is blocked by obstacles
                 break;
             case Definition.STATUS_NAVI_AVOID_END:
-                //障碍物已移除
+                // Obstacle has been removed
                 break;
         }
     }
 };
 ```
 
-**调用方式：**
+**Invocation Method:**
 
-1. **默认速度**
+1. **Default Speed**
 
 ```java
 try {
     JSONObject position = new JSONObject();
-    //x坐标
+    // X coordinate
     position.put(Definition.JSON_NAVI_POSITION_X, x);
-    //y坐标
+    // Y coordinate
     position.put(Definition.JSON_NAVI_POSITION_Y, y);
-    //z坐标
+    // Z coordinate
     position.put(Definition.JSON_NAVI_POSITION_THETA, theta);
     RobotApi.getInstance().goPosition(reqId, position.toString(), goPositionListener);
 } catch (JSONException e) {
@@ -1631,16 +1631,16 @@ try {
 }
 ```
 
-2. **指定速度** *该调用方式在V4.12版本开始支持*
+2. **Specified Speed** * This calling method is supported from version V4.12 *
 
 ```java
 try {
     JSONObject position = new JSONObject();
-    //x坐标
+    // X coordinate
     position.put(Definition.JSON_NAVI_POSITION_X, x);
-    //y坐标
+    // Y coordinate
     position.put(Definition.JSON_NAVI_POSITION_Y, y);
-    //z坐标
+    // Z coordinate
     position.put(Definition.JSON_NAVI_POSITION_THETA, theta);
     RobotApi.getInstance().goPosition(reqId, position.toString(), linearSpeed, angularSpeed, goPositionListener);
 } catch (JSONException e) {
@@ -1648,37 +1648,37 @@ try {
 }
 ```
 
-**参数说明：**
+**Parameter Description:**
 
-- `position`：参数为json格式的坐标点 `{ "x": "x坐标", "y": "y坐标", "theta": "z坐标" }`
-- `linearSpeed`：导航线速度，范围：0.1 ~ 0.85 m/s 默认值：0.7 m/s
-- `angularSpeed`：导航角速度，范围：0.4 ~ 1.4 m/s 默认值：1.2 m/s
+- `position`: Parameter is a JSON-formatted coordinate point `{ "x": "x coordinate", "y": "y coordinate", "theta": "z coordinate" }`
+- `linearSpeed`: Navigation linear speed, range: 0.1 ~ 0.85 m/s, default: 0.7 m/s
+- `angularSpeed`: Navigation angular speed, range: 0.4 ~ 1.4 rad/s, default: 1.2 rad/s
 
-> **注意：** 最终导航速度是结合线速度和角速度换算后得到，不同的线速度和角速度对导航运动方式有影响，建议线速度和角速度保持一定规律：angularSpeed = 0.4 + (linearSpeed – 0.1) / 3 * 4
+> **Note:** The final navigation speed is calculated by combining linear and angular speeds. Different combinations affect navigation motion patterns. It is recommended to maintain a certain relationship between linear and angular speeds = 0.4 + (linearSpeed – 0.1) / 3 * 4
 
-> **注意：** 调用该接口前需要确保已定位
+> **Note:** Before calling this interface, ensure localization is complete
 
-### 停止导航到指定坐标点
+### Stop Navigation to Specified Coordinates
 
-**方法名称：** `stopGoPosition`
+**Method Name:** `stopGoPosition`
 
-**调用方式：**
+**Invocation Method:**
 
 ```java
 RobotApi.getInstance().stopGoPosition(reqId);
 ```
 
-> **注意：** goPosition 与 startNavigation 两个启动导航的接口，都有一个对应的停止接口，必须一一对应，不能混用
+> **Note:** Both goPosition and startNavigation have corresponding stop interfaces that must be paired correctly and cannot be mixed
 
 ---
 
-### 转向目标点方向
+### Turn to Target Direction
 
-**方法名称：** `resumeSpecialPlaceTheta`
+**Method Name:** `resumeSpecialPlaceTheta`
 
-**方法说明：** 该接口只会左右转动到目标点方位，不会实际运动到目标点。
+**Method Description:** This interface only rotates horizontally to face the target location, it does not actually move to the target point.
 
-**调用方式：**
+**Invocation Method:**
 
 ```java
 RobotApi.getInstance().resumeSpecialPlaceTheta(reqId,
@@ -1690,30 +1690,30 @@ RobotApi.getInstance().resumeSpecialPlaceTheta(reqId,
     });
 ```
 
-**参数说明：**
+**Parameter Description:**
 
-- `reqId`：int类型 命令id
-- `placeName`：String类型 目标点名称
-- `listener`：CommandListener类型 消息回调
+- `reqId`: int type, command ID
+- `placeName`: String type, target location name
+- `listener`: CommandListener type, message callback
 
-**返回值：**
+**Return Value:**
 
-- `int result`：0 命令执行 / -1 没有执行
+- `int result`: 0 = command executed / -1 = command not executed
 
-> **注意：** 调用该接口前需要确保已定位
+> **Note:** Before calling this interface, ensure localization is complete
 
-### 计算巡线模式下，两点之间的距离
+### Calculate Distance Between Two Points in Patrol Mode
 
-使用这个API可以获取到两点之间的距离（仅用于计算在巡线模式下，巡线路径上的两个点之间的距离）
+This API can be used to get the distance between two points (only for calculating the distance between two points on the patrol route in patrol mode)
 
-**方法名称：** `getNaviPathInfo`
+**Method Name:** `getNaviPathInfo`
 
-**方法说明：** 用于计算在巡线模式下，巡线路径上的两个点之间的距离。传入的点位信息可以是巡线路径上的任意点，可通过获取点位的API来获取地图上标定的点位的信息。
+**Method Description:** Used to calculate the distance between two points on the patrol route in patrol mode. The input point information can be any point on the patrol route and can be obtained through the point retrieval API from the map.
 
-**调用方式：**
+**Invocation Method:**
 
 ```java
-// 起点和终点都必须在巡线路经上，机器人开启巡线模式
+// Start and end points must be on the patrol line route, robot starts patrol line mode
 Pose startPos = new Pose();
 startPos.setX(-0.22329703f);
 startPos.setY(1.1073834f);
@@ -1724,7 +1724,7 @@ endPos.setX(0.09533833f);
 endPos.setY(-0.7406802f);
 endPos.setTheta(-2.886187f);
 
-// 使用这个API获取路径长度，单位米
+// Use this API to get path length, unit: meters
 RobotApi.getInstance().getNaviPathInfo(reqID,
     startPos,
     endPos,
@@ -1738,7 +1738,7 @@ RobotApi.getInstance().getNaviPathInfo(reqID,
                 e.printStackTrace();
             }
         }
-        
+
         @Override
         public void onError(int errorCode, String errorString, String extraData) {
             Log.d("OnError", errorCode);
@@ -1747,38 +1747,38 @@ RobotApi.getInstance().getNaviPathInfo(reqID,
 ```
 ---
 
-### 设置机器人加速减速模式
+### Set Robot Acceleration/Deceleration Mode
 
-开发招财豹时，可对机器人加速和刹车加速度进行全局设置，以适应当前的业务需求。设置方法如下：
+When developing for Caizhao Leopard, you can globally set the robot's acceleration and braking acceleration to adapt to current business needs. The setting method is as follows:
 
-#### 1. 在APP中添加权限
+#### 1. Add Permissions in APP
 
 ```xml
 <uses-permission android:name="com.ainirobot.coreservice.robotSettingProvider" />
 ```
 
-#### 2. 在代码中使用方法来更改设置
+#### 2. Use Methods in Code to Change Settings
 
 ```java
 public class NavigationSettings {
-    // value "1" - "3": 1柔和 2正常 3急迫
+    // value "1" - "3": 1 soft 2 normal 3 urgent
     public static final String ROBOT_SETTING_NAVIGATION_BREAK_MODE_LEVEL = "robot_setting_navigation_break_mode_level";
-    // value "1" - "3": 1柔和 2正常 3急迫
+    // value "1" - "3": 1 soft 2 normal 3 urgent
     public static final String ROBOT_SETTING_NAVIGATION_START_MODE_LEVEL = "robot_setting_navigation_start_mode_level";
-    
+
     public NavigationSettings() {
     }
-    
+
     public void setBreakModeLevel(int i) {
         i = i > 3 ? 3 : Math.max(i, 1);
         putString(ROBOT_SETTING_NAVIGATION_BREAK_MODE_LEVEL, "" + i);
     }
-    
+
     public void setStartModeLevel(int i) {
         i = i > 3 ? 3 : Math.max(i, 1);
         putString(ROBOT_SETTING_NAVIGATION_START_MODE_LEVEL, "" + i);
     }
-    
+
     private void putString(String key, String value) {
         if (value.equals("")) {
             return;
@@ -1790,42 +1790,42 @@ public class NavigationSettings {
             e.printStackTrace();
         }
     }
-    
+
     private void sendSettingBroadcast(String key, String value) {
         RobotSettingApi.getInstance().setRobotString(key, value);
     }
 }
 ```
 
-## 梯控导航
+## Elevator Navigation
 
-### 介绍
+### Introduction
 
-梯控导航指机器人的行走能力，机器人可以从A点行动至B点，行走过程中可以自动规划路线，不同楼层自动切换地图，可以有效避开障碍物。
+Elevator navigation refers to the robot's walking ability. The robot can move from point A to point B, automatically planning routes during movement, auto-switching maps for different floors, and effectively avoiding obstacles.
 
-机器人导航所使用的传感器比较多，包括底部激光雷达，RGBD，头部IR传感器（部分机型）等，所以在导航中请不要遮挡这些传感器，以免出现机器人不走，路径规划失败等问题。
+Robot navigation uses many sensors, including bottom LIDAR, RGBD, head IR sensors (on some models), etc. Please do not block these sensors during navigation to avoid robot immobility or path planning failure.
 
-**机器人能执行导航动作的前提条件：**
+**Prerequisites for robot to execute navigation:**
 
-- 机器人已新建地图，并且在该地图上已经定位成功
-- 机器人必须建立巡线
-- 机器人必须处于巡线的点位之上
-- 机器人的地图不能使用复制的地图，会造成点位ID，楼层冲突，无法到达
-- 雷达处于开启状态
-- 仅支持梯控机器人
+- Robot has created new maps and is successfully localized on each map
+- Robot must establish patrol lines
+- Robot must be positioned at a patrol point
+- Robot maps cannot use duplicated maps, which may cause point ID and floor conflicts, making navigation impossible
+- LIDAR is in the enabled state
+- Only supports elevator-control capable robots
 
-> **重要提示：** 请一定要注意以上前提条件！
+> **Important Note:** Please pay special attention to the above prerequisites!
 
-> **注意：** 使用卡高梯控 ROM 需要10.3及以上；使用自研梯控 ROM 需要10.5及以上。当前机器使用梯控类型请咨询售前。
+> **Note:** For third-party elevator control ROM, version 10.3 or higher is required. For proprietary elevator control ROM, version 10.5 or higher is required. Please consult pre-sales for your machine's elevator control type.
 
-### 获取多地图点位数据信息
+### Get Multi-Floor Location Data Information
 
-**方法名称：** `getMultiFloorConfigAndPose`
+**Method Name:** `getMultiFloorConfigAndPose`
 
-**调用方式：**
+**Invocation Method:**
 
 ```java
-// 获取多地图点位列表
+// Get multi-floor location list
 RobotApi.getInstance().getMultiFloorConfigAndPose(Definition.DEBUG_REQ_ID, new CommandListener() {
     @Override
     public void onResult(int result, String message, String extraData) {
@@ -1840,11 +1840,11 @@ RobotApi.getInstance().getMultiFloorConfigAndPose(Definition.DEBUG_REQ_ID, new C
     }
 });
 ```
-### 导航到指定位置
+### Navigate to Specified Location
 
-**方法名称：** `startElevatorNavigation`
+**Method Name:** `startElevatorNavigation`
 
-**调用方式：**
+**Invocation Method:**
 
 ```java
 RobotApi.getInstance().startElevatorNavigation(Definition.DEBUG_REQ_ID,
@@ -1853,24 +1853,24 @@ RobotApi.getInstance().startElevatorNavigation(Definition.DEBUG_REQ_ID,
         new ActionListener() {
             @Override
             public void onResult(int status, String message, String extraData) throws RemoteException {
-                Log.e("mName", "onResult: " + status + " responseString：" + message + " extraData：" + extraData);
+                Log.e("mName", "onResult: " + status + " responseString:" + message + " extraData:" + extraData);
                 handlerResult(status, message, extraData);
             }
-            
+
             @Override
             public void onError(int errorCode, String errorString, String extraData) throws RemoteException {
-                Log.e("mName", "onError: " + errorCode + " errorString：" + errorString + " extraData：" + extraData);
+                Log.e("mName", "onError: " + errorCode + " errorString:" + errorString + " extraData:" + extraData);
                 handlerError(errorCode, errorString, extraData);
             }
-            
+
             @Override
             public void onStatusUpdate(int status, String data, String extraData) throws RemoteException {
-                Log.e("mName", "onStatusUpdate: " + status + " data：" + data + " extraData：" + extraData);
+                Log.e("mName", "onStatusUpdate: " + status + " data:" + data + " extraData:" + extraData);
                 handlerStatusUpdate(status, data, extraData);
             }
         });
 ```
-**handlerResult 方法：**
+**handlerResult Method:**
 
 ```java
 private void handlerResult(int status, String message, String extraData) {
@@ -1879,10 +1879,10 @@ private void handlerResult(int status, String message, String extraData) {
             // stop(ComponentResult.RESULT_NAVIGATION_ARRIVED, message, extraData);
             break;
         case Definition.ACTION_RESPONSE_STOP_SUCCESS:
-            // stop(status, message + " 停止成功", extraData);
+            // stop(status, message + " Stop successful", extraData);
             break;
         case Definition.RESULT_FAILURE:
-            // stop(status, message + " 导航失败", extraData);
+            // stop(status, message + " Navigation failed", extraData);
             break;
         case Definition.STATUS_NAVI_OUT_MAP:
             // stop(ComponentError.ERROR_NAVIGATION_OUT_MAP, message, extraData);
@@ -1905,7 +1905,7 @@ private void handlerResult(int status, String message, String extraData) {
     }
 }
 ```
-**handlerError 方法：**
+**handlerError Method:**
 
 ```java
 private void handlerError(int errorCode, String message, String extraData) {
@@ -1945,7 +1945,7 @@ private void handlerError(int errorCode, String message, String extraData) {
     }
 }
 ```
-**handlerStatusUpdate 方法：**
+**handlerStatusUpdate Method:**
 
 ```java
 private void handlerStatusUpdate(int status, String data, String extraData) {
@@ -1988,192 +1988,192 @@ private void handlerStatusUpdate(int status, String data, String extraData) {
     }
 }
 ```
-**参数说明：**
+**Parameter Description:**
 
-- `definition.DEBUG_REQ_ID`：int类型，命令id，定义参数reqid
-- `dest`：string类型，本次导航目的地，目的地不为空，且是目标楼层地图上所在的点
-- `floor`：int类型，目的地所在楼层映射，目的地楼层的楼层映射（FloorIndex），不能为0，且需在MapTool多层管理的地图组中
-- `listener`：ActionListener类型，功能监听，需要的回调：onResult、onError、onStatusUpdate
+- `definition.DEBUG_REQ_ID`: int type, command ID, defines parameter reqId
+- `dest`: String type, destination for this navigation, must not be empty and must be a point on the target floor map
+- `floor`: int type, floor mapping where destination is located. Must not be 0 and must be in a map group managed by MapTool
+- `listener`: ActionListener type, function listener with required callbacks: onResult, onError, onStatusUpdate
 
-> **注意：** 调用该接口前需要确保已定位
+> **Note:** Before calling this interface, ensure localization is complete
 
-### 停止导航到指定位置
+### Stop Navigation to Specified Location
 
-**方法名称：** `stopAdvanceNavigation`
+**Method Name:** `stopAdvanceNavigation`
 
-**调用方式：**
+**Invocation Method:**
 
 ```java
 RobotApi.getInstance().stopAdvanceNavigation(reqId);
 ```
 
-> **注意：** 该接口只能用于停止startElevatorNavigation启动的导航
+> **Note:** This interface can only be used to stop navigation started by startElevatorNavigation
 
 ---
 
-### 状态和错误码定义
+### Status and Error Code Definition
 
 #### onStatusUpdate
-导航过程中上报的事件，上报时任务不会停止。
+Events reported during navigation. Tasks will not stop when events are reported.
 
-| 名称 | Code | 定义 |
+| Name | Code | Definition |
 |------|------|------|
-| `STATUS_START_NAVIGATION` | 1014 | 导航开始 |
-| `STATUS_NAVI_REPLACE_DESTINATION` | 1048 | 切换目的地并开始导航 |
-| `STATUS_ESTIMATE_LOST` | 1045 | 定位丢失 |
-| `STATUS_DISTANCE_WITH_DESTINATION` | 1050 | 距目的地距离,单位（m）例：extraData = "3" |
-| `STATUS_NAVI_AVOID_IMMEDIATELY` | 1051 | 避障 |
-| `STATUS_GOAL_OCCLUDED` | 1016 | 避障开始 |
-| `STATUS_NAVI_AVOID` | 1018 | 避障 |
-| `STATUS_GOAL_OCCLUDED_END` | 1017 | 避障结束 |
-| `STATUS_NAVI_AVOID_END` | 1019 | 避障结束 |
-| `STATUS_NAVI_OBSTACLES_AVOID` | 1023 | 障碍物避障 |
-| `STATUS_NAVI_MULTI_ROBOT_WAITING` | 1034 | 开始等待其他机器人通过（多机避障开始） |
-| `STATUS_NAVI_MULTI_ROBOT_WAITING_END` | 1035 | 多机避障结束 |
-| `STATUS_NAVI_GO_STRAIGHT` | 1036 | 机器人在直线上行走 |
-| `STATUS_NAVI_TURN_LEFT` | 1037 | 机器人左转 |
-| `STATUS_NAVI_TURN_RIGHT` | 1038 | 机器人右转 |
+| `STATUS_START_NAVIGATION` | 1014 | Navigation started |
+| `STATUS_NAVI_REPLACE_DESTINATION` | 1048 | Switch destination and start navigation |
+| `STATUS_ESTIMATE_LOST` | 1045 | Localization lost |
+| `STATUS_DISTANCE_WITH_DESTINATION` | 1050 | Distance to destination, unit (m). Example: extraData = "3" |
+| `STATUS_NAVI_AVOID_IMMEDIATELY` | 1051 | Obstacle avoidance |
+| `STATUS_GOAL_OCCLUDED` | 1016 | Obstacle avoidance started |
+| `STATUS_NAVI_AVOID` | 1018 | Obstacle avoidance |
+| `STATUS_GOAL_OCCLUDED_END` | 1017 | Obstacle avoidance finished |
+| `STATUS_NAVI_AVOID_END` | 1019 | Obstacle avoidance finished |
+| `STATUS_NAVI_OBSTACLES_AVOID` | 1023 | Obstacle avoidance |
+| `STATUS_NAVI_MULTI_ROBOT_WAITING` | 1034 | Start waiting for other robots to pass (multi-robot avoidance started) |
+| `STATUS_NAVI_MULTI_ROBOT_WAITING_END` | 1035 | Multi-robot avoidance finished |
+| `STATUS_NAVI_GO_STRAIGHT` | 1036 | Robot moving in straight line |
+| `STATUS_NAVI_TURN_LEFT` | 1037 | Robot turning left |
+| `STATUS_NAVI_TURN_RIGHT` | 1038 | Robot turning right |
 
 #### onResult
 
-导航功能结束时，上报的状态
+Status reported when navigation finishes.
 
-| 名称 | Code | 定义 |
+| Name | Code | Definition |
 |------|------|------|
-| `RESULT_NAVIGATION_ARRIVED` | 102 | 到达目的地 |
-| `RESULT_OK` | 1 | 成功 |
-| `RESULT_FAILURE` | 2 | 导航失败 |
-| `RESULT_DESTINATION_AVAILABLE` | 103 | 目的地可达，未被占用 |
-| `RESULT_DESTINATION_IN_RANGE` | 104 | 到达目的地范围内 |
-| `ACTION_RESPONSE_STOP_SUCCESS` | 3 | action停止成功 |
-| `STATUS_NAVI_OUT_MAP` | 1020 | 超出地图范围 |
-| `STATUS_NAVI_GLOBAL_PATH_FAILED` | 1025 | 导航路径规划失败 |
-| `STATUS_NAVI_MULTI_MAP_NOT_MATCH` | 1040 | 多机地图未匹配 |
-| `STATUS_NAVI_MULTI_LORA_DISCONNECT` | 1041 | 多机lora断开连接 |
-| `STATUS_NAVI_MULTI_LORA_CONFIG_FAIL` | 1042 | 多机配置有问题 |
-| `STATUS_NAVI_MULTI_VERSION_NOT_MATCH` | 1043 | 视觉未匹配 |
-| `STATUS_NAVI_WHEEL_SLIP` | 1044 | 导航时轮子打滑 |
+| `RESULT_NAVIGATION_ARRIVED` | 102 | Arrived at destination |
+| `RESULT_OK` | 1 | successful |
+| `RESULT_FAILURE` | 2 | navigationfailed |
+| `RESULT_DESTINATION_AVAILABLE` | 103 | Destination reachable, not occupied |
+| `RESULT_DESTINATION_IN_RANGE` | 104 | Within destination range |
+| `ACTION_RESPONSE_STOP_SUCCESS` | 3 | actionstopsuccessful |
+| `STATUS_NAVI_OUT_MAP` | 1020 | Out of map range |
+| `STATUS_NAVI_GLOBAL_PATH_FAILED` | 1025 | Navigation path planning failed |
+| `STATUS_NAVI_MULTI_MAP_NOT_MATCH` | 1040 | Multi-robot map not matched |
+| `STATUS_NAVI_MULTI_LORA_DISCONNECT` | 1041 | Multi-robot LoRa disconnected |
+| `STATUS_NAVI_MULTI_LORA_CONFIG_FAIL` | 1042 | Multi-robot configuration error |
+| `STATUS_NAVI_MULTI_VERSION_NOT_MATCH` | 1043 | Vision not matched |
+| `STATUS_NAVI_WHEEL_SLIP` | 1044 | Wheel slip during navigation |
 
 #### onError
 
-导航出现异常结束时，上报的状态
+Status reported when navigation finishes with an exception.
 
-| 名称 | Code | 定义 |
+| Name | Code | Definition |
 |------|------|------|
-| `ERROR_PARAMETER` | -102 | 参数错误 |
-| `ERROR_TARGET_NOT_FOUND` | -107 | 未找到点位 |
-| `ERROR_DESTINATION_NOT_EXIST` | -108 | 目的地不存在 |
-| `ERROR_ESTIMATE_ERROR` | -128 | 重定位失败 |
-| `ERROR_MULTIPLE_MODE_ERROR` | -127 | 多机信息错误 |
-| `ERROR_PARAMS_JSON_PARSER_ERROR` | -32750026 | json解析错误 |
-| `ERROR_NO_AVAILABLE_DESTINATION` | -129 | 未找到可用的目的地 |
-| `ERROR_NOT_ESTIMATE` | -116 | 未定位 |
-| `ERROR_IN_DESTINATION` | -113 | 已经在目的地 |
-| `ERROR_DESTINATION_CAN_NOT_ARRAIVE` | -109 | 目的地不可达 |
-| `ERROR_MULTI_ROBOT_WAITING_TIMEOUT` | -125 | 多机避障等待超时 |
-| `ERROR_NAVIGATION_AVOID_TIMEOUT` | -136 | 机器人避障超时 |
+| `ERROR_PARAMETER` | -102 | Parameter error |
+| `ERROR_TARGET_NOT_FOUND` | -107 | Point not found |
+| `ERROR_DESTINATION_NOT_EXIST` | -108 | Destination does not exist |
+| `ERROR_ESTIMATE_ERROR` | -128 | Re-localization failed |
+| `ERROR_MULTIPLE_MODE_ERROR` | -127 | Multi-robot information error |
+| `ERROR_PARAMS_JSON_PARSER_ERROR` | -32750026 | JSON parsing error |
+| `ERROR_NO_AVAILABLE_DESTINATION` | -129 | No available destination found |
+| `ERROR_NOT_ESTIMATE` | -116 | Not localized |
+| `ERROR_IN_DESTINATION` | -113 | Already at destination |
+| `ERROR_DESTINATION_CAN_NOT_ARRAIVE` | -109 | Destination unreachable |
+| `ERROR_MULTI_ROBOT_WAITING_TIMEOUT` | -125 | Multi-robot avoidance wait timeout |
+| `ERROR_NAVIGATION_AVOID_TIMEOUT` | -136 | Robot obstacle avoidance timeout |
 | `ACTION_RESPONSE_ALREADY_RUN` | -1 | Request busy |
-| `ACTION_RESPONSE_REQUEST_RES_ERROR` | -6 | 请求失败 |
-| `ACTION_RESPONSE_RES_UNAVAILBALE` | -9 | 请求不可用 |
-| `ERROR_WHEEL_OVER_CURRENT_RUN_OUT` | -124 | 轮子堵转重试次数用完 |
+| `ACTION_RESPONSE_REQUEST_RES_ERROR` | -6 | Request failed |
+| `ACTION_RESPONSE_RES_UNAVAILBALE` | -9 | Request unavailable |
+| `ERROR_WHEEL_OVER_CURRENT_RUN_OUT` | -124 | Wheel blockage retry count exhausted |
 
-### 梯控示例地址
+### Elevator Navigation Example Address
 
-> **注意：** 具体的梯控示例代码和使用说明，请参考相关的示例项目。
+> **Note:** For specific elevator navigation example code and usage instructions, please refer to the related sample projects.
 
-## 过闸机导航
+## Gate Passing Navigation
 
-### 介绍
+### Introduction
 
-以下是关于机器人过闸机的 API 介绍，使用 API 需要有以下准备工作：
+The following are API introductions for robot gate passing. Before using the API, the following preparations are required:
 
-**准备工作：**
+**Preparation:**
 
-- 机器硬件支持过闸机
-- 设置闸机线
-- 建图时要设置"闸机入口"和"闸机出口"两个点位，点位名字强匹配
-- 设置巡线，要保证闸机入口和闸机出口，有唯一一条巡线可通过，该巡线需要是双向线
-- 完成上述步骤后，选择编辑地图，闸机线选项，可选择一条巡线作为闸机线，选择后保存并且上传云端
+- Machine hardware supports gate passing
+- Set up gate line
+- When creating map, set "gate entrance" and "gate exit" points with exact name matching
+- Set patrol line to ensure gate entrance and exit have a unique patrol path that is bidirectional
+- After completing the above steps, select Edit Map and gate line option to choose a patrol as the gate line, then save and upload to cloud
 
-> **注意：** 闸机线目前是整机唯一，没有与地图的关联关系，切换地图后要重新设置
+> **Note:** The gate line is unique for the machine and not associated with any map. It must be reset when switching maps
 
-### 判断从当前位置到目标点位是否通过闸机
+### Check if Gate Passing is Needed from Current Position
 
-**方法名称：** `getGatePassingRoute`
+**Method Name:** `getGatePassingRoute`
 
-**调用方式：**
+**Invocation Method:**
 
 ```java
 RobotApi.getInstance().getGatePassingRoute(reqId, targetPlaceName, new CommandListener() {
     @Override
     public void onResult(int result, String message) {
-        // 处理返回结果
-        // 如果返回的List<Pose>为空，则不需要经过闸机
-        // 如果非空，则两个点即为地图里建立的"闸机入口"和"闸机出口"的点
+        // Process return result
+        // If returned List<Pose> is empty, no need to pass through gate
+        // If not empty, the two points are the "gate entrance" and "gate exit" in the map
     }
 });
 ```
 
-**参数说明：**
+**Parameter Description:**
 
-- `reqId`：命令id
-- `targetPlaceName`：机器人要导航去的目标点名称
-- `listener`：回调，可以返回一个`List<Pose>`，如果为空，则不需要经过闸机，如果非空，则两个点即为地图里建立的"闸机入口"和"闸机出口"的点
+- `reqId`: Command ID
+- `targetPlaceName`: Target location name for robot navigation
+- `listener`: Callback that can return a `List<Pose>`. If empty, no gate passing is needed. If not empty, the two points are the "gate entrance" and "gate exit" points in the map
 
-> **注意：** 详细使用参考 Demo
+> **Note:** For detailed usage, refer to the Demo
 
-### 导航通过闸机
+### Navigate Through Gate
 
-通过 `getGatePassingRoute` 判断需要通过闸机，则导航到离机器人最近的一个点（上一步查询得到的点），然后再控制闸机开门（目前客户自己实现），开门成功后，导航到目的地。
+Use `getGatePassingRoute` to check if gate passing is needed. If so, navigate to the nearest point (obtained from the previous query), then control the gate to open (currently implemented by clients). After successful opening, navigate to the final destination.
 
-**实现流程：**
+**Implementation Flow:**
 
-1. 调用 `getGatePassingRoute` 判断是否需要经过闸机
-2. 如果需要经过闸机，导航到离机器人最近的点位（闸机入口或出口）
-3. 控制闸机开门（需要客户自己实现）
-4. 开门成功后，导航到最终目的地
+1. Call `getGatePassingRoute` to check if gate passing is needed
+2. If gate passing is needed, navigate to the nearest point (gate entrance or exit)
+3. Control the gate to open (must be implemented by client)
+4. After successful opening, navigate to the final destination
 
-## 基础场景
+## Basic Scenarios
 
-### 简介
+### Introduction
 
-基础场景是RobotOS提供的功能组件，指包含一系列功能策略的场景功能，使用场景Api可以快速实现譬如引领，注册等基础能力，运行过程中的功能状态通过回调函数告知调用侧，开发者可以根据业务需求参与决策。
+Basic scenarios are functional components provided by RobotOS that include a series of functional policies. Using scenario APIs can quickly implement basic capabilities such as leading and registration. During execution, functional status is reported through callback functions, allowing developers to participate based on business requirements.
 
-## 引领
+## Leading
 
-### 场景介绍
+### Scenario Introduction
 
-引领是方便用户二次开发而实现的一个简单的业务场景，内部集成了人脸识别和导航，可在导航中持续识别引领目标，并可实时上报引领目标的状态，用户二次开发时可根据上报的状态进行处理，更快的实现自身业务需求。
+Leading is a simple business scenario implemented for user secondary development. It internally integrates face recognition and navigation, continuously identifies leading targets during navigation, and reports target status in real-time. Users can respond based on reported status during secondary development to quickly implement their business requirements.
 
-> **注意：** 此API目前仅支持带有后置摄像头的豹小秘，其它机器人请使用navigation实现类似功能
+> **Note:** This API currently only supports Xiaobao Express with rear-facing camera. Other robots should use navigation to implement similar functionality
 
-### 开始引领
+### Start Leading
 
-**方法名称：** `startLead`
+**Method Name:** `startLead`
 
-**调用方式：**
+**Invocation Method:**
 
 ```java
 LeadingParams params = new LeadingParams();
-//引领目标人id
+// Leading target person ID
 params.setPersonId(personId);
-//引领目的地
+// Leading destination
 params.setDestinationName(dest);
-//引领目标找不到多久后上报丢失状态
+// Report lost status after target not found
 params.setLostTimer(lostTime);
-//引领开始多久后开启人脸识别
+// Time after leading starts before face recognition begins
 params.setDetectDelay(delayTime);
-//引领目标距离机器人多远后上报超距状态
+// Report exceeding distance status after leading target is this far from robot
 params.setMaxDistance(maxDistance);
 RobotApi.getInstance().startLead(reqId, params, new ActionListener() {
     @Override
     public void onResult(int status, String responseString) throws RemoteException {
         switch (status) {
             case Definition.RESULT_OK:
-                //成功将目标引领到目的地
+                // Successfully led target to destination
                 break;
             case Definition.ACTION_RESPONSE_STOP_SUCCESS:
-                //在引领执行中，主动调用stopLead，成功停止引领
+                // Manually called stopLead during leading, successfully stopped leading
                 break;
             default:
                 break;
@@ -2183,29 +2183,29 @@ RobotApi.getInstance().startLead(reqId, params, new ActionListener() {
     public void onError(int errorCode, String errorString) throws RemoteException {
         switch (errorCode) {
             case Definition.ERROR_NOT_ESTIMATE:
-                //当前未定位
+                // Currently not localized
                 break;
             case Definition.ERROR_SET_TRACK_FAILED:
             case Definition.ERROR_TARGET_NOT_FOUND:
-                //引领目标未找到
+                // Leading target not found
                 break;
             case Definition.ERROR_IN_DESTINATION:
-                //当前已经在引领目的地
+                // Currently already at leading destination
                 break;
             case Definition.ERROR_DESTINATION_CAN_NOT_ARRAIVE:
-                //避障超时，默认为机器人20s的前进距离不足0.1m，
+                // Obstacle avoidance timeout. Default: if robot moves less than 0.1m in 20 seconds
                 break;
             case Definition.ERROR_DESTINATION_NOT_EXIST:
-                //引领目的地不存在
+                // Leading destination does not exist
                 break;
             case Definition.ERROR_HEAD:
-                //引领中操作头部云台失败
+                // Head gimbal operation failed during leading
                 break;
             case Definition.ACTION_RESPONSE_ALREADY_RUN:
-                //引领已经在进行中，请先停止上次引领，才能重新执行
+                // Leading is already in progress. Please stop the previous leading before executing again
                 break;
             case Definition.ACTION_RESPONSE_REQUEST_RES_ERROR:
-                //已经有需要控制底盘的接口调用，请先停止，才能继续调用
+                // Already have interface call that needs to control chassis, please stop first before continuing
                 break;
             default:
                 break;
@@ -2215,22 +2215,22 @@ RobotApi.getInstance().startLead(reqId, params, new ActionListener() {
     public void onStatusUpdate(int status, String data) throws RemoteException {
         switch (status) {
             case Definition.STATUS_NAVI_OUT_MAP:
-                //目标点不能到达，引领目的地在地图外，有可能为地图与位置点不匹配，请重新设置位置点
+                // Target point cannot be reached. Leading destination is outside map. May be due to map and position point mismatch. Please reset position point
                 break;
             case Definition.STATUS_NAVI_AVOID:
-                //当前引领路线已被障碍物堵死
+                // Current leading route is blocked by obstacles
                 break;
             case Definition.STATUS_NAVI_AVOID_END:
-                //障碍物已移除
+                // Obstacle has been removed
                 break;
             case Definition.STATUS_GUEST_FARAWAY:
-                //引领目标距离机器人太远，判断标准通过参数maxDistance设置
+                // Leading target is too far from robot. Judgment standard is set via maxDistance parameter
                 break;
             case Definition.STATUS_DEST_NEAR:
-                //引领目标进入机器人maxDistance范围内
+                // Leading target enters robot's maxDistance range
                 break;
             case Definition.STATUS_LEAD_NORMAL:
-                //正式开始导航
+                // Officially start navigation
                 break;
             default:
                 break;
@@ -2239,36 +2239,36 @@ RobotApi.getInstance().startLead(reqId, params, new ActionListener() {
 });
 ```
 
-### 结束引领
+### Stop Leading
 
-**方法名称：** `stopLead`
+**Method Name:** `stopLead`
 
-**调用方式：**
+**Invocation Method:**
 
 ```java
 RobotApi.getInstance().stopLead(reqId, isResetHW);
 ```
 
-**参数说明：**
+**Parameter Description:**
 
-- `isResetHW`：引领时会切换摄像头到后置摄像头，`isResetHW`是用于设置停止引领时是否恢复摄像头状态
-  - `true`：恢复摄像头为前置
-  - `false`：保持停止时的状态
-## 焦点跟随
+- `isResetHW`: During leading, the camera switches to rear-facing. This parameter sets whether to restore camera state when stopping leading
+  - `true`: Restore camera to front-facing
+  - `false`: Keep the state at stop time
+## Focus Following
 
-### 场景介绍
+### Scenario Introduction
 
-焦点跟随会根据用户指定的人脸id，持续识别并跟踪，头部云台会持续跟着目标转动，底盘也会跟着联动，直到目标静止，机器人正对目标。
+Focus following tracks a specific person by face ID. The head gimbal continuously follows the target, the chassis moves in sync, until the target stops and the robot faces the target.
 
-### 开启焦点跟随
+### Start Focus Following
 
-**方法名称：** `startFocusFollow`
+**Method Name:** `startFocusFollow`
 
-> **注意1：** 此方法使用时会占用底盘资源，不可同时执行任何底盘操作，包括导航。
-> 
-> **注意2：** 不要反复调用此方法来跟踪同一个人，只需要在跟随丢失或主动停止跟随后，再次启动`startFocusFollow`。
+> **Note 1:** This method occupies chassis resources and cannot execute any chassis operations simultaneously, including navigation.
+>
+> **Note 2:** Do not repeatedly call this method to track the same person. Only call `startFocusFollow` again after losing tracking or manually stopping it.
 
-**调用方式：**
+**Invocation Method:**
 
 ```java
 
@@ -2277,16 +2277,16 @@ RobotApi.getInstance().startFocusFollow(reqId, faceId, lostTimeout, maxDistance,
     public void onStatusUpdate(int status, String data) {
         switch (status) {
             case Definition.STATUS_TRACK_TARGET_SUCCEED:
-                //跟随目标成功
+                // Follow target successfully
                 break;
             case Definition.STATUS_GUEST_LOST:
-                //跟随目标丢失
+                // Follow target lost
                 break;
             case Definition.STATUS_GUEST_FARAWAY:
-                //跟随目标距离已大于设置的最大距离
+                // Follow target distance exceeds set maximum distance
                 break;
             case Definition.STATUS_GUEST_APPEAR:
-                //跟随目标重新进入设置的最大距离内
+                // Follow target re-enters set maximum distance range
                 break;
         }
     }
@@ -2294,13 +2294,13 @@ RobotApi.getInstance().startFocusFollow(reqId, faceId, lostTimeout, maxDistance,
         switch (errorCode) {
             case Definition.ERROR_SET_TRACK_FAILED:
             case Definition.ERROR_TARGET_NOT_FOUND:
-                //跟随目标未找到
+                // Follow target not found
                 break;
             case Definition.ACTION_RESPONSE_ALREADY_RUN:
-                //正在跟随中，请先停止上次跟随，才能重新执行
+                // Following in progress. Please stop previous following before executing again
                 break;
             case Definition.ACTION_RESPONSE_REQUEST_RES_ERROR:
-                //已经有需要控制底盘的接口调用(例如：引领、导航)，请先停止，才能继续调用
+                // Already have interface call that needs to control chassis (e.g., leading, navigation)se stop first before continuing
                 break;
         }
     }
@@ -2308,48 +2308,48 @@ RobotApi.getInstance().startFocusFollow(reqId, faceId, lostTimeout, maxDistance,
         Log.d(TAG, "startTrackPerson onResult status: " + status);
         switch (status) {
             case Definition.ACTION_RESPONSE_STOP_SUCCESS:
-                //在焦点跟随过程中，主动调用stopFocusFollow，成功停止跟随
+                // During focus following, manually called stopFocusFollow, successfully stopped following
                 break;
         }
     }
 });
 ```
 
-**参数说明：**
+**Parameter Description:**
 
-- `faceId`：焦点跟随的目标人脸id
-- `lostTimeout`：多久识别不到目标上报目标丢失状态，一般填5-10秒
-- `maxDistance`：目标距离多远上报超距状态，一般填5米
+- `faceId`: Target person face ID for focus following
+- `lostTimeout`: Report target lost status after not recognizing target for this duration, typically 5-10 seconds
+- `maxDistance`: Report exceeding max distance status when target is this far away, typically 5 meters
 
-### 停止焦点跟随
+### Stop Focus Following
 
-**方法名称：** `stopFocusFollow`
+**Method Name:** `stopFocusFollow`
 
-**调用方式：**
+**Invocation Method:**
 
 ```java
 RobotApi.getInstance().stopFocusFollow(reqId);
 ```
-## 唤醒
+## Wake-up
 
-### 场景介绍
+### Scenario Introduction
 
-唤醒场景指机器人根据唤醒词呼唤的声源方位，控制机器人转动到用户角度。
+Wake-up scenario means the robot turns towards the sound source direction when the wake word is spoken.
 
-**不同机型策略：**
+**Different Machine Type Strategies:**
 
-- **小秘策略**：当角度小于45度时，只转动头部云台，大于45度时，头部云台及底盘均会转动，以最快的速度转动到声源定位的目标角度
-- **mini策略**：根据声源方位，转动底盘到声源方位
+- **Xiaobao Express Strategy**: When angle is less than 45°, only the head gimbal rotates. When greater than 45°, both head gimbal and chassis rotate to the target angle at maximum speed
+- **Mini Strategy**: Rotate chassis towards sound source direction based on sound source location
 
-### 声源定位
+### Sound Source Localization
 
-每次唤醒机器人时，可以获取到唤醒时唤醒人和机器人之间的夹角，这个夹角叫声源定位角度。在`ModuleCallback`的`onSendRequest`回调获得，`reqType`为`Definition.REQ_SPEECH_WAKEUP`时，`reqParams`为声源定位的角度。它是唤醒API的传入参数。
+When robot wakes up, you can get the angle between the waker and robot, called sound source localization angle. This is obtained in `ModuleCallback`'s `onSendRequest` callback, where `reqType` is `Definition.REQ_SPEECH_WAKEUP`, and `reqParams` is the sound source localization angle. It is a parameter for the wake-up API.
 
-### 开始唤醒
+### Start Wake-up
 
-**方法名称：** `wakeUp`
+**Method Name:** `wakeUp`
 
-**调用方式：**
+**Invocation Method:**
 
 ```java
 RobotApi.getInstance().wakeUp(reqId, angle, new ActionListener() {
@@ -2357,58 +2357,58 @@ RobotApi.getInstance().wakeUp(reqId, angle, new ActionListener() {
     public void onResult(int status, String responseString) throws RemoteException {
         switch (status) {
             case Definition.RESULT_OK:
-                //唤醒完成
+                // Wake up completed
                 break;
             case Definition.ACTION_RESPONSE_STOP_SUCCESS:
-                //在唤醒过程中，主动调用stopWakeUp，停止唤醒
+                // During wake-up, manually called stopWakeUp, stopped wake-up
                 break;
         }
     }
     @Override public void onError(int errorCode, String errorString) throws RemoteException {
         switch (errorCode) {
             case Definition.ERROR_MOVE_HEAD_FAILED:
-                //头部云台移动失败
+                // Head gimbal movement failed
                 break;
             case Definition.ACTION_RESPONSE_ALREADY_RUN:
-                //当前正在唤醒中，需要先停止上次唤醒
+                // Currently waking up. Need to stop previous wake-up first
                 break;
             case Definition.ACTION_RESPONSE_REQUEST_RES_ERROR:
-                //已经有需要控制底盘的接口调用(例如：引领、导航等)，请先停止，才能继续调用
+                // Already have interface call that needs to control chassis (e.g., leading, navigation)ase stop first before continuing
             break;
         }
     }
 });
 ```
 
-**参数说明：**
+**Parameter Description:**
 
-- `angle`：声源定位角度
+- `angle`: Sound source localization angle
 
-### 停止唤醒
+### Stop Wake-up
 
-**方法名称：** `stopWakeUp`
+**Method Name:** `stopWakeUp`
 
-**调用方式：**
+**Invocation Method:**
 
 ```java
 RobotApi.getInstance().stopWakeUp(reqId);
 ```
 
-## 电量控制
+## Battery Management
 
-### 获取当前电量
+### Get Current Battery Level
 
-**调用方式：**
+**Invocation Method:**
 
 ```java
 RobotSettingApi.getInstance().getRobotString(Definition.ROBOT_SETTINGS_BATTERY_INFO);
 ```
 
-### 开始自动回充
+### Start Auto Charging
 
-**方法名称：** `startNaviToAutoChargeAction`
+**Method Name:** `startNaviToAutoChargeAction`
 
-**调用方式：**
+**Invocation Method:**
 
 ```java
 RobotApi.getInstance().startNaviToAutoChargeAction(reqId, timeout, new ActionListener() {
@@ -2416,10 +2416,10 @@ RobotApi.getInstance().startNaviToAutoChargeAction(reqId, timeout, new ActionLis
     public void onResult(int status, String responseString) throws RemoteException {
         switch (status) {
             case Definition.RESULT_OK:
-                //充电成功
+                // Charging successful
                 break;
             case Definition.RESULT_FAILURE:
-                //充电失败
+                // Charging failed
                 break;
         }
     }
@@ -2427,16 +2427,16 @@ RobotApi.getInstance().startNaviToAutoChargeAction(reqId, timeout, new ActionLis
     public void onStatusUpdate(int status, String data) throws RemoteException {
         switch (status) {
             case Definition.STATUS_NAVI_GLOBAL_PATH_FAILED:
-                //全局路径规划失败
+                // Global path planning failed
                 break;
             case Definition.STATUS_NAVI_OUT_MAP:
-                //目标点不能到达，引领目的地在地图外，有可能为地图与位置点不匹配，请重新设置位置点
+                // Target point cannot be reached. Leading destination is outside map. May be due to map and position point mismatch. Please reset position point
                 break;
             case Definition.STATUS_NAVI_AVOID:
-                //前往回充点路线已被障碍物堵死
+                // Route to charging pile is blocked by obstacles
                 break;
             case Definition.STATUS_NAVI_AVOID_END:
-                //障碍物已移除
+                // Obstacle has been removed
                 break;
             default:
                 break;
@@ -2445,24 +2445,24 @@ RobotApi.getInstance().startNaviToAutoChargeAction(reqId, timeout, new ActionLis
 });
 ```
 
-**参数说明：**
+**Parameter Description:**
 
-- `timeout`：导航超时时间，如果超过该时间未到达充电桩位置，则认为回充失败
+- `timeout`: Navigation timeout duration. If charging pile is not reached within this time, auto-charging is considered failed
 
-### 结束自动回充
+### Stop Auto Charging
 
-**方法名称：** `stopAutoChargeAction`
+**Method Name:** `stopAutoChargeAction`
 
-**调用方式：**
+**Invocation Method:**
 
 ```java
 RobotApi.getInstance().stopAutoChargeAction(reqId, true);
 ```
-### 停止充电并脱离充电桩
+### Stop Charging and Undock from Charging Pile
 
-**方法名称：** `leaveChargingPile`
+**Method Name:** `leaveChargingPile`
 
-**调用方式：**
+**Invocation Method:**
 
 ```java
 RobotApi.getInstance().leaveChargingPile(reqId, speed, distance, new CommandListener() {
@@ -2474,11 +2474,11 @@ RobotApi.getInstance().leaveChargingPile(reqId, speed, distance, new CommandList
             public void onError(int errorCode, String errorString, String extraData) {
                 Log.d(TAG, "leaveChargingPile errorCode: " + errorCode + " errorString:" + errorString + " extraData:" + extraData);
                 switch (errorCode) {
-                    case Definition.RESULT_FAILURE_MOTION_AVOID_STOP://前方有障碍，离桩失败
+                    case Definition.RESULT_FAILURE_MOTION_AVOID_STOP:// Obstacle ahead, undocking failed
                         break;
-                    case Definition.RESULT_FAILURE_TIMEOUT://离桩超时(15s)
+                    case Definition.RESULT_FAILURE_TIMEOUT:// Undocking timeout (15s)
                         break;
-                    case Definition.STATUS_LEAVE_PILE_OPEN_RADAR_FAILURE://雷达启动失败
+                    case Definition.STATUS_LEAVE_PILE_OPEN_RADAR_FAILURE:// Radar startup failed
                         break;
                     default:
                         break;
@@ -2488,39 +2488,39 @@ RobotApi.getInstance().leaveChargingPile(reqId, speed, distance, new CommandList
             public void onResult(int result, String message, String extraData) {
                 Log.d(TAG, "leaveChargingPile onResult: " + result + " message:" + message);
                 switch (result) {
-                    case Definition.RESULT_OK://离桩成功
-                        //如果此处想判断充电状态 注意充电状态更新会有一定时间
+                    case Definition.RESULT_OK:// Undocking successful
+                        // If you want to check charging status here, note that charging status updates take some time
                         break;
                 }
             }
         });
 ```
 
-**参数说明：**
+**Parameter Description:**
 
-- `speed`：离桩前进的速度，默认 0.7
-- `distance`：离桩前进的距离，默认 0.2，单位米
+- `speed`: Speed for moving away from charging pile, default 0.7
+- `distance`: Distance to move away from charging pile, default 0.2, unit: meters
 
-> **备注1：** 线充方式无法使用该方法脱离充电。
-> 
-> **备注2：** 此方法需先调用 `RobotApi.getInstance().disableBattery();` 禁用系统充电后才能使用。
+> **Note 1:** This method cannot be used for contact charging undocking.
+>
+> **Note 2:** This method requires calling `RobotApi.getInstance().disableBattery();` to disable system charging first.
 
 
-## 多机协作与调度
+### Multi-Robot Coordination and Scheduling
 
-### 多机协作
+#### Multi-Robot Coordination
 
-多机协作包含多机调度和多机避让功能，涉及到机器人多机协作的基础能力，此处主要涉及到的通信模块也属于机器人的多机协作基础能力部分，所属系统功能。
+Multi-robot coordination includes multi-robot scheduling and avoidance capabilities, involving fundamental multi-robot cooperation abilities. The communication module involved here is part of the robot's multi-robot cooperation foundation and system functions.
 
-机器人多机协作，不需要我们人为做任何操作，所有行为均是机器人系统调度。但前提是必须保证机器人在同一地图下工作，多个机器人在碰面之后，会调用我们的机器人通信，会给他们此时的工作优先级进行排序，从而来确定是避让还是继续工作，从而避免多个机器人在工作时相遇在同一地点，呆滞不动的情况。因此，只需保证机器人性能与硬件一切正常，多机协作能力即可正常工作。
+Robot multi-robot coordination requires no manual operation; all behaviors are system-scheduled. However, all robots must work on the same map. When multiple robots meet, they communicate through the robot communication module, which sorts their work priorities to determine whether to yield or continue working. This prevents multiple robots from encountering each other at the same location and becoming stuck. Therefore, as long as robot performance and hardware are functioning normally, multi-robot cooperation will work properly.
 
-### 多机协作信息
+#### Multi-Robot Coordination Information
 
-在安装了ESP32多机通讯模块的机器人上，可使用以下方法获取多机信息，可用于制作多机调度系统。
+On robots with installed ESP32 multi-robot communication module, you can use the following methods to get multi-robot information for creating multi-robot scheduling systems.
 
-> **注意：** 目前招财豹一定有ESP32多机通讯模块，其它机器人默认不包含这个模块。
+> **Note:** Currently, Caizhao Leopard has ESP32 multi-robot communication module. Other robots do not include this module by default.
 
-**调用方式：**
+**Invocation Method:**
 
 ```java
 RobotApi.getInstance().registerStatusListener(Definition.STATUS_MULTIPLE_ROBOT_WORKING, mStatusListener);
@@ -2532,13 +2532,13 @@ private StatusListener mStatusListener = new StatusListener() {
             Type dataType = new TypeToken<List<MultiRobotStatus>>(){}.getType();
             List<MultiRobotStatus> curRobotStatus = mGson.fromJson(data, dataType);
         } catch(Exception ex) {
-            // 处理异常
+            // Handle exception
         }
     }
 };
 ```
 
-**MultiRobotStatus类定义：**
+**MultiRobotStatus Class Definition:**
 
 ```java
 public class MultiRobotStatus {
@@ -2554,39 +2554,39 @@ public class MultiRobotStatus {
 }
 ```
 
-## 系统功能
+## System Functions
 
-### 系统状态监控
+### System Status Monitoring
 
-机器人有非常多的状态、事件可以监控，来辅助完成工作。监控主要使用下面函数来完成。
+Robot has many states and events that can be monitored to assist work. Monitoring is mainly done using the functions below.
 
-**调用方式：**
+**Invocation Method:**
 
 ```java
 RobotApi.getInstance().registerStatusListener(
         Definition.STATUS_POSE_ESTIMATE, mStatusPoseListener);
 ```
 
-能监控到的事件定义可以在SDK的`Definition.Java`中找到。目前提供的监控状态如下：
+Event definitions that can be monitored can be found in SDK's `Definition.java`. Currently provided monitoring states are as follows:
 
 ```java
-STATUS_POSE = "navi_pose"; //位置改变
-STATUS_MAP = "navi_map"; //地图改变
-STATUS_EMERGENCY = "status_emergency"; //紧急状态
-STATUS_POSE_ESTIMATE = "status_pose_estimate"; //机器人定位状态
-STATUS_AVOID_STOPPING = "status_avoid_stopping";//动态避停
-STATUS_SWITCH_MAP = "status_switch_map"; //地图切换
-STATUS_RADAR = "status_radar"; //雷达状态
-STATUS_BATTERY = "status_battery"; //电池充电状态
-STATUS_MULTIPLE_ROBOT_WORKING = "status_multiple_robot_working"; //多机状态信息
-STATUS_MAP_OUTSIDE = "status_map_outside_report"; //机器出地图(目前仅限招财)
-STATUS_ROBOT_BEING_PUSHED = "status_robot_being_pushed"; //机器被推动(目前仅限招财)
+STATUS_POSE = "navi_pose"; // Location changed
+STATUS_MAP = "navi_map"; // Map changed
+STATUS_EMERGENCY = "status_emergency"; // Emergency status
+STATUS_POSE_ESTIMATE = "status_pose_estimate"; // Robot localization status
+STATUS_AVOID_STOPPING = "status_avoid_stopping"; // Dynamic obstacle avoidance stop
+STATUS_SWITCH_MAP = "status_switch_map"; // Map switching
+STATUS_RADAR = "status_radar"; // Radar status
+STATUS_BATTERY = "status_battery"; // Battery charging status
+STATUS_MULTIPLE_ROBOT_WORKING = "status_multiple_robot_working"; // Multi-robot status information
+STATUS_MAP_OUTSIDE = "status_map_outside_report"; // Robot outside map (currently Caizhao only)
+STATUS_ROBOT_BEING_PUSHED = "status_robot_being_pushed"; // Robot being pushed (currently Caizhao only)
 ```
-### 设置灯效
+### Set LED Effect
 
-**方法名称：** `setLight`
+**Method Name:** `setLight`
 
-**调用方式：**
+**Invocation Method:**
 
 ```java
 JSONObject params = new JSONObject();
@@ -2605,108 +2605,108 @@ try {
 }
 RobotApi.getInstance().setLight(0, params.toString(), null);
 ```
-**参数说明：**
+**Parameter Description:**
 
-- `reqId`：int类型，命令id
-- `params`：String类型，可包含如下参数：
-  - `type`：填0
-  - `startColor`：灯效起始颜色值
-  - `endColor`：灯效结束颜色值
-  - `startTime`：渐变开始颜色停留的时间
-  - `endTime`：渐变结束颜色停留的时间
-  - `loopTime`：灯效渐变重复次数
-  - `duration`：渐变过程花费的时间
-  - `finalColor`：渐变过渡颜色
-- `listener`：ActionListener类型，消息回调
+- `reqId`: int type, command ID
+- `params`: String type, can include the following parameters:
+  - `type`: Fill 0
+  - `startColor`: LED effect starting color value
+  - `endColor`: LED effect ending color value
+  - `startTime`: Duration for starting color to stay
+  - `endTime`: Duration for ending color to stay
+  - `loopTime`: LED effect gradient repeat count
+  - `duration`: Time spent on gradient process
+  - `finalColor`: Gradient transition color
+- `listener`: ActionListener type, message callback
 
-> **注意：** 颜色值使用RGB排列的16位字符串，例如"F3F3F3"或者"00FF00"。
+> **Note:** Color values use 16-bit RGB strings, such as "F3F3F3" or "00FF00".
 
-**返回值：**
+**Return Value:**
 
-- `int result`：0 命令执行 / -1 没有执行
+- `int result`: 0 = command executed / -1 = command not executed
 
-> **示例代码：** 设置灯效代码demo可以在这里找到（代码适用于豹小秘机器人，其他机器人请替换机器人jar包）：点击这里
+> **Example Code:** LED effect setting demo can be found here (code applies to Xiaobao Express robot, for other robots please replace the robot JAR package): click here
 
-### 招财豹Pro和豹小递Pro设置灯效
+### Setting LED Effects for Caizhao Leopard Pro and Xiaobao Express Pro
 
-#### 检查是否使用ProZcbLed灯带接口
+#### Check if Using ProZcbLed Light Strip Interface
 
-**方法名称：** `isUseProZcbLed`
+**Method Name:** `isUseProZcbLed`
 
-**调用方式：**
+**Invocation Method:**
 
 ```java
 /**
- * 是否使用ProZcbLed灯带接口
+ * Whether to use ProZcbLed light strip interface
  */
 RobotApi.getInstance().isUseProZcbLed();
 ```
 
-#### 设置底盘灯带效果
+#### Set Chassis Light Strip Effect
 
-**方法名称：** `setProZcbLedEffect`
+**Method Name:** `setProZcbLedEffect`
 
-**调用方式：**
+**Invocation Method:**
 
 ```java
 /**
- * 控制ZcbLed灯，即Saiph Pro的底盘灯带
- * proZcbEffect 参数参考下面颜色定义
- * Zcb:招财豹
+ * Control ZcbLed light, i.e., Saiph Pro chassis light strip
+ * proZcbEffect parameter refer to color definition below
+ * Zcb: Caizhao Leopard
  */
 RobotApi.getInstance().setProZcbLedEffect(int reqId, int proZcbEffect, CommandListener listener);
 ```
 
-#### 检查是否有锁骨灯
+#### Check if Clavicle Light Exists
 
-**方法名称：** `isHasClavicleLight`
+**Method Name:** `isHasClavicleLight`
 
-**调用方式：**
+**Invocation Method:**
 
 ```java
 /**
- * 是否有锁骨灯
+ * Whether clavicle light exists
  */
 RobotApi.getInstance().isHasClavicleLight();
 ```
 
-#### 设置锁骨灯效果
+#### Set Clavicle Light Effect
 
-**方法名称：** `setProIobLedEffect`
+**Method Name:** `setProIobLedEffect`
 
-**调用方式：**
+**Invocation Method:**
 
 ```java
 /**
- * 控制IobLed灯，即Saiph Pro的锁骨灯
- * proIobLedEffect 参数参考下面颜色定义
- * "Iob"应该是拼写错误，应该是Lobby，表示胸口部位的灯带。
+ * Control IobLed light, i.e., Saiph Pro clavicle light
+ * proIobLedEffect parameter refer to color definition below
+ * "Iob" appears to be a spelling error, should be Lobby, refers to chest light strip
  */
 RobotApi.getInstance().setProIobLedEffect(int reqId, int proIobLedEffect, CommandListener listener);
 ```
-#### 颜色定义
+#### Color Definition
 
 ```java
-public static final int ZCB2UARTLED_GREENBREATH = 0xDE10;  //绿色呼吸效果
-public static final int ZCB2UARTLED_BLUEBREATH = 0xDE11;  //蓝色呼吸效果
-public static final int ZCB2UARTLED_ORANGEBREATH = 0xDE12;  //橙色呼吸效果
-public static final int ZCB2UARTLED_YELLOWBREATH = 0xDE13;  //黄色呼吸效果
-public static final int ZCB2UARTLED_BLUENORMAL = 0xDE14;  //蓝色正常效果
-public static final int ZCB2UARTLED_REDNORMAL = 0xDE15;  //红色正常效果
-public static final int ZCB2UARTLED_ORANGENORMAL = 0xDE16;  //橙色正常效果
-public static final int ZCB2UARTLED_YELLOWNORMAL = 0xDE17;  //黄色正常效果
-public static final int ZCB2UARTLED_GREENNORMAL = 0xDE18;  //绿色正常效果
-public static final int ZCB2UARTLED_TURNRIGHT = 0xDE19;  //右转效果
-public static final int ZCB2UARTLED_TURNLEFT = 0xDE20;  //左转效果
-public static final int ZCB2UARTLED_REGFLASH = 0xDE21;  //红色闪效果
-public static final int ZCB2UARTLED_YELLOWFLASH = 0xDE22;  //黄色闪效果
-public static final int ZCB2UARTLED_ALLOFF = 0xDE00;  //关闭所有zcb效果
+public static final int ZCB2UARTLED_GREENBREATH = 0xDE10;  // Green breathing effect
+public static final int ZCB2UARTLED_BLUEBREATH = 0xDE11;  // Blue breathing effect
+public static final int ZCB2UARTLED_ORANGEBREATH = 0xDE12;  // Orange breathing effect
+public static final int ZCB2UARTLED_YELLOWBREATH = 0xDE13;  // Yellow breathing effect
+public static final int ZCB2UARTLED_BLUENORMAL = 0xDE14;  // Blue normal effect
+public static final int ZCB2UARTLED_REDNORMAL = 0xDE15;  // Red normal effect
+public static final int ZCB2UARTLED_ORANGENORMAL = 0xDE16;  // Orange normal effect
+public static final int ZCB2UARTLED_YELLOWNORMAL = 0xDE17;  // Yellow normal effect
+public static final int ZCB2UARTLED_GREENNORMAL = 0xDE18;  // Green normal effect
+public static final int ZCB2UARTLED_TURNRIGHT = 0xDE19;  // Right turn effect
+public static final int ZCB2UARTLED_TURNLEFT = 0xDE20;  // Left turn effect
+public static final int ZCB2UARTLED_REGFLASH = 0xDE21;  // Red flashing effect
+public static final int ZCB2UARTLED_YELLOWFLASH = 0xDE22;  // Yellow flashing effect
+public static final int ZCB2UARTLED_ALLOFF = 0xDE00;  // Turn off all ZCB effects
 ```
-获取本机SN
+Get Device SN
 
-**方法名称：** `getRobotSn`
+**Method Name:** `getRobotSn`
 
-**调用方式：**
+**Invocation Method:**
 
 ```java
 boolean status = RobotApi.getInstance().getRobotSn(
@@ -2716,27 +2716,27 @@ boolean status = RobotApi.getInstance().getRobotSn(
             if (Definition.RESULT_OK == result) {
                 String serialNum = message;
             } else {
-                // 处理错误
+                // Handle error
             }
         }
     });
 ```
 
-**参数说明：**
+**Parameter Description:**
 
-- `listener`：CommandListener 消息回调{"code":0, "message":"err msg"}
+- `listener`: CommandListener message callback {"code":0, "message":"err msg"}
 
-**返回值：**
+**Return Value:**
 
-- `int result`：1 命令执行 / -1 没有执行
+- `int result`: 1 = command executed / -1 = command not executed
 
 ---
 
-### 获取系统版本
+### Get System Version
 
-**方法名称：** `getVersion`
+**Method Name:** `getVersion`
 
-**调用方式：**
+**Invocation Method:**
 
 ```java
 String version = RobotApi.getInstance().getVersion();
@@ -2744,19 +2744,19 @@ String version = RobotApi.getInstance().getVersion();
 
 ---
 
-### 禁止系统功能
+### Disable System Functions
 
-系统不再接管急停事件，没有急停画面，可用于用户自定义急停画面。在急停状态下，所有底盘相关功能API不可使用，唤醒、休眠等切换机器人状态的API也不生效。
+System no longer handles emergency stop events, no emergency stop screen. Can be used for custom emergency stop screen. When emergency stopped, all chassis-related APIs are disabled, and state switching APIs like wake-up and sleep are ineffective.
 
-**方法名称：** `disableEmergency`
+**Method Name:** `disableEmergency`
 
-**调用方式：**
+**Invocation Method:**
 
 ```java
 RobotApi.getInstance().disableEmergency();
 ```
 
-**获取Emergency状态的API：**
+**API for Getting Emergency Status:**
 
 ```java
 RobotApi.getInstance().getRobotStatus(Definition.STATUS_EMERGENCY, new StatusListener(){
@@ -2766,7 +2766,7 @@ RobotApi.getInstance().getRobotStatus(Definition.STATUS_EMERGENCY, new StatusLis
     }
 });
 
-// 或者使用下面方法注册急停状态事件
+// Or use the method below to register emergency stop status event
 RobotApi.getInstance().registerStatusListener(Definition.STATUS_EMERGENCY, new StatusListener(){
     @Override
     public void onStatusUpdate(String type, String data) throws RemoteException {
@@ -2777,38 +2777,38 @@ RobotApi.getInstance().registerStatusListener(Definition.STATUS_EMERGENCY, new S
 
 ---
 
-### 禁用电池界面
+### Disable Battery Interface
 
-禁用当前电池界面，充电时可使用除底盘外client app任何能力。
+Disable current battery interface. During charging, all client app capabilities except chassis operations are available.
 
-如果确认不需要充电接管，推荐在APP启动连上RobotAPI成功之后，直接调用此接口禁用。此后直到APP退出，充电接管画面都会处于禁用状态。
+If charging takeover is not needed, it is recommended to call this interface immediately after successful RobotAPI connection on app startup. The charging takeover screen will remain disabled until app exit.
 
-**方法名称：** `disableBattery`
+**Method Name:** `disableBattery`
 
-**调用方式：**
+**Invocation Method:**
 
 ```java
 RobotApi.getInstance().disableBattery();
 ```
 
-**获取Battery状态的API：**
+**API for Getting Battery Status:**
 
 ```java
 RobotSettingApi.getInstance().getRobotString(Definition.ROBOT_SETTINGS_BATTERY_INFO);
 
-// 或使用下面方法监听电池状态变化
+// Or use the method below to listen for battery status changes
 RobotApi.getInstance().registerStatusListener(Definition.STATUS_BATTERY, listener);
 ```
 
 ---
 
-### 禁用功能键
+### Disable Function Keys
 
-禁用功能键，招财豹头部后面按钮。
+Disable function keys (buttons on the back of Caizhao Leopard's head).
 
-**方法名称：** `disableFunctionKey`
+**Method Name:** `disableFunctionKey`
 
-**调用方式：**
+**Invocation Method:**
 
 ```java
 RobotApi.getInstance().disableFunctionKey();
@@ -2816,22 +2816,22 @@ RobotApi.getInstance().disableFunctionKey();
 
 ---
 
-### 休眠功能
+### Sleep Function
 
-#### 场景介绍
+#### Scenario Introduction
 
-休眠是让机器人在没有任务或者低电量的时候，保持低功耗运行的一种模式。
+Sleep is a low-power running mode for robots when there are no tasks or low battery.
 
-> **注意：** 使用休眠API需要添加如下权限：
+> **Note:** Using sleep API requires adding the following permissions:
 > ```xml
 > <uses-permission android:name="com.ainirobot.coreservice.robotSettingProvider" />
 > ```
 
-#### 开始休眠
+#### Start Sleep
 
-**方法名称：** `robotStandby`
+**Method Name:** `robotStandby`
 
-**调用方式：**
+**Invocation Method:**
 
 ```java
 RobotApi.getInstance().robotStandby(0, new CommandListener() {
@@ -2842,11 +2842,11 @@ RobotApi.getInstance().robotStandby(0, new CommandListener() {
 });
 ```
 
-#### 停止休眠
+#### Stop Sleep
 
-**方法名称：** `robotStandbyEnd`
+**Method Name:** `robotStandbyEnd`
 
-**调用方式：**
+**Invocation Method:**
 
 ```java
 RobotApi.getInstance().robotStandbyEnd(reqId);
@@ -2854,18 +2854,18 @@ RobotApi.getInstance().robotStandbyEnd(reqId);
 
 ---
 
-### 安装APK
+### Install APK
 
-**方法名称：** `installApk`
+**Method Name:** `installApk`
 
-**调用方式：**
+**Invocation Method:**
 
 ```java
 RobotApi.getInstance().installApk(reqid, fullPathName, taskID);
 ```
 
-**参数说明：**
+**Parameter Description:**
 
-- `reqId`：int类型，命令id
-- `fullPathName`：安装包路径
-- `taskID`：taskID，非空的任意字符串内容
+- `reqId`: int type, command ID
+- `fullPathName`: Installation package path
+- `taskID`: Task ID, any non-empty string content

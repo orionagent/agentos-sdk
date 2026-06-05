@@ -1,28 +1,28 @@
-# AgentSDK 示例代码文档
+# AgentSDK Sample Code Documentation
 
-## 项目概述
+## description
 
-本项目是一个基于 AgentSDK 的 Android 应用示例，展示了如何使用 AgentSDK 创建具有情感交互能力的智能助手应用。应用通过识别用户的情绪状态，显示相应的表情图标并进行语音回复。
+description AgentSDK description Android description，description AgentSDK description。description，description。
 
-## 环境要求
+## description
 
-### 开发环境
-- Android SDK 版本: 最低支持API 26 (Android 8.0)
-- JDK版本: Java 11
-- Kotlin、Java语言开发
+### description
+- Android SDK description: descriptionAPI 26 (Android 8.0)
+- JDKdescription: Java 11
+- Kotlin、Javadescription
 
-### 运行环境
+### description
 AgentOS Product Version: V1.3.0.250515
 
-## 快速开始
+## description
 
-如果没有任何Android开发经验，请先下载安装[Android Studio](https://developer.android.com/studio?hl=zh-cn)，然后下载我们提供的空项目，用Android Studio打开此空项目后再开始接下来的步骤。
+descriptionAndroiddescription，description[Android Studio](https://developer.android.com/studio?hl=zh-cn)，description，descriptionAndroid Studiodescription。
 
-## AgentSDK 依赖配置
+## AgentSDK Dependencydescription
 
-### 1. 配置仓库
+### 1. description
 
-#### Groovy 配置 (settings.gradle)
+#### Groovy description (settings.gradle)
 
 ```groovy
 dependencyResolutionManagement {
@@ -40,7 +40,7 @@ dependencyResolutionManagement {
 }
 ```
 
-#### Kotlin 配置 (settings.gradle.kts)
+#### Kotlin description (settings.gradle.kts)
 
 ```kotlin
 dependencyResolutionManagement {
@@ -56,9 +56,9 @@ dependencyResolutionManagement {
 }
 ```
 
-### 2. 添加依赖
+### 2. descriptionDependency
 
-#### Groovy 配置 (app/build.gradle)
+#### Groovy description (app/build.gradle)
 
 ```groovy
 dependencies {
@@ -71,7 +71,7 @@ dependencies {
 }
 ```
 
-#### Kotlin 配置 (app/build.gradle.kts)
+#### Kotlin description (app/build.gradle.kts)
 
 ```kotlin
 dependencies {
@@ -84,9 +84,9 @@ dependencies {
 }
 ```
 
-### 3. 添加注册表
+### 3. descriptionRegister description
 
-查看项目根目录的 `app/src/main` 目录下，是否包含 `assets` 目录，如果没有请先创建 `assets` 目录，然后在 `assets` 目录下创建 `actionRegistry.json` 文件，并在文件中添加以下配置：
+descriptionTable of Contentsdescription `app/src/main` Table of Contentsdescription，description `assets` Table of Contents，description `assets` Table of Contents，description `assets` Table of Contentsdescription `actionRegistry.json` description，description：
 
 #### actionRegistry.json
 
@@ -98,14 +98,14 @@ dependencies {
 }
 ```
 
-**配置说明：**
-- `appId`: Agent应用的appId，需在接待后台申请
-- `platform`: 当前运行的平台，如：opk或apk
-- `actionList`: 可以从外部调起的action（只能是app级），在注册表中声名的action需要在AppAgent的onExecuteAction方法中处理action的执行，注：如果不想对外暴露action，actionList可以设置为空数组[]
+**descriptionDescription：**
+- `appId`: AgentdescriptionappId，description
+- `platform`: description，description：opkdescriptionapk
+- `actionList`: descriptionaction（descriptionappdescription），descriptionRegister descriptionactiondescriptionAppAgentdescriptiononExecuteActionMethodsdescriptionactiondescriptionexecute，description：descriptionaction，actionListdescriptionSet description[]
 
-## AgentSDK 核心组件
+## AgentSDK description
 
-### 1. 应用级 Agent 实现
+### 1. App-level Agent Implementation
 
 #### MainApplication.kt
 
@@ -161,14 +161,14 @@ class MainApplication : Application() {
 }
 ```
 
-**核心方法说明：**
-- `setPersona()`: 设置 AI 助手的角色人设
-- `setStyle()`: 设置对话风格
-- `setObjective()`: 设置任务目标
-- `registerAction()`: 动态注册 Action
-- `onExecuteAction()`: 处理静态注册的 Action
+**descriptionMethodsDescription：**
+- `setPersona()`: Set  AI descriptionpersona
+- `setStyle()`: Set conversation style
+- `setObjective()`: Set description
+- `registerAction()`: Dynamic registration Action
+- `onExecuteAction()`: descriptionStatic registrationdescription Action
 
-### 2. 页面级 Agent 实现
+### 2. description Agent description
 
 #### MainActivity.kt
 
@@ -302,9 +302,9 @@ class MainActivity : AppCompatActivity() {
 }
 ```
 
-## AgentSDK 核心概念
+## AgentSDK description
 
-### 1. Action 结构
+### 1. Action description
 
 ```kotlin
 class Action(
@@ -316,7 +316,7 @@ class Action(
 )
 ```
 
-### 2. Parameter 结构
+### 2. Parameter description
 
 ```kotlin
 data class Parameter(
@@ -328,7 +328,7 @@ data class Parameter(
 )
 ```
 
-### 3. ActionExecutor 接口
+### 3. ActionExecutor description
 
 ```kotlin
 interface ActionExecutor {
@@ -336,7 +336,7 @@ interface ActionExecutor {
 }
 ```
 
-### 4. 参数类型
+### 4. description
 
 ```kotlin
 enum class ParameterType {
@@ -348,9 +348,9 @@ enum class ParameterType {
 }
 ```
 
-## AgentSDK 核心 API
+## AgentSDK description API
 
-### 1. Agent 核心功能
+### 1. Agent description
 
 ```kotlin
 // TTS 同步播放
@@ -360,7 +360,7 @@ AgentCore.ttsSync(text: String)
 action.notify(isTriggerFollowUp: Boolean)
 ```
 
-### 2. 协程作用域
+### 2. description
 
 ```kotlin
 // 使用 AgentSDK 提供的协程作用域
@@ -369,7 +369,7 @@ AOCoroutineScope.launch {
 }
 ```
 
-### 3. AppAgent 配置方法
+### 3. AppAgent descriptionMethods
 
 ```kotlin
 // 设置角色人设
@@ -385,7 +385,7 @@ setObjective(objective: String)
 registerAction(action: Action)
 ```
 
-### 4. PageAgent 使用
+### 4. PageAgent description
 
 ```kotlin
 // 创建页面级 Agent
@@ -396,45 +396,45 @@ PageAgent(activity: Activity)
     .blockAllActions() // 排除所有 Action
 ```
 
-## AgentSDK 最佳实践
+## AgentSDK description
 
-### 1. Action 命名规范
+### 1. Action description
 
-- 使用公司域名作为前缀，避免冲突
-- Action 名称使用大写字母
-- 格式：`com.company.module.ACTION_NAME`
+- description，description
+- Action description
+- description：`com.company.module.ACTION_NAME`
 
-### 2. 参数设计原则
+### 2. description
 
-- 参数名使用英文，多个单词用下划线连接
-- 避免与 Action 或 Parameter 对象的属性名相同
-- 提供清晰的参数描述，帮助 AI 理解
+- Use English parameter names and join multiple words with underscores
+- description Action description Parameter descriptionPropertiesdescription
+- description，description AI description
 
-### 3. Action 执行处理
+### 3. Action executedescription
 
-- 在 ActionExecutor 中处理异常情况
-- 及时调用 `action.notify()` 通知执行状态
-- 返回正确的布尔值表示处理结果
+- description ActionExecutor description
+- description `action.notify()` descriptionexecutedescription
+- description
 
-### 4. Agent 生命周期
+### 4. Agent description
 
-- **App 级 Agent**：应用前台期间生效
-- **Page 级 Agent**：页面可见期间生效
-- 合理选择 Agent 级别，避免资源浪费
+- **App description Agent**：description
+- **Page description Agent**：description
+- description Agent description，description
 
-### 5. 静态 vs 动态注册
+### 5. description vs Dynamic registration
 
-- **静态注册**：在 actionRegistry.json 中配置，可被外部调用
-- **动态注册**：在代码中注册，仅当前应用内部使用
+- **Static registration**：description actionRegistry.json description，description
+- **Dynamic registration**：descriptionRegister ，description
 
-## 总结
+## Summary
 
-本示例展示了 AgentSDK 的核心功能：
+description AgentSDK description：
 
-1. **依赖配置**：仓库配置、版本管理
-2. **Agent 实现**：应用级和页面级 Agent 的创建和配置
-3. **Action 系统**：动态注册、静态注册、参数处理
-4. **核心 API**：TTS 播放、协程使用、状态通知
-5. **最佳实践**：命名规范、错误处理、生命周期管理
+1. **Dependencydescription**：description、description
+2. **Agent description**：description Agent description
+3. **Action description**：Dynamic registration、Static registration、description
+4. **description API**：TTS description、description、description
+5. **description**：description、description、description
 
-通过这个示例，开发者可以快速理解和使用 AgentSDK 构建智能交互应用。 
+description，description AgentSDK description。 
