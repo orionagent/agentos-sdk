@@ -3,170 +3,169 @@ description:
 globs: 
 alwaysApply: true
 ---
-# AgentOS SDK 项目开发规则
+# AgentOS SDK Project Development Rules
 
-## 重要：每次对话开始时必须加载的上下文文档
-在开始任何开发任务前，必须先阅读以下关键文档：
+## Important: Context documents that must be loaded at the start of every conversation
+Before starting any development task, you must read the following key documents:
 
 [README.md](mdc:README.md)
 @Agent/v0.3.5/
 @Robot/v11.3C/
 [FAQ.md](mdc:FAQ.md)
 
-## 1. 文档说明
+## 1. Document Description
 
 ### 📖 **AgentOS_SDK_Doc_x.x.x.md**
-大模型相关能力接口和使用方法，包含对话管理、语音合成、智能交互等功能。
+LLM-related capability interfaces and usage methods, including conversation management, text-to-speech, intelligent interaction, and more.
 
 ### 📋 **API_Reference.md**
-AgentOS SDK v0.3.5 完整的API参考文档，详细描述所有核心类、接口、方法、属性、构造函数、参数说明、返回值、使用示例等。
+Complete API reference for AgentOS SDK v0.3.5, describing all core classes, interfaces, methods, properties, constructors, parameters, return values, and usage examples in detail.
 
 ### 🤖 **RobotAPI.md**
-机器人原生控制接口，包含底层运动控制、导航、传感器信息等功能。
+Robot native control interfaces, including low-level motion control, navigation, sensor information, and more.
 
 ### 📁 **ClassPathList.md**
-提供项目中所有关键类的完整包路径清单，包含 AgentOS SDK 和 RobotOS SDK 的所有核心 import 路径。
+Provides the complete package path list of all key classes in the project, including all core import paths for AgentOS SDK and RobotOS SDK.
 
 ### 💻 **SampleCodes.md**
-提供各功能模块的典型示例代码，供开发参考和快速实现。包含完整的依赖配置、Agent 实现、Action 系统、核心API使用等示例。
+Provides typical sample code for each feature module for development reference and rapid implementation, including complete dependency configuration, Agent implementation, Action system usage, and core API usage examples.
 
 ---
 
-## 2. 技术栈要求
+## 2. Tech Stack Requirements
 
-- **编程语言：** Java 和 Kotlin
-- **构建工具：** Gradle
-- **平台：** Android（最低API 26）
-- **JDK版本：** Java 11
-
----
-
-## 3. SDK使用规范
-
-### 3.1 文档查阅优先级 ⚠️**重要**
-
-**任何开发需求或编译运行错误，与 Agent 或 Robot 相关的问题，必须严格按照以下优先级查阅资料：**
-
-#### 🥇 **第一优先级：完整查阅项目文档**
-
-**按问题类型查阅对应文档：**
-- **Agent 开发问题**：优先查阅 **AgentOS_SDK_Doc_v0.3.5.md**（了解功能接口）→ **API_Reference.md**（获取详细API说明）
-- **Robot 控制问题**：优先查阅 **RobotAPI.md**（了解底层控制接口）
-- **代码实现问题**：参考 **SampleCodes.md**（获取完整示例代码）
-- **导入路径问题**：确认 **ClassPathList.md**（获取正确的包路径）
-
-#### 🥈 **第二优先级：项目文档无相关资料时**
-- 仅在项目文档中完全没有任何相关信息时，才可查阅网络资料或Android官方标准文档
-
-❌ **严禁在未完整查阅项目文档的情况下直接使用网络资料或通用Android开发资料！**
-
-### 3.2 具体使用规范
-
-- 所有机器人控制功能必须基于 RobotOS SDK 开发，RobotOS SDK 提供了摄像头、视觉、底盘运动、室内地图、导航等多个能力
-- 所有大模型 Agent 开发功能必须基于 AgentOS SDK 开发
-- 开发时优先参考示例代码，结合类路径清单确认正确导入
-
-⚠️ **重要：所有API使用必须参考 API_Reference.md 中的详细说明，包括方法签名、参数类型、返回值、使用注意事项等**
-
-⚠️ **重要：所有关于AgentOS和RobotOS的 import 语句必须参考 ClassPathList.md 中的完整路径清单，确保导入路径正确无误**
-
-⚠️ **重点关注：** ParameterType 枚举类型、LLMConfig、LLMMessage 等 Agent 相关类的数据结构，需要严格按照规范使用
+- **Programming languages:** Java and Kotlin
+- **Build tool:** Gradle
+- **Platform:** Android (minimum API 26)
+- **JDK version:** Java 11
 
 ---
 
-## 4. 开发规范
+## 3. SDK Usage Specifications
 
-### 4.1 通用代码规范
+### 3.1 Documentation lookup priority ⚠️**Important**
 
-- 遵循 Android 平台开发最佳实践
-- 使用项目统一的命名规范和代码风格
-- 如遇接口调用异常，优先排查文档示例与导入路径是否匹配
-- 除非用户要求，否则不要主动给用户创建各种 README 一类的总结说明文档或者任何开发总结等，不要自动生成总结
+**For any development requirement, compile/runtime error, or Agent/Robot-related issue, you must strictly follow this lookup priority:**
 
-### 4.2 Action 开发规范
+#### 🥇 **Top priority: fully review project documentation**
 
-⚠️ **重要：actionRegistry.json 文件是项目必需的配置文件，其中的 appid 是 AgentCore.appId 的来源**
+**Read documentation based on issue type:**
+- **Agent development issues**: First check **AgentOS_SDK_Doc_v0.3.5.md** (understand capability interfaces) → then **API_Reference.md** (get detailed API guidance)
+- **Robot control issues**: First check **RobotAPI.md** (understand low-level control interfaces)
+- **Code implementation issues**: Refer to **SampleCodes.md** (get complete sample code)
+- **Import path issues**: Verify **ClassPathList.md** (get correct package paths)
 
-- 使用 Action 时必须了解所有可用的构造函数：完整构造函数、外部Action构造函数（仅需name）、内部Action构造函数（自动使用AgentCore.appId）
-- 系统 Action 的使用必须参考 Actions.kt 中的完整列表，包括系统指令类Action和系统内置应用类Action
-- Action 参数命名使用英文，多个单词用下划线连接，避免与 Action 或 Parameter 对象的属性名相同
-- 每个 Action 执行完成后必须调用 `action.notify()` 方法
-- 动态注册 Action 需要设置 executor
-- 静态注册 Action 需要在 actionRegistry.json 中配置
-- 一个 App 只能有一个 AppAgent 实例
-- 每个页面只能有一个 PageAgent 实例
+#### 🥈 **Second priority: when project docs have no relevant information**
+- Only when project documentation contains absolutely no relevant information may you consult online resources or Android official standard docs.
 
-### 4.3 异步处理规范
+❌ **Do not directly use online resources or generic Android materials before fully reviewing project documentation!**
 
-- ⚠️ **ActionExecutor.onExecute() 方法有2秒超时限制，耗时操作必须使用协程或线程池异步执行**
-  - Kotlin: 使用协程 `AOCoroutineScope.launch { // 协程代码 }`
-  - Java: 使用线程池 `AsyncTaskHelper.execute(() -> { // 线程代码 });`
-- ⚠️ **在Action的回调中所有 TTS、LLM 等异步操作完成后才能调用 action.notify()，意味着action已经处理完毕**
-- 使用 TaskResult<T> 处理异步任务结果，通过 status 判断成功失败（1=成功，2=失败）
+### 3.2 Specific usage rules
 
-### 4.4 UI 开发规范
+- All robot control features must be developed based on RobotOS SDK, which provides camera, vision, chassis movement, indoor maps, navigation, and more capabilities
+- All LLM Agent development features must be developed based on AgentOS SDK
+- During development, prioritize sample code and use the class path list to verify correct imports
 
-- 目标设备屏幕唯一规格：物理分辨率 1920 × 1080px，屏幕密度 3.5，逻辑分辨率约 500 × 308dp
-- 如果可能就用 Jetpack Compose 创建UI，如果只能用xml，则不要创建单独的适配文件，统一在 layout 文件夹处理响应式布局。不用单独设置 `android:screenOrientation="landscape"`
-- 页面设计的更简洁大方紧凑一些，文字和组件更小。不要嵌套多层，不要超出屏幕或者宽高比不协调
+⚠️ **Important: All API usage must reference the detailed descriptions in API_Reference.md, including method signatures, parameter types, return values, and usage notes**
 
-### 4.5 页面信息和语音交互规范
+⚠️ **Important: All import statements for AgentOS and RobotOS must reference the complete path list in ClassPathList.md to ensure import correctness**
 
-- **页面信息上传**：当页面级别人设目标无法覆盖的场景时，需要通过更新上下文信息来通知大模型理解当前页面内容
-- **语音交互实现**：通过打开麦克风实现，大模型会自动根据用户语音匹配到对应的 Action
-- **LLM接口调用**：仅在业务场景复杂、普通 Action 难以实现、需要语音文本之外其他参数的业务时，才调用 llm 等大模型接口
+⚠️ **Focus on:** Data structures of Agent-related classes such as `ParameterType` enum, `LLMConfig`, and `LLMMessage` must be used strictly according to specifications
 
 ---
 
-## 5. 语言差异
+## 4. Development Conventions
 
-### 5.1 Kotlin vs Java 代码区别 ⚠️**重要**
+### 4.1 General code conventions
 
-**严格区分 Kotlin 和 Java 语法，不得混用！生成代码时必须严格按照对应语言的语法规范：**
+- Follow Android platform development best practices
+- Use the project's unified naming conventions and coding style
+- If interface calls fail, first verify whether documentation examples and import paths match
+- Unless requested by the user, do not proactively create summary documents such as README files or any development summaries
 
-#### 🔵 **Kotlin 代码特点：**
-- 空安全语法：`?.` `!!` `?:`
-- 可空类型声明：`String?`
+### 4.2 Action development conventions
 
-#### 🟠 **Java 代码特点：**
-- 传统空值检查：`if (obj != null)`
-- 非空类型默认，需要手动检查null
-- ⚠️ **没有默认参数**：必须传递所有参数
+⚠️ **Important: The `actionRegistry.json` file is a required project configuration file, and its `appid` is the source of `AgentCore.appId`**
 
-#### 🔄 **关键API调用差异：**
-- **AgentCore调用：**
+- When using Action, you must understand all available constructors: full constructor, external Action constructor (name only), and internal Action constructor (automatically uses `AgentCore.appId`)
+- Usage of system Actions must reference the complete list in `Actions.kt`, including system command Actions and system built-in app Actions
+- Action parameter naming must use English with underscores between words, and avoid names that conflict with Action or Parameter property names
+- `action.notify()` must be called after each Action execution is completed
+- Dynamic Action registration requires setting an executor
+- Static Action registration must be configured in `actionRegistry.json`
+- One App can only have one AppAgent instance
+- Each page can only have one PageAgent instance
+
+### 4.3 Asynchronous processing conventions
+
+- ⚠️ **`ActionExecutor.onExecute()` has a 2-second timeout limit. Time-consuming operations must be executed asynchronously using coroutines or thread pools**
+  - Kotlin: use coroutine `AOCoroutineScope.launch { // coroutine code }`
+  - Java: use thread pool `AsyncTaskHelper.execute(() -> { // thread code });`
+- ⚠️ **In Action callbacks, `action.notify()` can only be called after all asynchronous operations (TTS, LLM, etc.) are complete, which indicates the Action has been fully handled**
+- Use `TaskResult<T>` to handle async task results and determine success/failure via status (1=success, 2=failure)
+
+### 4.4 UI development conventions
+
+- Target device screen spec: physical resolution 1920 × 1080px, screen density 3.5, logical resolution approximately 500 × 308dp
+- Use Jetpack Compose for UI if possible. If XML must be used, do not create separate adaptation files; handle responsive layouts uniformly in the `layout` folder. Do not separately set `android:screenOrientation="landscape"`
+- Page design should be concise, clean, and compact, with smaller text and components. Avoid deep nesting, overflow, or unbalanced aspect ratios
+
+### 4.5 Page info and voice interaction conventions
+
+- **Page info upload**: For scenarios not covered by page-level persona goals, update context information to notify the LLM of current page content
+- **Voice interaction implementation**: Achieved by enabling the microphone; the LLM automatically matches user speech to the corresponding Action
+- **LLM interface calls**: Call LLM interfaces such as `llm` only when business scenarios are complex, normal Action implementation is difficult, or parameters beyond speech text are required
+
+---
+
+## 5. Language Differences
+
+### 5.1 Kotlin vs Java code differences ⚠️**Important**
+
+**Strictly distinguish Kotlin and Java syntax. Do not mix them. Generated code must strictly follow the syntax rules of the target language:**
+
+#### 🔵 **Kotlin characteristics:**
+- Null-safety syntax: `?.` `!!` `?:`
+- Nullable type declaration: `String?`
+
+#### 🟠 **Java characteristics:**
+- Traditional null checks: `if (obj != null)`
+- Non-null by default; null must be checked manually
+- ⚠️ **No default parameters**: all parameters must be passed
+
+#### 🔄 **Key API call differences:**
+- **AgentCore invocation:**
   - Kotlin: `AgentCore.methodName()`
   - Java: `AgentCore.INSTANCE.methodName()`
 
-- **监听器实现：**
+- **Listener implementation:**
   - Kotlin: `object : OnTranscribeListener { }`
   - Java: `new OnTranscribeListener() { }`
-- **方法参数：**
-  - Kotlin: 支持默认参数，可省略部分参数
-  - Java: 无默认参数，必须传递所有参数
+- **Method parameters:**
+  - Kotlin: supports default parameters; some can be omitted
+  - Java: no default parameters; all must be passed
 
-#### ❌ **常见Java参数错误示例：**
-- ❌ `AgentCore.INSTANCE.tts("hello")` // 缺少必需参数
-- ✅ `AgentCore.INSTANCE.tts("hello", 5000, null)` // 所有参数都传递
+#### ❌ **Common Java parameter error examples:**
+- ❌ `AgentCore.INSTANCE.tts("hello")` // Missing required parameters
+- ✅ `AgentCore.INSTANCE.tts("hello", 5000, null)` // All parameters passed
 
-⚠️ **重要：严禁混用两种语言的语法！**
+⚠️ **Important: Never mix syntax from the two languages!**
 
 ---
 
-## 6. 开发流程
+## 6. Development Workflow
 
-⚠️ **重要：开发过程中严格遵循第3节SDK使用规范、第4节开发规范、第5节语言差异中的所有要求**
+⚠️ **Important: During development, strictly follow all requirements in Section 3 (SDK usage), Section 4 (development conventions), and Section 5 (language differences)**
 
-1. **📚 开发前准备**：完整阅读项目文档，确认开发语言（Kotlin/Java）
-2. **🔧 集成 AgentOS SDK**：配置仓库、添加依赖、创建 actionRegistry.json 配置文件
-3. **🎭 设定 App 的人设目标风格**
-4. **📱 创建业务页面**：根据需求确定是否需要页面级别人设目标风格
-5. **⚡ 定义并注册 Action 到 AgentOS SDK**
-6. **💻 实现 Action 的处理逻辑**：遵循第4.3节异步处理规范
-7. **📄 上传页面信息**：根据需求决定是否需要上传页面信息
-8. **🎤 用户语音和大模型交互**：实现语音交互功能
-9. **💬 需要主动跟用户交流的场景**：考虑主动调用 followup 或者代替用户调用 query
-10. **🧹 App 和页面关闭的时候**：按需清理一些上下文和页面信息
-11. **🧪 测试语音触发和 Action 执行**
-12. **🐛 问题解决**：遇到问题时重新查阅项目文档和开发流程，遵循第3.1节文档查阅优先级
-
+1. **📚 Pre-development preparation**: Fully read project docs and confirm development language (Kotlin/Java)
+2. **🔧 Integrate AgentOS SDK**: Configure repository, add dependencies, and create `actionRegistry.json`
+3. **🎭 Define App persona goal style**
+4. **📱 Create business pages**: Decide whether page-level persona goal style is needed
+5. **⚡ Define and register Actions to AgentOS SDK**
+6. **💻 Implement Action handling logic**: Follow async processing rules in Section 4.3
+7. **📄 Upload page information**: Decide whether page info upload is required
+8. **🎤 User voice and LLM interaction**: Implement voice interaction features
+9. **💬 Scenarios requiring proactive user communication**: Consider actively calling `followup` or calling `query` on the user's behalf
+10. **🧹 App and page shutdown**: Clean up context and page information as needed
+11. **🧪 Test voice triggers and Action execution**
+12. **🐛 Problem resolution**: Revisit project docs and workflow when issues occur, following doc lookup priority in Section 3.1

@@ -1,88 +1,88 @@
 # FAQ
 
-## 目录
+## Table of Contents
 
-1. [你需要知道的概念](#你需要知道的概念)
-   - [应用授权](#应用授权)
-   - [应用被挂起](#应用被挂起)
-   - [应用恢复挂起](#应用恢复挂起)
+1. [Concepts You Need to Know](#concepts-you-need-to-know)
+   - [App Authorization](#app-authorization)
+   - [App Suspended](#app-suspended)
+   - [App Resume from Suspension](#app-resume-from-suspension)
 
-2. [打开开发者模式](#打开开发者模式)
-   - [背景](#背景)
-   - [开启方法](#开启方法)
-   - [查询动态密码](#查询动态密码)
+2. [Enable Developer Mode](#enable-developer-mode)
+   - [Background](#background)
+   - [How to Enable](#how-to-enable)
+   - [Query Dynamic Password](#query-dynamic-password)
 
-3. [如何获取机器人原始日志](#如何获取机器人原始日志)
-   - [1. 查看机器人上所有保存好的日志](#1-查看机器人上所有保存好的日志)
-   - [2. 拉取指定时间段的日志](#2-拉取指定时间段的日志)
+3. [How to Get Raw Robot Logs](#how-to-get-raw-robot-logs)
+   - [1. View All Saved Logs on the Robot](#1-view-all-saved-logs-on-the-robot)
+   - [2. Pull Logs for a Specific Time Range](#2-pull-logs-for-a-specific-time-range)
 
-4. [常用的adb命令](#常用的adb命令)
+4. [Common ADB Commands](#common-adb-commands)
    - [1. adb devices](#1-adb-devices)
    - [2. adb shell](#2-adb-shell)
    - [3. adb push](#3-adb-push)
    - [4. adb pull](#4-adb-pull)
    - [5. adb install](#5-adb-install)
 
-5. [常见问题及解决方案](#常见问题及解决方案)
-   - [语音交互无响应](#语音交互无响应)
-   - [非Activity/Fragment开发方式的PageAgent生命周期管理](#非activityfragment开发方式的pageagent生命周期管理)
-   - [RobotOS系统迁移到AgentOS需要重新实现功能吗](#robotos系统迁移到agentos需要重新实现功能吗)
-   - [AgentOS会自动调用小豹应用的功能吗](#agentos会自动调用小豹应用的功能吗)
-   - [人设和PageAgent都无法满足业务需求怎么办](#人设和pageagent都无法满足业务需求怎么办)
+5. [Common Issues and Solutions](#common-issues-and-solutions)
+   - [No Response in Voice Interaction](#no-response-in-voice-interaction)
+   - [PageAgent Lifecycle Management for Non-Activity/Fragment Development](#pageagent-lifecycle-management-for-non-activityfragment-development)
+   - [Do I Need to Reimplement Features When Migrating from RobotOS to AgentOS?](#do-i-need-to-reimplement-features-when-migrating-from-robotos-to-agentos)
+   - [Will AgentOS Automatically Call Xiaobao App Features?](#will-agentos-automatically-call-xiaobao-app-features)
+   - [What If Persona and PageAgent Cannot Meet Business Requirements?](#what-if-persona-and-pageagent-cannot-meet-business-requirements)
 
-## 你需要知道的概念
+## Concepts You Need to Know
 
-### 应用授权
-只有当app成功连接上RobotOS，并且app界面在前端显示时，app才能成功被授权使用sdk，当app界面退到后台，app当即被挂起。
+### App Authorization
+An app can be authorized to use the SDK only when it successfully connects to RobotOS and its UI is displayed in the foreground. Once the app moves to the background, it is suspended immediately.
 
-### 应用被挂起
-机器人使用中会遇到一些系统事件，比如急停，低电，OTA，硬件异常等，当发生这些系统事件时，RobotOS会接管业务，这时前台的业务apk就会被挂起，收到onsuspend事件，业务apk也不再具有使用api的能力。
+### App Suspended
+During robot operation, system events may occur, such as emergency stop, low battery, OTA, or hardware exceptions. When these events occur, RobotOS takes over business control. The foreground business APK is suspended, receives the `onsuspend` event, and can no longer use APIs.
 
-### 应用恢复挂起
-对应挂起事件，当系统事件消失后，RobotOS会把业务控制权交还给当前app，当前apk恢复使用RobotApi的能力。
+### App Resume from Suspension
+When the corresponding system event disappears, RobotOS returns business control to the current app, and the APK regains the ability to use RobotApi.
 
-## 打开开发者模式
+## Enable Developer Mode
 
-### 背景
+### Background
 
-为了保证机器系统安全，以后版本默认关闭USB调试（插线adb），机器及对应版本如下：
+To ensure system security, USB debugging (wired ADB) is disabled by default in later versions. Applicable devices and versions:
 
-- **豹小秘**：V6.9及以后版本
-- **mini**：V6.13及以后版本
+- **Leopard Secretary**: V6.9 and later
+- **Mini**: V6.13 and later
 
-### 开启方法
+### How to Enable
 
-出厂版本默认ADB关闭，只有通过以下方式可临时开启：
+ADB is disabled by default in factory versions and can only be enabled temporarily through the following method:
 
-1. 在任何时候（包括自检异常），单指下拉>>狂点多次时间区域
+1. At any time (including during self-check exceptions), swipe down with one finger >> tap the time area rapidly multiple times.
 
-2. 弹出动态密码输入页，该页面显示系统日期时间，动态密码的获取查看【查询动态密码】部分
+2. A dynamic password input page pops up. This page displays the system date and time. For how to get the dynamic password, see [Query Dynamic Password](#query-dynamic-password).
 
-   - **动态密码输入正确**：跳转至步骤三，可以进行adb设置。
-   - **动态密码输入错误**：清空输入内容，停留在当前页面。
+   - **Dynamic password correct**: Jump to step 3 and configure ADB.
+   - **Dynamic password incorrect**: Input is cleared and you remain on the current page.
 
-3. 当"启用调试"被打开后，显示第二个菜单"持久调试"。注意"启动调试"在重启后会恢复默认
+3. After **Enable Debugging** is turned on, a second menu **Persistent Debugging** is shown. Note that **Enable Debugging** resets to default after reboot.
 
-   - "持久调试"菜单默认不显示，只有"启用调试"开启后，才显示。
-   - "持久调试"显示后，默认是未开启状态，需要手动开启。
-   - 当再次关闭"启用调试"开关后，"持久调试"自动设置为禁用，且菜单隐藏。
-   - 以上设置重启后才能生效
+   - The **Persistent Debugging** menu is hidden by default and appears only after **Enable Debugging** is turned on.
+   - After appearing, **Persistent Debugging** is off by default and must be manually enabled.
+   - If **Enable Debugging** is turned off again, **Persistent Debugging** is automatically disabled and hidden.
+   - The above settings take effect after reboot.
 
-   为了方便开发者，还提供"打开MIMI"，"开启系统导航栏"，"打开设置"，三个附带的快捷功能。
+   For convenience, three additional shortcuts are also provided: **Open MIMI**, **Enable System Navigation Bar**, and **Open Settings**.
 
-4. 新生产的机器人都支持wifi ADB调试，在这里还可以开启wifi adb，方便调试。
+4. Newly manufactured robots support Wi-Fi ADB debugging. You can also enable Wi-Fi ADB here for easier debugging.
 
-### 查询动态密码
+### Query Dynamic Password
 
-提供SN号，联系您的售前/售后技术支持
+Provide the SN and contact your pre-sales/after-sales technical support.
 
-如果需要查看打开开发者模式的视频，请访问：[打开开发者模式详细教程](https://doc.orionstar.com/blog/knowledge-base/%e6%89%93%e5%bc%80%e5%bc%80%e5%8f%91%e8%80%85%e6%a8%a1%e5%bc%8f/#undefined)
+If you need a video tutorial for enabling developer mode, visit: [Detailed Developer Mode Tutorial](https://doc.orionstar.com/blog/knowledge-base/%e6%89%93%e5%bc%80%e5%bc%80%e5%8f%91%e8%80%85%e6%a8%a1%e5%bc%8f/#undefined)
 
-## 如何获取机器人原始日志
+## How to Get Raw Robot Logs
 
-### 1. 查看机器人上所有保存好的日志
+### 1. View All Saved Logs on the Robot
 
-使用以下命令进入机器人shell并查看日志目录：
+Use the following commands to enter the robot shell and view the log directory:
 
 ```bash
 adb shell
@@ -90,23 +90,23 @@ cd /sdcard/logs/offlineLogs/821/
 ls -l
 ```
 
-### 2. 拉取指定时间段的日志
+### 2. Pull Logs for a Specific Time Range
 
-退出adb shell后，使用adb pull命令取出需要时间段的日志：
+After exiting `adb shell`, use `adb pull` to retrieve logs for the target time range:
 
 ```bash
 adb pull /sdcard/logs/offlineLogs/821/logcat.log-2020-05-22-11-00-07-062.tgz
 ```
 
-> **注意**：日志文件名包含具体的时间戳，请根据实际需要的时间段选择对应的日志文件。
+> **Note**: Log filenames include exact timestamps. Select the corresponding file based on your required time range.
 
-## 常用的adb命令
+## Common ADB Commands
 
-机器人开发无论使用OPK还是APK，都是基于Android进行开发，所以首先我们要保证Android环境没有问题。Android环境中比较重要的是adb命令的使用。下面列举一些常用adb命令：
+Whether robot development uses OPK or APK, it is Android-based. So first ensure your Android environment is ready. ADB command usage is especially important. Below are commonly used ADB commands:
 
 ### 1. adb devices
 
-这条命令用来查询当前连接的设备号，当电脑正常连上了机器人，它会返回机器人列表，例如：
+This command queries currently connected device IDs. When the computer is properly connected to the robot, it returns a robot list, for example:
 
 ```bash
 black_mac:dexlib mac$ adb devices
@@ -114,171 +114,171 @@ List of devices attached
 KTS17Q080284    device
 ```
 
-如果没有返回连接的机器人列表，就无法调试。首先请检查USB线是否连上了机器人，并且牢固。如果遇到其它问题，请百度搜索 "adb devices 无法返回正确结果"。
+If no connected robot list is returned, debugging is not possible. First check whether the USB cable is connected firmly. For other issues, search for "adb devices cannot return correct results".
 
 ### 2. adb shell
 
-这条命令用来进入机器人的终端shell，下面列举几个常用的adb shell命令：
+This command enters the robot terminal shell. Common `adb shell` command examples:
 
-**查看机器SN码：**
+**Check robot SN:**
 ```bash
 adb shell getprop|grep serial
 ```
 
 ### 3. adb push
 
-这条命令用来向机器人推文件，在手动升级机器人的时候会用到，我们需要把升级包push到机器人对应文件夹。
+This command pushes files to the robot. It is used during manual robot upgrades, where you need to push the upgrade package to the corresponding robot folder.
 
 ```bash
 adb push xxx.opk /system/vendor/opk/
 ```
 
-**手动OTA升级机器：**
+**Manual OTA upgrade:**
 
-在adb命令正常打开，且连接上机器后，执行以下命令：
+After ADB is enabled and connected to the robot, run:
 
 ```bash
-# 打开ota service
+# Start ota service
 adb shell am start -n com.ainirobot.ota/.MainActivity
 
-# 把ota包push进去，xxx为ota包所在文件路径
+# Push ota package, xxxx is the package path
 adb push xxxx /sdcard/ota/download/update.zip
 ```
 
-包push完成后，点击机器人页面的"开始升级"
+After push is complete, click **Start Upgrade** on the robot page.
 
 ### 4. adb pull
 
-这条命令用来从机器人取文件，当我们要取机器日志的时候会用到。
+This command pulls files from the robot. It is commonly used when retrieving robot logs.
 
-**获取机器人最近的日志：**
+**Get recent robot logs:**
 ```bash
 adb pull /sdcard/logs/offlineLogs/821/
 ```
 
-**获取机器人指定时间的日志：**
+**Get robot logs for a specific time:**
 
-1. 用此命令查看机器人上所有保存好的日志：
+1. Use this command to view all saved logs on the robot:
 ```bash
 adb shell
 cd /sdcard/logs/offlineLogs/821/
 ls -l
 ```
 
-2. 退出adb shell后，使用adb pull取出需要时间段的日志：
+2. Exit `adb shell`, then use `adb pull` to retrieve logs for the required time range:
 ```bash
 adb pull /sdcard/logs/offlineLogs/821/logcat.log-2020-05-22-11-00-07-062
 ```
 
 ### 5. adb install
 
-这个命令用来向机器中安装应用，通常用来安装开发的APK包。
+This command installs apps onto the robot, usually for installing your developed APK package.
 
-**安装APK：**
+**Install APK:**
 ```bash
-adb install -r -d xx.apk  # xx.apk是你文件所在的绝对路径
+adb install -r -d xx.apk  # xx.apk is the absolute path to your file
 ```
 
-> **更多adb命令**：请自行百度搜索 "adb 使用教程" 获取更详细的信息。
+> **More ADB commands**: Search for "ADB usage tutorial" for more details.
 
-## 常见问题及解决方案
+## Common Issues and Solutions
 
-### 语音交互无响应
+### No Response in Voice Interaction
 
-**问题描述**：通过语音输入与机器人交互时，系统无响应或无法正常执行预期Action。
+**Issue description**: When interacting with the robot via voice input, the system does not respond or fails to execute expected Actions.
 
-**排查步骤**：
-1. **网络连接验证**：确认设备已连接网络，ASR服务依赖网络连接进行语音识别处理。可通过机器人网络检测功能测试网络状态。
-2. **系统状态检查**：验证机器人当前不处于充电、OTA升级或其他系统事件状态，这些状态会导致应用被挂起。
-3. **麦克风状态确认**：
-   - 验证麦克风硬件状态为开启
-   - 确认当前应用为二开应用或小豹应用（仅这两种应用类型麦克风默认开启）
-   - 检查代码中是否调用了麦克风关闭相关API
-4. **用户交互位置**：确保用户位于机器人正前方，人脸朝向机器人，距离保持在有效识别范围内
-5. **免唤醒功能状态**：如应用正在调用摄像头，可通过关闭免唤醒功能或关闭摄像头调用进行测试。确认为免唤醒问题后，建议临时关闭免唤醒功能以避免与摄像头调用冲突，或采用摄像头数据流共享方式避免资源抢占。
-6. **ASR/TTS服务状态**：确认ASR（自动语音识别）与TTS（文本转语音）服务的监听字幕条处于开启状态。
-7. **Action注册验证**：确保应用已注册至少一个SAY Action，避免大模型Action规划失效导致无响应。
+**Troubleshooting steps**:
+1. **Network verification**: Confirm the device is connected to the network. ASR depends on network connectivity for speech recognition processing. You can test network status using the robot network check feature.
+2. **System state check**: Verify the robot is not in charging, OTA upgrade, or other system event states. These states will suspend the app.
+3. **Microphone status confirmation**:
+   - Verify microphone hardware is enabled
+   - Confirm the current app is a secondary-developed app or Xiaobao app (microphone is enabled by default only for these app types)
+   - Check whether the code calls APIs that disable the microphone
+4. **User position**: Ensure the user stands in front of the robot, facing it, and within the effective recognition distance
+5. **Wake-free status**: If the app is using the camera, test by disabling wake-free mode or camera usage. If confirmed as a wake-free issue, temporarily disable wake-free mode to avoid camera conflicts, or use camera stream sharing to avoid resource contention.
+6. **ASR/TTS service status**: Confirm the subtitle listening bar for ASR (Automatic Speech Recognition) and TTS (Text-to-Speech) services is enabled.
+7. **Action registration check**: Ensure the app has registered at least one SAY Action to avoid no response due to failed LLM action planning.
 
-### 非Activity/Fragment开发方式的PageAgent生命周期管理
+### PageAgent Lifecycle Management for Non-Activity/Fragment Development
 
-**问题描述**：使用Flutter等跨平台框架或自定义UI框架开发时，无法直接使用Activity/Fragment构造PageAgent，需要手动管理PageAgent的生命周期。
+**Issue description**: When using cross-platform frameworks like Flutter or custom UI frameworks, you cannot directly construct `PageAgent` from `Activity`/`Fragment` and must manually manage the PageAgent lifecycle.
 
-**解决方案**：
-1. **手动创建PageAgent**：使用pageId构造函数创建PageAgent实例，不依赖Activity/Fragment生命周期。
-2. **生命周期管理**：开发者需要在适当的时机手动调用PageAgent的生命周期方法：
-   - **页面显示时**：调用`begin()`方法激活PageAgent，使注册的Action开始生效
-   - **页面隐藏时**：调用`end()`方法暂停PageAgent，停止Action响应
-   - **页面销毁时**：调用`destroy()`方法释放PageAgent资源
-3. **状态同步**：确保PageAgent的生命周期状态与实际页面可见性保持一致，避免在页面不可见时仍然响应语音交互。
+**Solution**:
+1. **Create PageAgent manually**: Use the `pageId` constructor to create a `PageAgent` instance without depending on `Activity`/`Fragment` lifecycle.
+2. **Lifecycle management**: Developers must manually call PageAgent lifecycle methods at proper times:
+   - **When page is shown**: Call `begin()` to activate PageAgent and enable registered Actions
+   - **When page is hidden**: Call `end()` to pause PageAgent and stop Action responses
+   - **When page is destroyed**: Call `destroy()` to release PageAgent resources
+3. **State sync**: Keep PageAgent lifecycle state consistent with actual page visibility to avoid voice responses when the page is not visible.
 
-**代码示例**：
+**Code example**:
 ```kotlin
-// 创建PageAgent实例，需要提供唯一的pageId
+// Create PageAgent instance with a unique pageId
 val pageAgent = PageAgent("your_page_id")
 
-// 注册Action（在begin()之前）
+// Register Action (before begin())
 pageAgent.registerAction(yourAction)
 
-// 页面显示时激活
+// Activate when page is shown
 pageAgent.begin()
 
-// 页面隐藏时暂停
+// Pause when page is hidden
 pageAgent.end()
 
-// 页面销毁时释放
+// Release when page is destroyed
 pageAgent.destroy()
 ```
 
 
 
-**注意事项**：
-- 必须严格按照页面的实际生命周期调用对应方法
-- 避免在页面已销毁后仍然保持PageAgent活跃状态
-- 确保Action注册在PageAgent激活之前完成
-- **页面切换管理**：在页面切换时，必须及时结束前一个PageAgent，然后创建并激活新页面的PageAgent
+**Notes**:
+- You must strictly call corresponding methods according to actual page lifecycle
+- Avoid keeping PageAgent active after the page is destroyed
+- Ensure Action registration is complete before PageAgent activation
+- **Page switching management**: During page switching, you must promptly end the previous PageAgent, then create and activate a PageAgent for the new page
 
-### RobotOS系统迁移到AgentOS需要重新实现功能吗
+### Do I Need to Reimplement Features When Migrating from RobotOS to AgentOS?
 
-**是的，需要迁移业务逻辑。**
+**Yes, business logic migration is required.**
 
-- **触发方式变更**：RobotOS通过领域和技能匹配 → AgentOS通过Action匹配
-- **代码迁移**：将原有业务逻辑代码迁移到Action回调中
-- **示例**：导航功能原来在技能匹配后执行，现在需要在导航Action回调中执行相同逻辑
+- **Trigger mode change**: RobotOS uses domain and skill matching → AgentOS uses Action matching
+- **Code migration**: Move original business logic into Action callbacks
+- **Example**: Navigation used to run after skill matching; now execute the same logic inside navigation Action callbacks
 
-### AgentOS会自动调用小豹应用的功能吗
+### Will AgentOS Automatically Call Xiaobao App Features?
 
-**不会自动调用，需要开发者自行实现。**
+**No. Automatic invocation is not supported and must be implemented by developers.**
 
-- **核心原则**：AgentOS不会自动调用小豹应用或系统组件
-- **开发要求**：所有功能都需要在Action中自行实现
-- **示例**：日历查询需要开发者调用日历API并处理结果，而非调用小豹内置组件
-- **跳转支持**：可使用`AgentCore.jumpToXiaobao()`方法跳转到小豹应用首页
+- **Core principle**: AgentOS does not automatically invoke Xiaobao apps or system components
+- **Development requirement**: All features must be implemented within Actions
+- **Example**: For calendar queries, developers must call calendar APIs and process results instead of calling built-in Xiaobao components
+- **Jump support**: You can use `AgentCore.jumpToXiaobao()` to jump to Xiaobao app home
 
-### 人设和PageAgent都无法满足业务需求怎么办
+### What If Persona and PageAgent Cannot Meet Business Requirements?
 
-**优先优化人设和Action设计，必要时使用高级接口。**
+**Prioritize optimizing persona and Action design; use advanced interfaces when necessary.**
 
-#### 基础优化方案
-- **人设优化**：完善人设信息，提升智能交互效果
-- **Action设计**：优化Action逻辑，满足业务功能需求
+#### Basic optimization options
+- **Persona optimization**: Improve persona information to enhance intelligent interaction
+- **Action design**: Optimize Action logic to satisfy business feature requirements
 
-#### 动态信息更新
-- **接口**：`uploadInterfaceInfo()`
-- **适用场景**：UI变化、任务进度更新、需要通知大模型的新信息
-- **作用**：实时更新应用状态，保持大模型信息同步
+#### Dynamic information update
+- **Interface**: `uploadInterfaceInfo()`
+- **Use cases**: UI changes, task progress updates, or new information that must be sent to the LLM
+- **Purpose**: Update app state in real time and keep the LLM synchronized
 
-#### 复杂对话场景
-- **接口**：`llmSync()` 和 `llm()`
-- **适用场景**：复杂对话、自定义智能交互需求
-- **实现方式**：
+#### Complex dialogue scenarios
+- **Interfaces**: `llmSync()` and `llm()`
+- **Use cases**: Complex dialogues and custom intelligent interaction requirements
+- **Implementation**:
 
 ```kotlin
 val introQuery = "简短的自我介绍，不超过30字"
 
-// 构建消息列表
+// Build message list
 val messages = mutableListOf<LLMMessage>()
 
-// 添加系统提示词
+// Add system prompt
 messages.add(
     LLMMessage(
         LLMRole.SYSTEM,
@@ -295,16 +295,15 @@ messages.add(
     )
 )
 
-// 添加用户请求
+// Add user request
 val userMessage = LLMMessage(LLMRole.USER, introQuery)
 messages.add(userMessage)
 
 val config = LLMConfig(
     temperature = 0.8f,
-    maxTokens = 80  // 限制初始介绍的长度
+    maxTokens = 80  // Limit initial introduction length
 )
 
-// 生成回复（流式播放，机器人的回复会在onTranscribe中获取到）
+// Generate response (stream playback, robot response is received in onTranscribe)
 AgentCore.llmSync(messages, config, 20 * 1000)
 ```
-

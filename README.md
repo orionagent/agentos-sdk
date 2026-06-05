@@ -1,152 +1,152 @@
-# AgentOS SDK 开发文档
+# AgentOS SDK Development Documentation
 
-## 版本兼容性与集成指南
+## Version Compatibility and Integration Guide
 
-**本文档提供完整的AgentOS SDK集成方案，必须严格按照目标设备型号和系统版本选择对应的SDK版本。**
+**This document provides a complete AgentOS SDK integration plan. You must strictly choose the corresponding SDK version based on the target device model and system version.**
 
-📋 **版本更新历史**: [查看完整版本变更日志 →](CHANGELOG.md)
+📋 **Version Update History**: [View full changelog →](CHANGELOG.md)
 
-### 版本对应关系
+### Version Mapping
 
-- **Mini机器人**：最新版本 → AgentOS SDK v0.4.5 (推荐)
-- **豹小秘2机器人**：最新版本 → AgentOS SDK v0.4.5 (推荐)
+- **Mini Robot**: Latest version → AgentOS SDK v0.4.5 (recommended)
+- **Leopard Secretary 2 Robot**: Latest version → AgentOS SDK v0.4.5 (recommended)
 
-⚠️ **重要提示**：推荐使用最新ROM版本以获得最佳性能和稳定性
+⚠️ **Important**: It is recommended to use the latest ROM version for optimal performance and stability.
 
-### 平台兼容性矩阵
+### Platform Compatibility Matrix
 
-#### 🤖 豹小秘2机器人
+#### 🤖 Leopard Secretary 2 Robot
 
-| 系统版本 | ROM版本 | AgentOS版本 | SDK版本 | 维护状态 |
+| System Version | ROM Version | AgentOS Version | SDK Version | Maintenance Status |
 |---------|---------|------------|---------|---------|
-| Release Latest | V11.7 | v1.7.0 | v0.4.5 | ✅ 最新版本 (推荐) |
-| Release Latest | V11.6.2025092601 | v1.6.0.250925.C | v0.4.4 | ✅ 稳定版本 |
-| Release | V11.4.2025082001 | V1.4.0.250818.C | v0.3.7 | ⚠️ 旧版本 |
+| Release Latest | V11.7 | v1.7.0 | v0.4.5 | ✅ Latest version (recommended) |
+| Release Latest | V11.6.2025092601 | v1.6.0.250925.C | v0.4.4 | ✅ Stable version |
+| Release | V11.4.2025082001 | V1.4.0.250818.C | v0.3.7 | ⚠️ Legacy version |
 
 
-#### 🔹 Mini机器人
+#### 🔹 Mini Robot
 
-| 系统版本 | ROM版本 | AgentOS版本 | SDK版本 | 维护状态 |
+| System Version | ROM Version | AgentOS Version | SDK Version | Maintenance Status |
 |---------|---------|------------|---------|---------|
-| Release Latest | V11.7 | v1.7.0 | v0.4.5 | ✅ 最新版本 (推荐) |
-| Release Latest | V11.6.2025100912 | V1.6.0.250925C | v0.4.4 | ✅ 稳定版本 |
-| Release Enhanced | V10.3.2025071101 | V1.3.0.250630.C | v0.3.5 | ⚠️ 旧版本 |
+| Release Latest | V11.7 | v1.7.0 | v0.4.5 | ✅ Latest version (recommended) |
+| Release Latest | V11.6.2025100912 | V1.6.0.250925C | v0.4.4 | ✅ Stable version |
+| Release Enhanced | V10.3.2025071101 | V1.3.0.250630.C | v0.3.5 | ⚠️ Legacy version |
 
-> **💡 提示**：推荐使用最新Release系统以获得完整功能支持和最佳性能体验
+> **💡 Tip**: It is recommended to use the latest Release system for full feature support and the best performance.
 
-### 生产环境推荐配置
+### Recommended Production Configuration
 
-- **豹小秘2机器人**：**AgentOS SDK v0.4.5** + 最新Release系统 (v1.7.0)
-- **Mini机器人**：**AgentOS SDK v0.4.5** + 最新Release系统 (v1.7.0)
+- **Leopard Secretary 2 Robot**: **AgentOS SDK v0.4.5** + latest Release system (v1.7.0)
+- **Mini Robot**: **AgentOS SDK v0.4.5** + latest Release system (v1.7.0)
 
 ---
 
-**⚠️ 集成注意事项**
+**⚠️ Integration Notes**
 
-版本不匹配可能导致API调用异常或运行时错误。请务必根据目标设备的系统版本选择匹配的SDK版本，确保应用程序的稳定性和兼容性。
+Version mismatch may cause API call exceptions or runtime errors. Be sure to select the SDK version that matches the target device system version to ensure application stability and compatibility.
 
 ---
 
-## SDK概述
+## SDK Overview
 
-AgentOS SDK 是猎户星空智能机器人的官方开发工具包，提供完整的应用开发解决方案。SDK集成了大语言模型能力、机器人硬件控制接口、语音交互系统等企业级功能模块，支持快速构建智能机器人应用。
+AgentOS SDK is the official development toolkit for OrionStar intelligent robots, providing a complete application development solution. The SDK integrates enterprise-grade modules such as large language model capabilities, robot hardware control interfaces, and voice interaction systems, enabling rapid development of intelligent robot applications.
 
-## 快速开始
+## Quick Start
 
-### 开发环境要求
+### Development Environment Requirements
 
-- **编程语言**：Java / Kotlin
-- **构建工具**：Gradle
-- **开发平台**：Android Studio
-- **目标平台**：Android
+- **Programming language**: Java / Kotlin
+- **Build tool**: Gradle
+- **Development platform**: Android Studio
+- **Target platform**: Android
 
-### 核心文档
+### Core Documentation
 
-#### AgentOS SDK 文档
-- **SDK开发文档**：[AgentOS_SDK_Doc_v0.4.5.md](Agent/v0.4.5/AgentOS_SDK_Doc_v0.4.5.md)
-  - 大模型相关能力接口：对话管理、语音合成、智能交互等
-  - 新增唤醒词模式控制功能
-  - 适用于豹小秘2和Mini机器人最新版本
-- **API参考**：[v0.4.5版本](Agent/v0.4.5/API_Reference.md)
-  - 完整的API参考文档，包含所有核心类、接口、方法、属性、构造函数、参数说明、返回值、使用示例等详细说明
-- **类路径参考**：[v0.4.5版本](Agent/v0.4.5/ClassPathList.md)
-  - 项目中所有关键类的完整包路径
-- **示例代码**：[v0.4.5版本](Agent/v0.4.5/SampleCodes.md)
-  - 各功能模块的典型实现示例
-- **SDK Development Documentation (English)**：[AgentOS_SDK_Doc_v0.4.5_en.md](Agent/v0.4.5/AgentOS_SDK_Doc_v0.4.5_en.md)
+#### AgentOS SDK Documentation
+- **SDK Development Documentation**: [AgentOS_SDK_Doc_v0.4.5.md](Agent/v0.4.5/AgentOS_SDK_Doc_v0.4.5.md)
+  - LLM-related interfaces: conversation management, text-to-speech, intelligent interaction, and more
+  - Newly added wake-word mode control features
+  - Applicable to the latest versions of Leopard Secretary 2 and Mini robots
+- **API Reference**: [v0.4.5](Agent/v0.4.5/API_Reference.md)
+  - Complete API reference including detailed descriptions of all core classes, interfaces, methods, properties, constructors, parameters, return values, and usage examples
+- **Class Path Reference**: [v0.4.5](Agent/v0.4.5/ClassPathList.md)
+  - Full package paths of all key classes in the project
+- **Sample Code**: [v0.4.5](Agent/v0.4.5/SampleCodes.md)
+  - Typical implementation examples for each feature module
+- **SDK Development Documentation (English)**: [AgentOS_SDK_Doc_v0.4.5_en.md](Agent/v0.4.5/AgentOS_SDK_Doc_v0.4.5_en.md)
   - Comprehensive guide for LLM capabilities, conversation management, TTS, intelligent interaction, wake-free functionality, and more
   - Applicable to the latest versions of Leopard Secretary 2 and Mini robots
 
-#### 机器人原生接口
-- **RobotOS API**：[RobotAPI.md](Robot/v11.3C/RobotAPI.md)
-  - 机器人原生控制接口：运动控制、导航、传感器、相机、充电、定位等
-  - **v0.4.4+ 重要更新**：SDK已自动集成RobotService依赖，无需手动添加jar包
-- **RobotOS API (English)**：[RobotAPI_en.md](Robot/v11.3C/RobotAPI_en.md)
+#### Robot Native Interfaces
+- **RobotOS API**: [RobotAPI.md](Robot/v11.3C/RobotAPI.md)
+  - Robot native control interfaces: motion control, navigation, sensors, camera, charging, localization, and more
+  - **Important update for v0.4.4+**: The SDK now automatically integrates RobotService dependencies; no manual JAR addition is required
+- **RobotOS API (English)**: [RobotAPI_en.md](Robot/v11.3C/RobotAPI_en.md)
   - Complete reference for robot native control interfaces: motion control, navigation, sensors, camera, charging, localization, and more
   - **Important Update for v0.4.4+**: SDK automatically integrates RobotService dependency, no need to manually add jar packages
 
-#### 云端服务接口
-- **OpenAPI文档**：[https://openapi.orionstar.com/opendocs/zh/index](https://openapi.orionstar.com/opendocs/zh/index)
-  - 机器人云端管理平台：涵盖企业信息管理、访客系统、远程控制、数据统计等API服务
+#### Cloud Service Interfaces
+- **OpenAPI Docs**: [https://openapi.orionstar.com/opendocs/zh/index](https://openapi.orionstar.com/opendocs/zh/index)
+  - Robot cloud management platform APIs covering enterprise information management, visitor systems, remote control, data analytics, and more
 
-### AI辅助开发
+### AI-Assisted Development
 
-#### Cursor AI 集成
-- **完整指南**：[AGENTOS_CURSOR_AI_GUIDE.md](https://github.com/orionagent/agentos-sdk/blob/main/AGENTOS_CURSOR_AI_GUIDE.md)
-  - Cursor AI 集成步骤详解
-  - AgentOS SDK 专用开发规则配置
-  - AI 辅助开发最佳实践
-- **配置包**：[cursor-rules-dependencies.zip](https://github.com/orionagent/agentos-sdk/blob/main/cursor-rules-dependencies.zip)
-  - 包含完整的 Cursor Rules 配置
-  - 支持智能代码生成和错误检测
-  - 提供专业的 AgentOS SDK 开发建议
-
----
-
-## 开发规范
-
-### 技术架构与协作关系
-
-#### SDK职责划分
-- **AgentOS SDK**：负责大模型集成、智能对话、Action规划执行、语音交互（ASR/TTS）、免唤醒等AI能力
-- **RobotAPI**：负责机器人底层控制，包括运动控制、导航、传感器、视觉、地图、充电等硬件能力
-- **协作关系**：AgentOS SDK与RobotAPI协作使用，AgentOS SDK处理智能交互层面，RobotAPI处理硬件控制层面
+#### Cursor AI Integration
+- **Complete Guide**: [AGENTOS_CURSOR_AI_GUIDE.md](https://github.com/orionagent/agentos-sdk/blob/main/AGENTOS_CURSOR_AI_GUIDE.md)
+  - Detailed Cursor AI integration steps
+  - AgentOS SDK-specific development rule configuration
+  - Best practices for AI-assisted development
+- **Configuration Package**: [cursor-rules-dependencies.zip](https://github.com/orionagent/agentos-sdk/blob/main/cursor-rules-dependencies.zip)
+  - Includes complete Cursor Rules configuration
+  - Supports intelligent code generation and error detection
+  - Provides professional AgentOS SDK development guidance
 
 ---
 
-**⚠️ 重要：语音和NLP功能迁移**
+## Development Guidelines
 
-在AgentOS系统上，RobotAPI原有的ASR、TTS、NLP等语音能力已停用，所有语音和NLP相关功能需要迁移到AgentOS SDK。
+### Technical Architecture and Collaboration
 
-**迁移指引**：详细的功能区别和迁移方案请参阅 [RobotAPI.md](Robot/v11.3C/RobotAPI.md)
-
-### 开发流程
-
-#### 标准开发步骤
-1. **环境准备**：安装 Android Studio，配置开发环境
-2. **文档学习**：阅读 AgentOS SDK 文档和机器人原生接口文档
-3. **示例参考**：参考示例代码 ([v0.4.5版本](Agent/v0.4.5/SampleCodes.md))
-4. **API查阅**：通过API参考文档 ([v0.4.5版本](Agent/v0.4.5/API_Reference.md)) 了解详细的类和方法使用说明
-5. **功能集成**：按需集成 AgentOS SDK 和机器人原生API
-6. **测试验证**：测试验证功能实现效果
-
-#### 最佳实践
-- **底层控制**：合理使用机器人原生接口进行底层控制
-- **异步编程**：遵循异步编程模式，避免阻塞主线程
-- **异常处理**：做好异常处理和资源管理
+#### SDK Responsibility Split
+- **AgentOS SDK**: Handles AI capabilities such as LLM integration, intelligent dialogue, action planning and execution, voice interaction (ASR/TTS), and wake-free mode
+- **RobotAPI**: Handles low-level robot control, including motion, navigation, sensors, vision, mapping, charging, and other hardware capabilities
+- **Collaboration model**: AgentOS SDK and RobotAPI are used together—AgentOS SDK handles intelligent interaction layers, while RobotAPI handles hardware control layers
 
 ---
 
-## 其他资源
+**⚠️ Important: Voice and NLP Feature Migration**
 
-- **常见问题**：[FAQ.md](FAQ.md)
-- **Cursor AI 开发指南**：[AGENTOS_CURSOR_AI_GUIDE.md](https://github.com/orionagent/agentos-sdk/blob/main/AGENTOS_CURSOR_AI_GUIDE.md)
-- **AI开发规则**：[AI_Rules/](AI_Rules/)
+On the AgentOS system, RobotAPI's original ASR, TTS, NLP, and other voice capabilities are deprecated. All voice and NLP-related features must be migrated to AgentOS SDK.
+
+**Migration Guide**: For detailed capability differences and migration solutions, see [RobotAPI.md](Robot/v11.3C/RobotAPI.md)
+
+### Development Workflow
+
+#### Standard Development Steps
+1. **Environment setup**: Install Android Studio and configure the development environment
+2. **Documentation study**: Read AgentOS SDK docs and robot native interface docs
+3. **Sample reference**: Refer to sample code ([v0.4.5](Agent/v0.4.5/SampleCodes.md))
+4. **API lookup**: Use the API reference ([v0.4.5](Agent/v0.4.5/API_Reference.md)) to understand classes and method usage details
+5. **Feature integration**: Integrate AgentOS SDK and robot native APIs as needed
+6. **Testing and validation**: Test and validate feature implementation results
+
+#### Best Practices
+- **Low-level control**: Properly use robot native interfaces for low-level control
+- **Asynchronous programming**: Follow asynchronous programming patterns and avoid blocking the main thread
+- **Exception handling**: Implement robust exception handling and resource management
 
 ---
 
-## 版本信息
+## Additional Resources
 
-- **推荐SDK版本**：AgentOS SDK v0.4.5（豹小秘2 & Mini机器人通用）
-- **机器人API版本**：v11.3C
-- **文档更新时间**：2025年11月19日
+- **FAQ**: [FAQ.md](FAQ.md)
+- **Cursor AI Development Guide**: [AGENTOS_CURSOR_AI_GUIDE.md](https://github.com/orionagent/agentos-sdk/blob/main/AGENTOS_CURSOR_AI_GUIDE.md)
+- **AI Development Rules**: [AI_Rules/](AI_Rules/)
+
+---
+
+## Version Information
+
+- **Recommended SDK version**: AgentOS SDK v0.4.5 (universal for Leopard Secretary 2 & Mini robots)
+- **Robot API version**: v11.3C
+- **Document last updated**: November 19, 2025
