@@ -12,12 +12,14 @@ https://github.com/user-attachments/assets/201b549d-02c1-4fd6-bda7-9370a4955b0a
 2. 弹出动态密码输入页，该页面显示系统日期时间，动态密码的获取查看【查询动态密码】部分
 - 动态密码输入正确：跳转至步骤三，可以进行adb设置。
 - 动态密码输入错误：清空输入内容，停留在当前页面。
+<img width="640" height="1024" alt="1280X1280" src="https://github.com/user-attachments/assets/9f8d4d58-a916-410e-9875-ae704e4dee67" />
 
 3. 当"启用调试"被打开后，显示第二个菜单"持久调试"。注意"启动调试"在重启后会恢复默认
 - "持久调试"菜单默认不显示，只有"启用调试"开启后，才显示。
 - "持久调试"显示后，默认是未开启状态，需要手动开启。
 - 当再次关闭"启用调试"开关后，"持久调试"自动设置为禁用，且菜单隐藏。
 - 以上设置重启后才能生效
+<img width="755" height="1024" alt="1280X1280 (1)" src="https://github.com/user-attachments/assets/bf79c568-95e7-4dd5-ad4e-8469ca0b35e3" />
 
 ## 查询动态密码
 
@@ -49,8 +51,10 @@ adb install -r /路径/你的.apk
 ### 远程安装
 
 #### 通过ORM后台单台安装APK
+<img width="1280" height="376" alt="8a61077d-cb93-4eb8-810a-37b56513c844" src="https://github.com/user-attachments/assets/72fa0504-e2d8-4394-8f07-bd9bc479c31c" />
 
 #### 通过EO批量安装
+<img width="1280" height="397" alt="78acdc12-7365-4f86-b6bf-679f448f9d21" src="https://github.com/user-attachments/assets/26351550-9588-425b-9197-fd5e6aeeee9b" />
 
 ## 启动APK
 
@@ -83,6 +87,10 @@ App如果需要在开机后默认启动进入，需要在Manifest中配置
 ### 如何正确的启动apk
 
 启动APK时，为确保APK被机器人底盘正确的授权并使用机器人功能，请使用RobotOS Home调起（参见下面视频）
+
+
+https://github.com/user-attachments/assets/4475fe5b-e17c-4fe2-8500-fbc528cf69af
+
 
 ## 常见问题
 
