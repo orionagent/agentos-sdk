@@ -4,7 +4,11 @@
 
 出厂版本默认ADB关闭，只有通过以下方式可临时开启：
 1. 在任何时候（包括自检异常），单指下拉>>狂点多次时间区域
-https://github.com/user-attachments/assets/37c47394-4c1e-4c8f-bb7f-6dad63fe97a6
+
+
+https://github.com/user-attachments/assets/201b549d-02c1-4fd6-bda7-9370a4955b0a
+
+
 2. 弹出动态密码输入页，该页面显示系统日期时间，动态密码的获取查看【查询动态密码】部分
 - 动态密码输入正确：跳转至步骤三，可以进行adb设置。
 - 动态密码输入错误：清空输入内容，停留在当前页面。
