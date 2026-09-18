@@ -1,0 +1,66 @@
+{
+  "appId": "app_00000000000000000000000000000000",
+  "platform": "apk",
+  "actionList": [
+    {
+      "name": "com.geomagnet.edu.GEOMAG_OVERVIEW",
+      "displayName": "地磁概述",
+      "desc": "当用户询问地磁是什么、地磁场的基本概念、地磁三要素、地磁场强度或地磁极的位置时，介绍地磁场的定义、构成和基本特征",
+      "parameters": []
+    },
+    {
+      "name": "com.geomagnet.edu.GEOMAG_PRINCIPLE",
+      "displayName": "地磁原理",
+      "desc": "当用户询问地磁场是怎么产生的、地球发电机原理、内源场与外源场或磁层的保护作用时，讲解地磁场的形成机制",
+      "parameters": []
+    },
+    {
+      "name": "com.geomagnet.edu.GEOMAG_VARIATION",
+      "displayName": "地磁变化与磁暴",
+      "desc": "当用户询问地磁场会不会变化、长期变化、日变化、磁暴、地磁倒转或极性反转时，介绍地磁场的各类时间尺度变化",
+      "parameters": []
+    },
+    {
+      "name": "com.geomagnet.edu.GEOMAG_APPLICATION",
+      "displayName": "地磁应用场景",
+      "desc": "当用户询问地磁有哪些应用、应用场景、实际用途或地磁在各行业的应用时，总览性地介绍地磁在导航、勘探、航天、生物导航等领域的应用",
+      "parameters": []
+    },
+    {
+      "name": "com.geomagnet.edu.GEOMAG_NAVIGATION",
+      "displayName": "地磁导航与定位",
+      "desc": "当用户询问地磁导航、指南针原理、磁罗盘、地磁匹配导航、电子罗盘或地磁如何用于导航时，详细介绍地磁在导航定位中的应用",
+      "parameters": []
+    },
+    {
+      "name": "com.geomagnet.edu.GEOMAG_EXPLORATION",
+      "displayName": "磁法勘探与古地磁",
+      "desc": "当用户询问磁法勘探、找矿、航磁、古地磁、板块构造或海底磁条带时，介绍地磁在地质勘探与地球科学中的应用",
+      "parameters": []
+    },
+    {
+      "name": "com.geomagnet.edu.GEOMAG_SPACE_BIOLOGY",
+      "displayName": "航天与生物导航",
+      "desc": "当用户询问地磁在航天中的应用、卫星姿态控制、动物导航、候鸟信鸽海龟或趋磁细菌时，介绍地磁的太空应用与生物导航",
+      "parameters": []
+    },
+    {
+      "name": "com.geomagnet.edu.GEOMAG_ADVANTAGE",
+      "displayName": "地磁优势与局限",
+      "desc": "当用户询问地磁相比卫星导航有什么优势、地磁导航的优点、地磁技术的局限或挑战时，介绍地磁技术的优势与不足",
+      "parameters": []
+    },
+    {
+      "name": "com.geomagnet.edu.GEOMAG_HISTORY",
+      "displayName": "地磁学发展历史",
+      "desc": "当用户询问地磁学发展历史、指南针是谁发明的、磁偏角是谁发现的、高斯或国际地磁参考场时，介绍地磁学的发展历程",
+      "parameters": []
+    },
+    {
+      "name": "com.geomagnet.edu.GEOMAG_FAQ",
+      "displayName": "地磁常见问题",
+      "desc": "当用户询问指南针为什么指向北方、地磁极会不会倒转、地磁场消失会怎样、磁北极为什么移动等关于地磁的常见疑问时，给出通俗解答",
+      "parameters": []
+    }
+  ]
+}

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">地磁知识讲解员</string>
+    <string name="app_title">地磁知识讲解员</string>
+    <string name="app_subtitle">点击下方话题卡片，或直接对我说“介绍一下地磁”，即可了解地磁的原理、应用与优势。</string>
+    <string name="detail_hint">欢迎使用地磁知识讲解员</string>
+    <string name="detail_subtitle_hint">选择上方话题，或通过语音向我提问。</string>
+    <string name="home_body">地磁场是地球周围空间存在的天然磁场，看不见、摸不着，却深刻影响着指南针、候鸟迁徙、卫星姿态与人类科技生活。\n\n你可以：\n1. 点击上方话题卡片，查看详细内容；\n2. 直接对我说“地磁是怎么产生的”“地磁有什么应用”“地磁有什么优势”；\n3. 问我“指南针为什么指向北”“地磁极会倒转吗”等常见问题。\n\n我会为你逐项讲解。</string>
+</resources>
